@@ -1,25 +1,22 @@
 """
-Prototype 7 AMÉLIORÉ — MEF + Stochastique + Maillage adaptatif Hilbert
+FEM stiffness-matrix bandwidth reduction (Theorem 10.2 of the paper)
 
-Quatre sous-prototypes :
+Four sub-experiments:
 
-  7c+ : Éléments Finis (MEF P1) sur maillage STRUCTURÉ et NON-STRUCTURÉ
-        → Comparaison : naturel / RCM / Hilbert
-        → SSOR préconditionneur (sensible à l'ordre)
-        → Insight clé : Hilbert brille sur maillage non-structuré
+  (a) FEM (P1) on structured AND unstructured triangular meshes:
+      compare natural / RCM / Hilbert orderings, report bandwidth(K),
+      preconditioned CG iteration counts, and SSOR wall-time.
+      Hilbert shines on unstructured meshes (the paper's headline).
 
-  7d  : EDP stochastique (diffusion aléatoire κ(x,ω))
-        → Monte Carlo avec SSOR + renumérotage
-        → Le coût du renumérotage est amorti sur N réalisations
+  (b) Stochastic PDE (random diffusion kappa(x, omega)): Monte Carlo
+      with SSOR + reordering. The reordering cost is amortised over
+      many realisations.
 
-  7e  : Maillage adaptatif guidé par Hilbert
-        → Raffinement/déraffinement = ajout/troncature de caractères
-        → Cellules de taille variable (polygones dynamiques)
+  (c) Adaptive mesh refinement guided by Hilbert: refine/coarsen =
+      append/truncate code characters; cells of variable size become
+      dynamic polygons (Hierarchy by truncation, Theorem 6.1).
 
-  7f  : Incomplete Cholesky (IC(0)) — fill-in vs ordering
-        → Mesure directe du nnz(L) en fonction de l'ordonnancement
-
-Théorie : Paul Guindo, Altius Academy SNC.
+Author: Paul Guindo, Altius Academy SNC.
 """
 
 import math
@@ -36,8 +33,9 @@ from scipy.spatial import Delaunay
 
 warnings.filterwarnings("ignore", category=sparse.SparseEfficiencyWarning)
 
+
 # ===================================================================
-# Hilbert 2D encoding
+# 2D Hilbert encoding
 # ===================================================================
 
 
@@ -69,7 +67,7 @@ def _xy2d(p, x, y):
 
 
 def generate_structured_mesh(nx):
-    """Maillage triangulaire régulier sur [0,1]²."""
+    """Regular triangular mesh on [0, 1]^2."""
     x = np.linspace(0, 1, nx + 1)
     y = np.linspace(0, 1, nx + 1)
     xx, yy = np.meshgrid(x, y)
@@ -98,18 +96,17 @@ def generate_structured_mesh(nx):
 
 
 def generate_unstructured_mesh(n_points, seed=42):
-    """Maillage Delaunay non-structuré sur [0,1]² avec points aléatoires.
+    """Unstructured Delaunay mesh on [0, 1]^2 from random interior points.
 
-    Le "natural ordering" est l'ordre d'insertion (aléatoire) → pas de
-    localité spatiale → Hilbert devrait significativement améliorer.
+    The "natural" ordering is the random insertion order, which has no
+    spatial locality -- exactly the regime where Hilbert reordering
+    delivers the largest bandwidth reduction (Theorem 10.2(c)).
     """
     rng = np.random.RandomState(seed)
 
-    # Points intérieurs aléatoires
     n_interior = n_points
     pts_interior = rng.rand(n_interior, 2)
 
-    # Points de bord réguliers (assure un domaine convexe)
     n_edge = max(20, int(np.sqrt(n_points)))
     t = np.linspace(0, 1, n_edge, endpoint=False)
     pts_bottom = np.column_stack([t, np.zeros(n_edge)])
@@ -119,15 +116,12 @@ def generate_unstructured_mesh(n_points, seed=42):
 
     nodes = np.vstack([pts_interior, pts_bottom, pts_top, pts_left, pts_right])
 
-    # Supprimer les doublons
     _, unique_idx = np.unique(np.round(nodes, 8), axis=0, return_index=True)
     nodes = nodes[np.sort(unique_idx)]
 
-    # Delaunay
     tri = Delaunay(nodes)
     elements = tri.simplices
 
-    # Boundary: noeuds proches des bords
     eps = 1e-6
     boundary = np.where(
         (nodes[:, 0] < eps) | (nodes[:, 0] > 1 - eps) |
@@ -143,7 +137,7 @@ def generate_unstructured_mesh(n_points, seed=42):
 
 
 def hilbert_reorder(nodes, p=6):
-    """Renumérotage par courbe de Hilbert 2D."""
+    """2D Hilbert reordering of the mesh nodes."""
     n = 1 << p
     N = len(nodes)
 
@@ -169,7 +163,7 @@ def rcm_reorder(A):
 
 
 def random_reorder(N, seed=123):
-    """Permutation aléatoire (pire cas)."""
+    """Random permutation (worst-case baseline)."""
     rng = np.random.RandomState(seed)
     perm = rng.permutation(N)
     inv_perm = np.zeros(N, dtype=np.int64)
@@ -183,7 +177,7 @@ def random_reorder(N, seed=123):
 
 
 def assemble_stiffness(nodes, elements, kappa=None):
-    """Matrice de rigidité K pour -div(κ∇u)=f, P1 triangles."""
+    """Stiffness matrix K for -div(kappa * grad u) = f, P1 triangles."""
     N = len(nodes)
     rows, cols, vals = [], [], []
 
@@ -212,7 +206,7 @@ def assemble_stiffness(nodes, elements, kappa=None):
 
 
 def assemble_rhs(nodes, elements):
-    """Second membre f = source gaussienne au centre."""
+    """Right-hand side: Gaussian source centred at (0.5, 0.5)."""
     N = len(nodes)
     b = np.zeros(N)
     cx, cy, sigma = 0.5, 0.5, 0.1
@@ -230,7 +224,7 @@ def assemble_rhs(nodes, elements):
 
 
 def apply_dirichlet(K, b, boundary):
-    """Conditions de Dirichlet u=0 aux bords."""
+    """Homogeneous Dirichlet conditions u = 0 on the boundary."""
     K = K.tolil()
     for node in boundary:
         K[node, :] = 0
@@ -246,14 +240,14 @@ def apply_dirichlet(K, b, boundary):
 
 
 def bandwidth_stats(A):
-    """Bande passante max et moyenne."""
+    """Max and mean bandwidth of a sparse matrix."""
     rows, cols = A.nonzero()
     diffs = np.abs(rows - cols)
     return int(np.max(diffs)), float(np.mean(diffs))
 
 
 def make_ssor_pc(K_perm, omega=1.5):
-    """Construit un préconditionneur SSOR (symétrique → compatible CG)."""
+    """SSOR preconditioner (symmetric => CG-compatible)."""
     diag = K_perm.diagonal().copy()
     diag[np.abs(diag) < 1e-15] = 1.0
     D = sparse.diags(diag)
@@ -270,7 +264,7 @@ def make_ssor_pc(K_perm, omega=1.5):
 
 
 def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
-    """Résout Ku=b avec un ordonnancement donné."""
+    """Solve Ku = b under the given ordering."""
     N = K.shape[0]
     P = sparse.eye(N, format="csr")[perm, :]
     K_perm = P @ K @ P.T
@@ -278,14 +272,12 @@ def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
 
     bw_max, bw_avg = bandwidth_stats(K_perm)
 
-    # CG sans préconditionneur
     iter_cg = [0]
     t0 = time.perf_counter()
     u_cg, _ = cg(K_perm, b_perm, rtol=1e-10, maxiter=5000,
                   callback=lambda xk: iter_cg.__setitem__(0, iter_cg[0] + 1))
     t_cg = time.perf_counter() - t0
 
-    # CG + SSOR
     iter_ssor = [0]
     t_ssor = 0.0
     if use_ssor:
@@ -299,7 +291,6 @@ def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
         except Exception:
             iter_ssor[0] = -1
 
-    # ILU fill-in measurement
     try:
         ilu = spilu(K_perm.tocsc(), fill_factor=1.0, drop_tol=0.0)
         nnz_ilu = ilu.nnz
@@ -323,54 +314,52 @@ def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
 
 
 # ===================================================================
-# 7c+ : MEF structuré vs non-structuré
+# (a) FEM on structured vs unstructured meshes
 # ===================================================================
 
 
 def run_fem_meshes():
-    """7c+ : Comparaison sur maillage structuré ET non-structuré."""
+    """FEM bandwidth on structured AND unstructured meshes."""
     results = {}
 
-    for mesh_type in ["structuré", "non-structuré"]:
-        print(f"\n{'─' * 60}")
-        print(f"  7c+ : MEF (P1) — Maillage {mesh_type}")
-        print(f"{'─' * 60}")
+    for mesh_type in ["structured", "unstructured"]:
+        print(f"\n{'-' * 60}")
+        print(f"  (a) FEM (P1) -- {mesh_type} mesh")
+        print(f"{'-' * 60}")
 
-        if mesh_type == "structuré":
+        if mesh_type == "structured":
             NX = 64
             nodes, elements, boundary = generate_structured_mesh(NX)
         else:
             nodes, elements, boundary = generate_unstructured_mesh(4000)
 
         N = len(nodes)
-        print(f"  {N} noeuds, {len(elements)} éléments")
+        print(f"  {N} nodes, {len(elements)} elements")
 
         K = assemble_stiffness(nodes, elements)
         b = assemble_rhs(nodes, elements)
         K, b = apply_dirichlet(K, b, boundary)
 
-        # Orderings
         natural_perm = np.arange(N)
         rcm_perm, rcm_inv = rcm_reorder(K)
         hilbert_perm, hilbert_inv = hilbert_reorder(nodes, p=7)
 
         orderings = [
-            ("Naturel", natural_perm, natural_perm),
+            ("Natural", natural_perm, natural_perm),
             ("RCM", rcm_perm, rcm_inv),
             ("Hilbert", hilbert_perm, hilbert_inv),
         ]
 
-        # Ajout d'un ordre "aléatoire" pour le non-structuré (baseline pire cas)
-        if mesh_type == "non-structuré":
+        if mesh_type == "unstructured":
             rand_perm, rand_inv = random_reorder(N)
-            orderings.insert(0, ("Aléatoire", rand_perm, rand_inv))
+            orderings.insert(0, ("Random", rand_perm, rand_inv))
 
         mesh_results = []
         for name, perm, inv in orderings:
-            print(f"  → {name}...", end="", flush=True)
+            print(f"  -> {name}...", end="", flush=True)
             r = solve_with_ordering(K, b, perm, inv, name)
             print(f" BW_avg={r['bw_avg']:.0f}, CG={r['iter_cg']}, "
-                  f"CG+SSOR={r['iter_ssor']}, t_SSOR={r['time_ssor']:.1f}ms")
+                  f"CG+SSOR={r['iter_ssor']}, t_SSOR={r['time_ssor']:.1f} ms")
             mesh_results.append(r)
 
         results[mesh_type] = {
@@ -383,12 +372,12 @@ def run_fem_meshes():
 
 
 # ===================================================================
-# 7d : EDP stochastique avec SSOR
+# (b) Stochastic PDE with SSOR
 # ===================================================================
 
 
 def generate_kl_modes(nodes, elements, n_kl=5, corr_length=0.3):
-    """Modes de Karhunen-Loève pour champ aléatoire."""
+    """Karhunen-Loeve modes for the random diffusion field."""
     centers = np.mean(nodes[elements], axis=1)
     kl_modes = np.zeros((len(elements), n_kl))
 
@@ -403,27 +392,25 @@ def generate_kl_modes(nodes, elements, n_kl=5, corr_length=0.3):
 
 
 def run_stochastic_pde():
-    """7d : EDP stochastique — Monte Carlo avec SSOR + renumérotage.
+    """(b) Stochastic PDE: Monte Carlo with SSOR + reordering.
 
-    Test sur maillage non-structuré pour que l'ordering ait un impact.
+    Run on an unstructured mesh, where ordering matters most.
     """
-    print(f"\n{'─' * 60}")
-    print(f"  7d : EDP stochastique — Monte Carlo + SSOR")
-    print(f"{'─' * 60}")
+    print(f"\n{'-' * 60}")
+    print(f"  (b) Stochastic PDE -- Monte Carlo + SSOR")
+    print(f"{'-' * 60}")
 
     N_REAL = 50
     N_KL = 5
 
-    # Maillage non-structuré (c'est là que Hilbert brille)
     nodes, elements, boundary = generate_unstructured_mesh(2000, seed=99)
     N = len(nodes)
-    print(f"  Maillage non-structuré : {N} noeuds, {len(elements)} éléments")
-    print(f"  Réalisations MC : {N_REAL}, Modes KL : {N_KL}")
+    print(f"  Unstructured mesh: {N} nodes, {len(elements)} elements")
+    print(f"  MC realisations: {N_REAL}, KL modes: {N_KL}")
 
     kl_modes = generate_kl_modes(nodes, elements, n_kl=N_KL)
     b_base = assemble_rhs(nodes, elements)
 
-    # Pré-calcul des renumérotages
     hilbert_perm, _ = hilbert_reorder(nodes, p=6)
     P_h = sparse.eye(N, format="csr")[hilbert_perm, :]
 
@@ -442,7 +429,6 @@ def run_stochastic_pde():
         b = b_base.copy()
         K, b = apply_dirichlet(K, b, boundary)
 
-        # RCM (calcul une seule fois sur la première matrice)
         if not rcm_done:
             rcm_perm, _ = rcm_reorder(K)
             P_r = sparse.eye(N, format="csr")[rcm_perm, :]
@@ -469,25 +455,25 @@ def run_stochastic_pde():
                 stats[label]["iters"].append(-1)
                 stats[label]["times"].append(-1)
 
-    print(f"\n  Résultats (moyenne sur {N_REAL} réalisations, CG+SSOR) :")
+    print(f"\n  Results (mean over {N_REAL} realisations, CG+SSOR):")
     for label in ["natural", "hilbert", "rcm"]:
         iters = [x for x in stats[label]["iters"] if x > 0]
         times = [x for x in stats[label]["times"] if x > 0]
         if iters:
-            print(f"  → {label:>10} : {np.mean(iters):.0f} itérations, "
+            print(f"  -> {label:>10} : {np.mean(iters):.0f} iterations, "
                   f"{np.mean(times):.1f} ms/solve")
 
     return stats
 
 
 # ===================================================================
-# 7e : Maillage adaptatif guidé par Hilbert
+# (c) Hilbert-guided adaptive mesh refinement
 # ===================================================================
 
 
 def adaptive_hilbert_mesh(nodes, elements, solution,
                           threshold_refine=0.7, threshold_coarsen=0.1):
-    """Raffinement adaptatif guidé par le gradient."""
+    """Gradient-driven AMR with Hilbert tagging."""
     gradients = np.zeros(len(elements))
     for i, elem in enumerate(elements):
         x = nodes[elem, 0]
@@ -515,7 +501,7 @@ def adaptive_hilbert_mesh(nodes, elements, solution,
 
 
 # ===================================================================
-# Visualization
+# Figure
 # ===================================================================
 
 
@@ -525,27 +511,25 @@ def plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
     os.makedirs(output_dir, exist_ok=True)
 
     fig, axes = plt.subplots(2, 4, figsize=(22, 10))
-    fig.suptitle("Proto 7 amélioré — MEF + Stochastique + Adaptatif",
+    fig.suptitle("FEM bandwidth reduction by Hilbert reordering (Thm. 10.2)",
                  fontsize=14, fontweight="bold")
     colors_4 = ["#95a5a6", "#3498db", "#e74c3c", "#2ecc71"]
     colors_3 = ["#3498db", "#e74c3c", "#2ecc71"]
 
-    # --- 7c+ structuré : bande passante ---
     ax = axes[0, 0]
-    res_s = results_7c["structuré"]["results"]
+    res_s = results_7c["structured"]["results"]
     names = [r["name"] for r in res_s]
     bw = [r["bw_avg"] for r in res_s]
     bars = ax.bar(names, bw, color=colors_3, alpha=0.8)
     for bar, val in zip(bars, bw):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
                 f"{val:.0f}", ha="center", va="bottom", fontsize=9)
-    ax.set_ylabel("Bande moy.")
-    ax.set_title("Structuré : bande passante\n(plus bas = meilleur)")
+    ax.set_ylabel("mean bandwidth $\\overline{\\mathrm{BW}}(\\mathbf{K})$")
+    ax.set_title("Structured mesh: bandwidth\n(lower = better)")
     ax.grid(axis="y", alpha=0.3)
 
-    # --- 7c+ non-structuré : bande passante ---
     ax = axes[0, 1]
-    res_u = results_7c["non-structuré"]["results"]
+    res_u = results_7c["unstructured"]["results"]
     names = [r["name"] for r in res_u]
     bw = [r["bw_avg"] for r in res_u]
     c = colors_4 if len(res_u) == 4 else colors_3
@@ -553,60 +537,54 @@ def plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
     for bar, val in zip(bars, bw):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
                 f"{val:.0f}", ha="center", va="bottom", fontsize=9)
-    ax.set_ylabel("Bande moy.")
-    ax.set_title("Non-structuré : bande passante\n(plus bas = meilleur)")
+    ax.set_ylabel("mean bandwidth $\\overline{\\mathrm{BW}}(\\mathbf{K})$")
+    ax.set_title("Unstructured mesh: bandwidth\n(lower = better)")
     ax.grid(axis="y", alpha=0.3)
 
-    # --- 7c+ non-structuré : SSOR iterations ---
     ax = axes[0, 2]
     iter_s = [r["iter_ssor"] for r in res_u]
     bars = ax.bar(names, iter_s, color=c, alpha=0.8)
     for bar, val in zip(bars, iter_s):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
                 f"{val}", ha="center", va="bottom", fontsize=9)
-    ax.set_ylabel("Itérations CG+SSOR")
-    ax.set_title("Non-structuré : CG+SSOR\n(moins = meilleur)")
+    ax.set_ylabel("CG+SSOR iterations")
+    ax.set_title("Unstructured mesh: CG+SSOR\n(lower = better)")
     ax.grid(axis="y", alpha=0.3)
 
-    # --- 7d : Distribution Monte Carlo ---
     ax = axes[0, 3]
-    for label, color, lbl in [("natural", "#3498db", "Naturel"),
+    for label, color, lbl in [("natural", "#3498db", "Natural"),
                                ("hilbert", "#2ecc71", "Hilbert"),
                                ("rcm", "#e74c3c", "RCM")]:
         iters = [x for x in stats_7d[label]["iters"] if x > 0]
         if iters:
             ax.hist(iters, bins=15, alpha=0.5, color=color,
-                    label=f"{lbl} (μ={np.mean(iters):.0f})")
-    ax.set_xlabel("Itérations CG+SSOR")
-    ax.set_ylabel("Fréquence")
-    ax.set_title("7d : Monte Carlo + SSOR\n(non-structuré)")
+                    label=f"{lbl} (mean={np.mean(iters):.0f})")
+    ax.set_xlabel("CG+SSOR iterations")
+    ax.set_ylabel("MC realisations")
+    ax.set_title("(b) Stochastic PDE Monte Carlo + SSOR\n(unstructured mesh)")
     ax.legend(fontsize=8)
     ax.grid(alpha=0.3)
 
-    # --- Solution structurée ---
     ax = axes[1, 0]
     triang_s = mtri.Triangulation(nodes_s[:, 0], nodes_s[:, 1], elems_s)
     tcf = ax.tripcolor(triang_s, sol_s, cmap="viridis", shading="flat")
     plt.colorbar(tcf, ax=ax, shrink=0.8)
-    ax.set_title("Solution (structuré)")
+    ax.set_title("Solution $u$ (structured mesh)")
     ax.set_aspect("equal")
 
-    # --- Solution non-structurée ---
     ax = axes[1, 1]
     triang_u = mtri.Triangulation(nodes_u[:, 0], nodes_u[:, 1], elems_u)
     tcf = ax.tripcolor(triang_u, sol_u, cmap="viridis", shading="flat")
     plt.colorbar(tcf, ax=ax, shrink=0.8)
-    ax.set_title("Solution (non-structuré)")
+    ax.set_title("Solution $u$ (unstructured mesh)")
     ax.set_aspect("equal")
 
-    # --- Gradient (indicateur AMR) ---
     ax = axes[1, 2]
     tcf = ax.tripcolor(triang_s, gradients, cmap="hot", shading="flat")
     plt.colorbar(tcf, ax=ax, shrink=0.8)
-    ax.set_title("7e : Gradient (indicateur AMR)")
+    ax.set_title("(c) $|\\nabla u|$ -- AMR indicator")
     ax.set_aspect("equal")
 
-    # --- Maillage adaptatif ---
     ax = axes[1, 3]
     ax.triplot(triang_s, linewidth=0.2, color="gray")
     for idx in refined:
@@ -618,8 +596,8 @@ def plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
         tri = plt.Polygon(nodes_s[elem], facecolor="blue", alpha=0.1,
                           edgecolor="blue", linewidth=0.3)
         ax.add_patch(tri)
-    ax.set_title(f"7e : AMR Hilbert\nRouge={len(refined)} raff., "
-                 f"Bleu={len(coarsened)} déraff.")
+    ax.set_title(f"(c) Hilbert-guided AMR\nred = {len(refined)} refined, "
+                 f"blue = {len(coarsened)} coarsened")
     ax.set_aspect("equal")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -628,7 +606,7 @@ def plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
     path = os.path.join(output_dir, "fem_bandwidth.png")
     plt.savefig(path, dpi=150)
     plt.close()
-    print(f"  → {path}")
+    print(f"  -> {path}")
     return path
 
 
@@ -642,77 +620,71 @@ def main():
     OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
 
     print("=" * 65)
-    print("  PROTOTYPE 7 AMÉLIORÉ — MEF + Stochastique + Adaptatif")
-    print("  Altius-Code, Altius Academy SNC")
+    print("  FEM bandwidth reduction by Hilbert reordering (Thm. 10.2)")
+    print("  Altius Academy SNC")
     print("=" * 65)
 
-    # --- 7c+ : MEF structuré ET non-structuré ---
     results_7c = run_fem_meshes()
 
-    # --- 7d : Monte Carlo stochastique sur maillage non-structuré ---
     stats_7d = run_stochastic_pde()
 
-    # --- 7e : Maillage adaptatif ---
-    print(f"\n{'─' * 60}")
-    print(f"  7e : Maillage adaptatif guidé par Hilbert")
-    print(f"{'─' * 60}")
+    print(f"\n{'-' * 60}")
+    print(f"  (c) Hilbert-guided adaptive mesh refinement")
+    print(f"{'-' * 60}")
 
-    nodes_s = results_7c["structuré"]["nodes"]
-    elems_s = results_7c["structuré"]["elements"]
-    sol_s = results_7c["structuré"]["results"][-1]["solution"]  # Hilbert
+    nodes_s = results_7c["structured"]["nodes"]
+    elems_s = results_7c["structured"]["elements"]
+    sol_s = results_7c["structured"]["results"][-1]["solution"]
 
-    nodes_u = results_7c["non-structuré"]["nodes"]
-    elems_u = results_7c["non-structuré"]["elements"]
-    sol_u = results_7c["non-structuré"]["results"][-1]["solution"]  # Hilbert
+    nodes_u = results_7c["unstructured"]["nodes"]
+    elems_u = results_7c["unstructured"]["elements"]
+    sol_u = results_7c["unstructured"]["results"][-1]["solution"]
 
     refined, coarsened, gradients = adaptive_hilbert_mesh(
         nodes_s, elems_s, sol_s, threshold_refine=0.7, threshold_coarsen=0.1
     )
-    print(f"  → Éléments à raffiner : {len(refined)} "
+    print(f"  -> elements to refine  : {len(refined)} "
           f"({100*len(refined)/len(elems_s):.1f}%)")
-    print(f"  → Éléments à déraffiner : {len(coarsened)} "
+    print(f"  -> elements to coarsen : {len(coarsened)} "
           f"({100*len(coarsened)/len(elems_s):.1f}%)")
 
-    # ===== RÉSUMÉ =====
     print(f"\n{'=' * 65}")
-    print(f"  RÉSUMÉ DES RÉSULTATS")
+    print(f"  SUMMARY")
     print(f"{'=' * 65}")
 
-    for mesh_type in ["structuré", "non-structuré"]:
-        print(f"\n  7c+ — Maillage {mesh_type} :")
+    for mesh_type in ["structured", "unstructured"]:
+        print(f"\n  (a) FEM -- {mesh_type} mesh:")
         for r in results_7c[mesh_type]["results"]:
             print(f"    {r['name']:>10} : bw_avg={r['bw_avg']:.0f}, "
                   f"CG={r['iter_cg']}, CG+SSOR={r['iter_ssor']}, "
-                  f"t_SSOR={r['time_ssor']:.1f}ms")
+                  f"t_SSOR={r['time_ssor']:.1f} ms")
 
-        # Gain Hilbert vs Natural
         res = results_7c[mesh_type]["results"]
-        nat = next(r for r in res if r["name"] == "Naturel")
+        nat = next(r for r in res if r["name"] == "Natural")
         hil = next(r for r in res if r["name"] == "Hilbert")
         bw_gain = (1 - hil["bw_avg"] / nat["bw_avg"]) * 100
         ssor_gain = (1 - hil["iter_ssor"] / nat["iter_ssor"]) * 100 if nat["iter_ssor"] > 0 else 0
-        print(f"  → Hilbert vs Naturel : bande {bw_gain:+.1f}%, "
+        print(f"  -> Hilbert vs Natural : bandwidth {bw_gain:+.1f}%, "
               f"SSOR iters {ssor_gain:+.1f}%")
 
-    print(f"\n  7d — Monte Carlo stochastique (non-structuré) :")
+    print(f"\n  (b) Stochastic PDE Monte Carlo (unstructured mesh):")
     for label in ["natural", "hilbert", "rcm"]:
         iters = [x for x in stats_7d[label]["iters"] if x > 0]
         times = [x for x in stats_7d[label]["times"] if x > 0]
         if iters:
-            print(f"    {label:>10} : {np.mean(iters):.0f} itérations, "
+            print(f"    {label:>10} : {np.mean(iters):.0f} iterations, "
                   f"{np.mean(times):.1f} ms/solve")
 
-    print(f"\n  7e — Maillage adaptatif :")
-    print(f"    {len(refined)} cellules à raffiner, {len(coarsened)} à déraffiner")
+    print(f"\n  (c) Adaptive mesh:")
+    print(f"    {len(refined)} elements to refine, {len(coarsened)} to coarsen")
 
-    # Graphiques
-    print(f"\n[+] Graphiques...")
+    print(f"\n[+] Generating figure...")
     plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
                  nodes_u, elems_u, sol_u,
                  gradients, refined, coarsened, OUTPUT_DIR)
 
     print(f"\n{'=' * 65}")
-    print(f"  Proto 7 amélioré terminé.")
+    print(f"  fem_bandwidth done.")
     print(f"{'=' * 65}")
 
 

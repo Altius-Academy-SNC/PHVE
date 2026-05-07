@@ -1,16 +1,22 @@
 """
-Altius-Code 3D — Encodage bijectif de volumes anatomiques
+PHVE 3D codec -- bijective encoding of anatomical volumes
 
-Bijection entre coordonnées spatiales (x, y, z) et codes alphanumériques
-compacts via la courbe de Hilbert 3D.
+Implementation of the encoding map F_p^{(3),alpha} of the paper:
 
-Auteur : Paul Guindo, Altius Academy SNC
+    F_p^{(3),alpha}(x) = Enc o Hil_p^{(3)} o Nor_p^{(3),alpha}(x),
+
+where Nor normalises (x, y, z) into the integer grid [0, 2^p - 1]^3 of
+the chosen anatomical volume alpha (cranium, thorax, etc.), Hil is the
+Skilling 3D Hilbert kernel (Algorithm 1 of the paper), and Enc encodes
+the index in base 29 with an unambiguous alphabet.
+
+Author: Paul Guindo, Altius Academy SNC.
 """
 
 import math
 
 # ===================================================================
-# Alphabet base-29 (sans O/I/L/0/1/U/Z)
+# Base-29 alphabet (no O / I / L / 0 / 1 / U / Z to avoid ambiguity)
 # ===================================================================
 
 ALPHABET = "23456789ABCDEFGHJKMNPQRSTVWXY"
@@ -18,34 +24,31 @@ BASE = len(ALPHABET)  # 29
 CHAR_TO_VAL = {c: i for i, c in enumerate(ALPHABET)}
 
 # ===================================================================
-# Volumes anatomiques de référence
+# Reference anatomical volumes (PHVE Reference Family, d=3)
 # ===================================================================
 
 VOLUMES = {
-    "CR": {"name": "Crâne",       "dims": (300, 250, 250)},
+    "CR": {"name": "Cranium",     "dims": (300, 250, 250)},
     "TX": {"name": "Thorax",      "dims": (400, 350, 300)},
-    "CA": {"name": "Coeur",       "dims": (150, 120, 100)},
+    "CA": {"name": "Heart",       "dims": (150, 120, 100)},
     "AB": {"name": "Abdomen",     "dims": (400, 350, 300)},
-    "MB": {"name": "Membre",      "dims": (700, 200, 200)},
-    "FB": {"name": "Corps entier","dims": (2000, 600, 400)},
+    "MB": {"name": "Limb",        "dims": (700, 200, 200)},
+    "FB": {"name": "Full body",   "dims": (2000, 600, 400)},
 }
 
 # ===================================================================
-# Courbe de Hilbert 3D — Algorithme de Skilling (2004)
+# 3D Hilbert curve -- Skilling (2004) algorithm
 # ===================================================================
-# "Programming the Hilbert curve" — John Skilling, AIP 2004
-# Fonctionne pour toute dimension. Ici n=3 (3D).
+# "Programming the Hilbert curve", J. Skilling, AIP 2004.
+# Works for any dimension; here n = 3.
 
 def _coords_to_hilbert(coords, p):
-    """Transpose-to-Hilbert: transforme les coordonnées en index Hilbert.
-
-    coords: liste mutable [x, y, z] (modifiée en place)
-    p: nombre de bits par coordonnée
+    """Transpose-to-Hilbert: in-place transform of [x, y, z] integer
+    coordinates into the Skilling-transposed Hilbert representation.
     """
     n = len(coords)
     M = 1 << (p - 1)
 
-    # Inverse undo
     Q = M
     while Q > 1:
         P = Q - 1
@@ -58,7 +61,6 @@ def _coords_to_hilbert(coords, p):
                 coords[i] ^= t
         Q >>= 1
 
-    # Gray encode
     for i in range(1, n):
         coords[i] ^= coords[i - 1]
 
@@ -73,21 +75,15 @@ def _coords_to_hilbert(coords, p):
 
 
 def _hilbert_to_coords(coords, p):
-    """Hilbert-to-Transpose: transforme l'index Hilbert en coordonnées.
-
-    coords: liste mutable [x, y, z] (modifiée en place)
-    p: nombre de bits par coordonnée
-    """
+    """Hilbert-to-Transpose: inverse of _coords_to_hilbert."""
     n = len(coords)
     N = 2 << (p - 1)
 
-    # Gray decode
     t = coords[n - 1] >> 1
     for i in range(n - 1, 0, -1):
         coords[i] ^= coords[i - 1]
     coords[0] ^= t
 
-    # Undo excess work
     M = 2
     while M != N:
         P = M - 1
@@ -102,7 +98,7 @@ def _hilbert_to_coords(coords, p):
 
 
 def _interleave_3d(x, y, z, p):
-    """Entrelace 3 coordonnées de p bits en un index de 3p bits."""
+    """Interleave three p-bit coordinates into a single 3p-bit index."""
     d = 0
     for i in range(p):
         bit_x = (x >> i) & 1
@@ -113,7 +109,7 @@ def _interleave_3d(x, y, z, p):
 
 
 def _deinterleave_3d(d, p):
-    """Désentralace un index de 3p bits en 3 coordonnées de p bits."""
+    """Split a 3p-bit interleaved index back into three p-bit coordinates."""
     x = y = z = 0
     for i in range(p):
         z |= ((d >> (3 * i)) & 1) << i
@@ -123,10 +119,9 @@ def _deinterleave_3d(d, p):
 
 
 def xyz2d(p, x, y, z):
-    """Encodage Hilbert 3D : (x, y, z) -> index d.
+    """3D Hilbert encoding Hil_p^{(3)}: (x, y, z) -> index d in [0, 8^p - 1].
 
-    p : ordre de la courbe (grille 2^p × 2^p × 2^p)
-    Retourne d ∈ [0, 8^p - 1]
+    p : order of the curve (grid 2^p x 2^p x 2^p).
     """
     coords = [x, y, z]
     _coords_to_hilbert(coords, p)
@@ -134,11 +129,7 @@ def xyz2d(p, x, y, z):
 
 
 def d2xyz(p, d):
-    """Décodage Hilbert 3D : index d -> (x, y, z).
-
-    p : ordre de la courbe
-    Retourne (x, y, z) ∈ [0, 2^p - 1]^3
-    """
+    """Inverse 3D Hilbert decoding (Hil_p^{(3)})^{-1}: d -> (x, y, z)."""
     x, y, z = _deinterleave_3d(d, p)
     coords = [x, y, z]
     _hilbert_to_coords(coords, p)
@@ -146,11 +137,11 @@ def d2xyz(p, d):
 
 
 # ===================================================================
-# Vérification de bijectivité
+# Bijectivity verification
 # ===================================================================
 
 def verify_bijectivity(p):
-    """Vérifie la bijectivité de xyz2d/d2xyz pour l'ordre p."""
+    """Exhaustively verify bijectivity of xyz2d / d2xyz at order p."""
     n = 1 << p
     total = n * n * n
     seen = set()
@@ -159,32 +150,34 @@ def verify_bijectivity(p):
             for z in range(n):
                 d = xyz2d(p, x, y, z)
                 if d in seen:
-                    return False, f"Doublon: d={d} pour ({x},{y},{z})"
+                    return False, f"Collision: d={d} for ({x},{y},{z})"
                 seen.add(d)
                 x2, y2, z2 = d2xyz(p, d)
                 if (x2, y2, z2) != (x, y, z):
-                    return False, f"Round-trip échoué: ({x},{y},{z})->d={d}->({x2},{y2},{z2})"
+                    return False, f"Round-trip failed: ({x},{y},{z})->d={d}->({x2},{y2},{z2})"
     if len(seen) != total:
-        return False, f"Couverture incomplète: {len(seen)}/{total}"
-    return True, f"OK: {total} points bijectifs"
+        return False, f"Incomplete coverage: {len(seen)}/{total}"
+    return True, f"OK: {total} bijective points"
 
 
 # ===================================================================
-# Conversion base-29
+# Base-29 conversion
 # ===================================================================
 
 def _code_length_3d(p):
-    """Nombre de caractères base-29 pour un code 3D d'ordre p."""
+    """Length of a 3D code at order p (ceil(3p * log_29(2))).
+    Matches Definition 2.3 of the paper for d=3, B=29.
+    """
     return math.ceil(3 * p * math.log(2) / math.log(BASE))
 
 
 def _canonical_precision_3d(k):
-    """Plus grand ordre p tel que _code_length_3d(p) <= k."""
+    """Largest order p such that _code_length_3d(p) <= k (round-trip safe)."""
     return int(k * math.log(BASE) / (3 * math.log(2)))
 
 
 def _int_to_base29(d, length):
-    """Entier -> chaîne base 29, paddée à `length` caractères."""
+    """Integer -> base-29 string padded to `length` characters."""
     if d == 0:
         return ALPHABET[0] * length
     chars = []
@@ -199,37 +192,36 @@ def _int_to_base29(d, length):
 
 
 def _base29_to_int(code):
-    """Chaîne base 29 -> entier."""
+    """Base-29 string -> integer."""
     d = 0
     for c in code.upper():
         if c not in CHAR_TO_VAL:
-            raise ValueError(f"Caractère invalide: '{c}'")
+            raise ValueError(f"Invalid character: '{c}'")
         d = d * BASE + CHAR_TO_VAL[c]
     return d
 
 
 # ===================================================================
-# Encodage / Décodage de volumes anatomiques
+# PHVE encode / decode
 # ===================================================================
 
 def encode(x_mm, y_mm, z_mm, p=8, volume="CR"):
-    """Encode des coordonnées spatiales (mm) en code Altius-Code 3D.
+    """Encode spatial coordinates (mm) into a PHVE 3D code.
 
     Args:
-        x_mm, y_mm, z_mm: coordonnées en mm dans le volume de référence
-        p: ordre de la courbe de Hilbert
-        volume: préfixe du volume anatomique ("CR", "TX", "CA", ...)
+        x_mm, y_mm, z_mm: coordinates in mm inside the reference volume.
+        p: Hilbert curve order.
+        volume: anatomical volume prefix ("CR", "TX", "CA", ...).
 
     Returns:
-        str: code au format "VOL:CCC-CCC-CC"
+        str: code formatted as "VOL:CCC-CCC-CC".
     """
     if volume not in VOLUMES:
-        raise ValueError(f"Volume inconnu: '{volume}'. Disponibles: {list(VOLUMES.keys())}")
+        raise ValueError(f"Unknown volume: '{volume}'. Available: {list(VOLUMES.keys())}")
 
     dims = VOLUMES[volume]["dims"]
     n = 1 << p
 
-    # Normaliser les coordonnées sur [0, 2^p - 1]
     ix = max(0, min(n - 1, int(x_mm / dims[0] * n)))
     iy = max(0, min(n - 1, int(y_mm / dims[1] * n)))
     iz = max(0, min(n - 1, int(z_mm / dims[2] * n)))
@@ -239,7 +231,6 @@ def encode(x_mm, y_mm, z_mm, p=8, volume="CR"):
     k = _code_length_3d(p)
     code = _int_to_base29(d, k)
 
-    # Formater avec tirets tous les 3 caractères
     parts = [code[i:i+3] for i in range(0, len(code), 3)]
     formatted = "-".join(parts)
 
@@ -247,24 +238,23 @@ def encode(x_mm, y_mm, z_mm, p=8, volume="CR"):
 
 
 def decode(code):
-    """Décode un code Altius-Code 3D en coordonnées spatiales (mm).
+    """Decode a PHVE 3D code back to spatial coordinates (mm).
 
     Args:
-        code: code au format "VOL:CCC-CCC-CC"
+        code: code formatted as "VOL:CCC-CCC-CC".
 
     Returns:
-        dict: {"x_mm", "y_mm", "z_mm", "p", "volume", "resolution_mm"}
+        dict: {"x_mm", "y_mm", "z_mm", "p", "volume", "resolution_mm"}.
     """
     if ":" not in code:
-        raise ValueError("Format invalide: le code doit contenir ':' (ex: 'CR:4H7-KBR')")
+        raise ValueError("Invalid format: code must contain ':' (e.g. 'CR:4H7-KBR')")
 
     vol_prefix, base29_part = code.split(":", 1)
     vol_prefix = vol_prefix.upper()
 
     if vol_prefix not in VOLUMES:
-        raise ValueError(f"Volume inconnu: '{vol_prefix}'")
+        raise ValueError(f"Unknown volume: '{vol_prefix}'")
 
-    # Retirer les tirets
     base29_code = base29_part.replace("-", "")
     k = len(base29_code)
     p = _canonical_precision_3d(k)
@@ -275,12 +265,10 @@ def decode(code):
     d = _base29_to_int(base29_code)
     ix, iy, iz = d2xyz(p, d)
 
-    # Dénormaliser (centre du voxel)
     x_mm = (ix + 0.5) * dims[0] / n
     y_mm = (iy + 0.5) * dims[1] / n
     z_mm = (iz + 0.5) * dims[2] / n
 
-    # Résolution
     res = max(dims[0] / n, dims[1] / n, dims[2] / n)
 
     return {
@@ -294,12 +282,12 @@ def decode(code):
 
 
 def truncate(code, n_chars=1):
-    """Tronque un code de n caractères (zoom arrière).
+    """Truncate a code by n characters (zoom out -- Theorem 6.1).
 
-    Retourne un code de précision inférieure désignant un volume englobant.
+    Returns a coarser code denoting an enclosing super-cell.
     """
     if ":" not in code:
-        raise ValueError("Format invalide")
+        raise ValueError("Invalid format")
 
     vol_prefix, base29_part = code.split(":", 1)
     base29_code = base29_part.replace("-", "")
@@ -309,7 +297,6 @@ def truncate(code, n_chars=1):
 
     truncated = base29_code[:-n_chars]
 
-    # Reformater avec tirets
     parts = [truncated[i:i+3] for i in range(0, len(truncated), 3)]
     formatted = "-".join(parts)
 
@@ -317,10 +304,9 @@ def truncate(code, n_chars=1):
 
 
 def encode_grid(p, volume="CR"):
-    """Encode tous les indices de grille et retourne le mapping.
+    """Encode every grid index and return the {(ix, iy, iz): code} mapping.
 
-    Utile pour la visualisation : retourne un dict {(ix,iy,iz): code}.
-    Pour les grandes grilles, utiliser encode() directement.
+    Useful for visualisation; for large grids, call encode() directly.
     """
     n = 1 << p
     k = _code_length_3d(p)
@@ -335,26 +321,21 @@ def encode_grid(p, volume="CR"):
 
 
 # ===================================================================
-# Fonctions utilitaires pour volumes NIfTI
+# NIfTI helpers
 # ===================================================================
 
 def voxel_to_code(voxel_ijk, affine, p=8, volume="CR"):
-    """Convertit un voxel (i, j, k) d'un NIfTI en code Altius-Code 3D.
+    """Voxel (i, j, k) of a NIfTI -> PHVE 3D code.
 
     Args:
-        voxel_ijk: tuple (i, j, k) indices du voxel dans le volume NIfTI
-        affine: matrice affine 4x4 du NIfTI (voxel -> mm)
-        p: ordre de la courbe
-        volume: préfixe du volume anatomique
-
-    Returns:
-        str: code Altius-Code 3D
+        voxel_ijk: tuple of voxel indices in the NIfTI volume.
+        affine: 4x4 NIfTI affine matrix (voxel -> mm).
+        p: Hilbert curve order.
+        volume: anatomical volume prefix.
     """
     import numpy as np
     ijk = np.array([voxel_ijk[0], voxel_ijk[1], voxel_ijk[2], 1.0])
     xyz_mm = affine @ ijk
-    # Les coordonnées NIfTI peuvent être négatives (RAS/LPS)
-    # On décale vers les positifs en utilisant les dimensions du volume
     dims = VOLUMES[volume]["dims"]
     x = xyz_mm[0] + dims[0] / 2
     y = xyz_mm[1] + dims[1] / 2
@@ -363,23 +344,13 @@ def voxel_to_code(voxel_ijk, affine, p=8, volume="CR"):
 
 
 def code_to_voxel(code, affine):
-    """Convertit un code Altius-Code 3D en indices voxel NIfTI.
-
-    Args:
-        code: code Altius-Code 3D
-        affine: matrice affine 4x4 du NIfTI
-
-    Returns:
-        tuple: (i, j, k) indices voxel
-    """
+    """PHVE 3D code -> voxel (i, j, k) of a NIfTI volume."""
     import numpy as np
     result = decode(code)
     dims = VOLUMES[result["volume"]]["dims"]
-    # Coordonnées mm (centrées sur l'origine du volume de référence)
     x_mm = result["x_mm"] - dims[0] / 2
     y_mm = result["y_mm"] - dims[1] / 2
     z_mm = result["z_mm"] - dims[2] / 2
-    # Inverse de la matrice affine
     inv_affine = np.linalg.inv(affine)
     xyz = np.array([x_mm, y_mm, z_mm, 1.0])
     ijk = inv_affine @ xyz
@@ -387,20 +358,18 @@ def code_to_voxel(code, affine):
 
 
 # ===================================================================
-# Main — Test rapide
+# Standalone smoke test
 # ===================================================================
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("  Altius-Code 3D — Test de bijectivité")
+    print("  PHVE 3D codec -- bijectivity smoke test")
     print("=" * 60)
 
-    # Test bijectivité p=3
     ok, msg = verify_bijectivity(3)
     print(f"\n  p=3 : {msg}")
 
-    # Test encode/decode
-    print(f"\n  Test encode/decode :")
+    print(f"\n  encode/decode test:")
     for vol in ["CR", "CA", "FB"]:
         dims = VOLUMES[vol]["dims"]
         x, y, z = dims[0] / 2, dims[1] / 2, dims[2] / 2  # centre
@@ -408,13 +377,12 @@ if __name__ == "__main__":
         result = decode(code)
         print(f"    {vol} centre ({x:.0f}, {y:.0f}, {z:.0f}) mm")
         print(f"      -> {code}")
-        print(f"      -> décodé: ({result['x_mm']:.1f}, {result['y_mm']:.1f}, {result['z_mm']:.1f}) mm")
-        print(f"      -> résolution: {result['resolution_mm']:.1f} mm")
+        print(f"      -> decoded: ({result['x_mm']:.1f}, {result['y_mm']:.1f}, {result['z_mm']:.1f}) mm")
+        print(f"      -> resolution: {result['resolution_mm']:.1f} mm")
 
-    # Test hiérarchie par troncature
     code = encode(150, 125, 125, p=8, volume="CR")
-    print(f"\n  Hiérarchie par troncature :")
-    print(f"    Code complet : {code}")
+    print(f"\n  Truncation hierarchy:")
+    print(f"    Full code   : {code}")
     for i in range(1, 5):
         t = truncate(code, i)
-        print(f"    Tronqué -{i}   : {t}")
+        print(f"    Truncated -{i}: {t}")
