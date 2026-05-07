@@ -329,7 +329,7 @@ def plot_results(data, affine, mask):
                  fontweight="bold", pad=20)
 
     plt.tight_layout()
-    path = os.path.join(OUTPUT_DIR, "proto_s1_brain.png")
+    path = os.path.join(OUTPUT_DIR, "bijectivity_mni152.png")
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"  -> {path}")

@@ -34,11 +34,11 @@ PHVE/
 │   ├── codec.py             # 2D Skilling kernel + base-29 codec (geolocation)
 │   ├── codec3d.py           # 3D Skilling kernel (anatomical encoding)
 │   ├── constants.py         # geographic Reference Family (DOMAINS dict)
-│   ├── proto_s1_brain.py    # Theorem 4.3 (3D bijectivity) on MNI152
-│   ├── proto_s2_interpatient.py  # Corollary 5.3 (prefix => proximity)
-│   ├── proto_s4_dpcm.py     # Theorem 8.2 (DPCM second-moment bound)
-│   ├── proto7_improved.py   # Theorem 10.2 (FEM bandwidth reduction)
-│   ├── proto_s6_surface.py  # Proposition 10.4 (surface morphing)
+│   ├── bijectivity_mni152.py     # Theorem 4.3 (3D bijectivity) on MNI152
+│   ├── interpatient_stability.py # Corollary 5.3 (prefix => proximity)
+│   ├── dpcm_compression.py       # Theorem 8.2 (DPCM second-moment bound)
+│   ├── fem_bandwidth.py          # Theorem 10.2 (FEM bandwidth reduction)
+│   ├── surface_morphing.py       # Proposition 10.4 (surface morphing)
 │   └── app_demo.py          # Streamlit demonstrator (8 tabs)
 ├── requirements.txt
 ├── LICENSE                  # MIT
@@ -60,11 +60,11 @@ Then run any single experiment:
 
 | Experiment | Script | Theorem |
 |---|---|---|
-| 3D bijectivity, MNI152, $p=8$ (235 375 voxels, 0 collisions) | `python proto_s1_brain.py` | 4.3 |
-| Inter-patient prefix stability, $p=6$ | `python proto_s2_interpatient.py` | 5.3 |
-| DPCM raster-vs-Hilbert on MNI152, $p=7$ | `python proto_s4_dpcm.py` | 8.2 |
-| FEM stiffness-matrix bandwidth, 4 251-node Delaunay mesh | `python proto7_improved.py` | 10.2 |
-| Surface morphing on a 31 328-vertex brain mesh | `python proto_s6_surface.py` | 10.4 |
+| 3D bijectivity, MNI152, $p=8$ (235 375 voxels, 0 collisions) | `python bijectivity_mni152.py` | 4.3 |
+| Inter-patient prefix stability, $p=6$ | `python interpatient_stability.py` | 5.3 |
+| DPCM raster-vs-Hilbert on MNI152, $p=7$ | `python dpcm_compression.py` | 8.2 |
+| FEM stiffness-matrix bandwidth, 4 251-node Delaunay mesh | `python fem_bandwidth.py` | 10.2 |
+| Surface morphing on a 31 328-vertex brain mesh | `python surface_morphing.py` | 10.4 |
 
 Or launch the interactive demonstrator:
 

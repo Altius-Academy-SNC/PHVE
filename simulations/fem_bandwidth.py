@@ -327,7 +327,7 @@ def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
 # ===================================================================
 
 
-def run_proto7c_improved():
+def run_fem_meshes():
     """7c+ : Comparaison sur maillage structuré ET non-structuré."""
     results = {}
 
@@ -402,7 +402,7 @@ def generate_kl_modes(nodes, elements, n_kl=5, corr_length=0.3):
     return kl_modes
 
 
-def run_proto7d():
+def run_stochastic_pde():
     """7d : EDP stochastique — Monte Carlo avec SSOR + renumérotage.
 
     Test sur maillage non-structuré pour que l'ordering ait un impact.
@@ -625,7 +625,7 @@ def plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
     ax.set_ylim(0, 1)
 
     plt.tight_layout()
-    path = os.path.join(output_dir, "proto7_improved.png")
+    path = os.path.join(output_dir, "fem_bandwidth.png")
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"  → {path}")
@@ -647,10 +647,10 @@ def main():
     print("=" * 65)
 
     # --- 7c+ : MEF structuré ET non-structuré ---
-    results_7c = run_proto7c_improved()
+    results_7c = run_fem_meshes()
 
     # --- 7d : Monte Carlo stochastique sur maillage non-structuré ---
-    stats_7d = run_proto7d()
+    stats_7d = run_stochastic_pde()
 
     # --- 7e : Maillage adaptatif ---
     print(f"\n{'─' * 60}")

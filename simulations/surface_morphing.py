@@ -283,7 +283,7 @@ def plot_results(verts_mm, faces, normals, hilbert_normalized,
     ax.set_title("Résumé du morphing", fontsize=11, fontweight="bold", pad=20)
 
     plt.tight_layout()
-    path = os.path.join(OUTPUT_DIR, "proto_s6_surface.png")
+    path = os.path.join(OUTPUT_DIR, "surface_morphing.png")
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"\n  -> Graphique sauvé : {path}")
@@ -296,7 +296,7 @@ def plot_results(verts_mm, faces, normals, hilbert_normalized,
 
 def write_report(verts_mm, faces, smooth_h, smooth_r):
     """Génère le rapport markdown."""
-    path = os.path.join(OUTPUT_DIR, "proto_s6_resultats.md")
+    path = os.path.join(OUTPUT_DIR, "surface_morphing_report.md")
 
     lines = [
         "# Proto S6 — Animation et morphing de surfaces anatomiques via Hilbert 3D",
@@ -343,9 +343,9 @@ def write_report(verts_mm, faces, smooth_h, smooth_r):
         "",
         "## Fichiers",
         "",
-        "- Script : `proto_s6_surface.py`",
-        "- Graphique : `results/proto_s6_surface.png`",
-        "- Ce rapport : `results/proto_s6_resultats.md`",
+        "- Script : `surface_morphing.py`",
+        "- Graphique : `results/surface_morphing.png`",
+        "- Ce rapport : `results/surface_morphing_report.md`",
     ]
 
     with open(path, "w") as f:

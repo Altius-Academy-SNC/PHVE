@@ -443,7 +443,7 @@ def plot_results(results_brain, results_full):
     ax.set_title("Résumé du benchmark DPCM", fontsize=11, fontweight="bold", pad=20)
 
     plt.tight_layout()
-    path = os.path.join(OUTPUT_DIR, "proto_s4_dpcm.png")
+    path = os.path.join(OUTPUT_DIR, "dpcm_compression.png")
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"\n  -> Graphique sauvé : {path}")
@@ -457,7 +457,7 @@ def plot_results(results_brain, results_full):
 def write_report(results_brain, results_full):
     """Génère le rapport markdown."""
     r = results_brain
-    path = os.path.join(OUTPUT_DIR, "proto_s4_resultats.md")
+    path = os.path.join(OUTPUT_DIR, "dpcm_compression_report.md")
 
     lines = [
         "# Proto S4 — Compression DPCM : Hilbert 3D vs Raster",
@@ -528,9 +528,9 @@ def write_report(results_brain, results_full):
         "",
         "## Fichiers",
         "",
-        "- Script : `proto_s4_dpcm.py`",
-        "- Graphique : `results/proto_s4_dpcm.png`",
-        "- Ce rapport : `results/proto_s4_resultats.md`",
+        "- Script : `dpcm_compression.py`",
+        "- Graphique : `results/dpcm_compression.png`",
+        "- Ce rapport : `results/dpcm_compression_report.md`",
     ]
 
     with open(path, "w") as f:

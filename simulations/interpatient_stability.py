@@ -178,7 +178,7 @@ def plot_results(p_values, sigma_values, sweep_results, interpatient_results, p_
     ax.set_title(f"Résultats détaillés (p={p_used})", fontsize=11, fontweight="bold", pad=20)
 
     plt.tight_layout()
-    path = os.path.join(OUTPUT_DIR, "proto_s2_interpatient.png")
+    path = os.path.join(OUTPUT_DIR, "interpatient_stability.png")
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"  -> {path}")
