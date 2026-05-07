@@ -22,7 +22,7 @@ from scipy.spatial import KDTree
 
 from codec3d import VOLUMES, xyz2d
 
-OUTPUT_DIR = "/home/paul/Documents/Code/brevets/Altius-Code/results"
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
 
 
 # ===================================================================

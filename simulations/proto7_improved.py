@@ -281,7 +281,7 @@ def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
     # CG sans préconditionneur
     iter_cg = [0]
     t0 = time.perf_counter()
-    u_cg, _ = cg(K_perm, b_perm, tol=1e-10, maxiter=5000,
+    u_cg, _ = cg(K_perm, b_perm, rtol=1e-10, maxiter=5000,
                   callback=lambda xk: iter_cg.__setitem__(0, iter_cg[0] + 1))
     t_cg = time.perf_counter() - t0
 
@@ -292,7 +292,7 @@ def solve_with_ordering(K, b, perm, inv_perm, name, use_ssor=True):
         try:
             M_ssor = make_ssor_pc(K_perm)
             t0 = time.perf_counter()
-            u_ssor, _ = cg(K_perm, b_perm, tol=1e-10, maxiter=5000,
+            u_ssor, _ = cg(K_perm, b_perm, rtol=1e-10, maxiter=5000,
                            M=M_ssor,
                            callback=lambda xk: iter_ssor.__setitem__(0, iter_ssor[0] + 1))
             t_ssor = time.perf_counter() - t0
@@ -460,7 +460,7 @@ def run_proto7d():
                 M_ssor = make_ssor_pc(K_p)
                 it = [0]
                 t0 = time.perf_counter()
-                _, info = cg(K_p, b_p, tol=1e-8, maxiter=5000, M=M_ssor,
+                _, info = cg(K_p, b_p, rtol=1e-8, maxiter=5000, M=M_ssor,
                              callback=lambda xk: it.__setitem__(0, it[0] + 1))
                 dt = time.perf_counter() - t0
                 stats[label]["iters"].append(it[0])
@@ -639,7 +639,7 @@ def plot_results(results_7c, stats_7d, nodes_s, elems_s, sol_s,
 
 def main():
     np.random.seed(42)
-    OUTPUT_DIR = "/home/paul/Documents/Code/brevets/Altius-Code/results"
+    OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
 
     print("=" * 65)
     print("  PROTOTYPE 7 AMÉLIORÉ — MEF + Stochastique + Adaptatif")

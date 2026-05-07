@@ -18,7 +18,7 @@ from codec3d import (
     _code_length_3d, _int_to_base29, _canonical_precision_3d,
 )
 
-OUTPUT_DIR = "/home/paul/Documents/Code/brevets/Altius-Code/results"
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
 
 
 def mm_to_altius(x_mm, y_mm, z_mm, p=6, volume="CR"):
