@@ -1,26 +1,32 @@
 """
-Altius-Code 3D — Interface interactive (Streamlit)
+PHVE -- interactive demonstrator (Streamlit)
 
-Dashboard complet avec toutes les applications du brevet :
-- Cerveau 3D : surface cerebrale coloree par code Altius (rotatif)
-- Explorateur : coupes IRM + encodage/decodage
-- Inter-patients (S2) : comparaison de codes entre patients
-- Recherche par prefixe : selection de region anatomique
-- Compression DPCM (S4) : benchmark Hilbert vs raster vs Morton
-- Simulation cardiaque (S5) : propagation d'onde via Hilbert 3D
-- Morphing surfaces (S6) : deformation lisse via Hilbert 1D
+Six tabs, one per experiment of the paper:
+  - Bijectivity (Theorem 4.3)        : MNI152 brain encoded by Hil_p^{(3)}.
+  - Prefix search (Proposition 10.1) : B-tree query as anatomical region selection.
+  - Inter-patient stability (Cor. 5.3): same code across MNI-registered patients.
+  - DPCM compression (Theorem 8.2)   : Hilbert vs raster vs Morton on MNI152.
+  - FEM bandwidth (Theorem 10.2)     : reordering K for unstructured meshes.
+  - Surface morphing (Prop. 10.4)    : sinusoidal deformation along Hil(v).
 
-Usage : streamlit run app_demo.py
+Usage:
+    streamlit run app_demo.py
 
-Auteur : Paul Guindo, Altius Academy SNC
+Author: Paul Guindo, Altius Academy SNC.
 """
+
+import math
+import time
+from collections import Counter
 
 import numpy as np
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import streamlit as st
-from collections import Counter
-from scipy.stats import spearmanr
+from plotly.subplots import make_subplots
+from scipy import sparse
+from scipy.sparse.linalg import cg, LinearOperator
+from scipy.sparse.csgraph import reverse_cuthill_mckee
+from scipy.spatial import Delaunay
 
 from codec3d import (
     VOLUMES, xyz2d, encode, decode, truncate,
@@ -29,23 +35,23 @@ from codec3d import (
 )
 
 # ===================================================================
-# Configuration
+# Page configuration
 # ===================================================================
 
 st.set_page_config(
-    page_title="Altius-Code 3D",
+    page_title="PHVE",
     page_icon="🧠",
     layout="wide",
 )
 
 
 # ===================================================================
-# Chargement des donnees (cached)
+# Cached loaders
 # ===================================================================
 
 @st.cache_data
 def load_brain():
-    """Charge MNI152 + masque cerebral."""
+    """Load MNI152 T1w + brain mask via nilearn."""
     from nilearn.datasets import load_mni152_template, load_mni152_brain_mask
     img = load_mni152_template(resolution=2)
     mask_img = load_mni152_brain_mask(resolution=2)
@@ -56,7 +62,7 @@ def load_brain():
 
 @st.cache_data
 def extract_brain_mesh(_data, _affine, _mask):
-    """Extrait la surface du cerveau par marching cubes."""
+    """Marching-cubes brain surface with per-vertex T1w intensity."""
     from skimage.measure import marching_cubes
     from scipy.ndimage import gaussian_filter
     smooth_mask = gaussian_filter(_mask.astype(np.float32), sigma=1.0)
@@ -73,7 +79,7 @@ def extract_brain_mesh(_data, _affine, _mask):
 
 @st.cache_data
 def compute_vertex_hilbert(verts_mm, p=5, volume="CR"):
-    """Calcule l'index Hilbert pour chaque vertex du mesh."""
+    """Hilbert index Hil_p^{(3)} for every vertex, normalised to [0, 1]."""
     dims = VOLUMES[volume]["dims"]
     n = 1 << p
     max_d = 8 ** p - 1
@@ -81,12 +87,9 @@ def compute_vertex_hilbert(verts_mm, p=5, volume="CR"):
 
     hilbert_vals = np.zeros(verts_mm.shape[0], dtype=np.float64)
     codes = []
-
     for idx in range(verts_mm.shape[0]):
         x, y, z = verts_mm[idx]
-        vx = x + dims[0] / 2
-        vy = y + dims[1] / 2
-        vz = z + dims[2] / 2
+        vx, vy, vz = x + dims[0]/2, y + dims[1]/2, z + dims[2]/2
         ix = max(0, min(n - 1, int(vx / dims[0] * n)))
         iy = max(0, min(n - 1, int(vy / dims[1] * n)))
         iz = max(0, min(n - 1, int(vz / dims[2] * n)))
@@ -94,7 +97,6 @@ def compute_vertex_hilbert(verts_mm, p=5, volume="CR"):
         hilbert_vals[idx] = d / max_d
         if idx < 10000:
             codes.append(_int_to_base29(d, k))
-
     return hilbert_vals, codes
 
 
@@ -102,13 +104,8 @@ def voxel_to_mm(i, j, k, affine):
     return (affine @ np.array([i, j, k, 1.0]))[:3]
 
 
-def mm_to_voxel(x, y, z, affine):
-    inv = np.linalg.inv(affine)
-    ijk = inv @ np.array([x, y, z, 1.0])
-    return int(round(ijk[0])), int(round(ijk[1])), int(round(ijk[2]))
-
-
-def mm_to_altius(x_mm, y_mm, z_mm, p=6, volume="CR"):
+def mm_to_phve(x_mm, y_mm, z_mm, p=6, volume="CR"):
+    """MNI mm coordinates -> PHVE 3D code."""
     dims = VOLUMES[volume]["dims"]
     x = x_mm + dims[0] / 2
     y = y_mm + dims[1] / 2
@@ -117,53 +114,54 @@ def mm_to_altius(x_mm, y_mm, z_mm, p=6, volume="CR"):
 
 
 LANDMARKS = {
-    "Centre cerveau": (0, 0, 0),
-    "Cortex frontal": (0, 50, 30),
-    "Cortex occipital": (0, -90, 0),
-    "Hippocampe G": (-25, -20, -15),
-    "Hippocampe D": (25, -20, -15),
-    "Cervelet": (0, -60, -35),
-    "Tronc cerebral": (0, -30, -30),
+    "Brain centre":      (0, 0, 0),
+    "Frontal cortex":    (0, 50, 30),
+    "Occipital cortex":  (0, -90, 0),
+    "L. hippocampus":    (-25, -20, -15),
+    "R. hippocampus":    (25, -20, -15),
+    "Cerebellum":        (0, -60, -35),
+    "Brain stem":        (0, -30, -30),
 }
 
 
 # ===================================================================
-# Page : Cerveau 3D
+# Tab 1: Bijectivity (Theorem 4.3)
 # ===================================================================
 
-def page_brain_3d():
-    st.header("Cerveau 3D — Codage Altius-Code")
+def page_bijectivity():
+    st.header("Bijectivity of $\\mathcal{F}_p^{(3),\\alpha}$ on MNI152")
+    st.caption("Theorem 4.3: the encoding map is a bijection on the cell-centre grid.")
 
     data, affine, mask = load_brain()
-    st.caption(f"MNI152 T1w | {data.shape} | 2 mm | {mask.sum():,} voxels cerebraux")
+    st.caption(f"MNI152 T1w | shape {data.shape} | 2 mm isotropic | {mask.sum():,} brain voxels")
 
     col_ctrl, col_3d = st.columns([1, 3])
 
     with col_ctrl:
-        p = st.slider("Precision (p)", 3, 7, 5,
-                       help="Ordre de la courbe de Hilbert pour la coloration")
-        color_mode = st.radio("Coloration", ["Index Hilbert", "IRM (intensite)", "Regions (prefixe)"])
-        opacity = st.slider("Opacite", 0.3, 1.0, 0.8, 0.05)
-        show_landmarks = st.checkbox("Afficher points anatomiques", value=True)
+        p = st.slider("Order $p$", 3, 7, 5,
+                       help="Order of the Hilbert curve used to colour the surface.")
+        color_mode = st.radio("Colour by", ["Hilbert index", "T1w intensity", "Prefix region"])
+        opacity = st.slider("Opacity", 0.3, 1.0, 0.8, 0.05)
+        show_landmarks = st.checkbox("Show anatomical landmarks", value=True)
 
-    with st.spinner("Extraction de la surface cerebrale..."):
+    with st.spinner("Extracting brain surface..."):
         verts_mm, faces, normals, intensity = extract_brain_mesh(data, affine, mask)
 
     st.sidebar.metric("Vertices", f"{verts_mm.shape[0]:,}")
     st.sidebar.metric("Triangles", f"{faces.shape[0]:,}")
 
-    if color_mode == "Index Hilbert":
-        with st.spinner(f"Calcul des index Hilbert (p={p})..."):
+    if color_mode == "Hilbert index":
+        with st.spinner(f"Computing Hil_p^{{(3)}} (p={p})..."):
             hilbert_vals, _ = compute_vertex_hilbert(verts_mm, p=p, volume="CR")
         vertex_colors = hilbert_vals
         colorscale = "HSV"
-        colorbar_title = "Index Hilbert"
-    elif color_mode == "IRM (intensite)":
+        colorbar_title = "Hilbert index"
+    elif color_mode == "T1w intensity":
         vertex_colors = intensity
         colorscale = "Gray"
-        colorbar_title = "Intensite T1w"
+        colorbar_title = "T1w intensity"
     else:
-        with st.spinner(f"Calcul des regions (p={p})..."):
+        with st.spinner(f"Computing prefix regions (p={p})..."):
             hilbert_vals, _ = compute_vertex_hilbert(verts_mm, p=p, volume="CR")
         dims = VOLUMES["CR"]["dims"]
         n = 1 << p
@@ -180,7 +178,7 @@ def page_brain_3d():
             region_ids[idx] = hash(code[:2]) % 20
         vertex_colors = region_ids
         colorscale = "Rainbow"
-        colorbar_title = "Region (prefixe 2 chars)"
+        colorbar_title = "Region (2-char prefix)"
 
     with col_3d:
         fig = go.Figure()
@@ -199,7 +197,7 @@ def page_brain_3d():
         if show_landmarks:
             lm_x, lm_y, lm_z, lm_names, lm_codes = [], [], [], [], []
             for name, (x, y, z) in LANDMARKS.items():
-                code = mm_to_altius(x, y, z, p=p, volume="CR")
+                code = mm_to_phve(x, y, z, p=p, volume="CR")
                 lm_x.append(x); lm_y.append(y); lm_z.append(z)
                 lm_names.append(name); lm_codes.append(code)
             fig.add_trace(go.Scatter3d(
@@ -209,7 +207,7 @@ def page_brain_3d():
                 text=lm_codes, textposition="top center",
                 textfont=dict(size=9, color="white"),
                 hovertext=[f"{n}<br>{c}" for n, c in zip(lm_names, lm_codes)],
-                hoverinfo="text", name="Points anatomiques",
+                hoverinfo="text", name="Anatomical landmarks",
             ))
 
         fig.update_layout(
@@ -223,21 +221,21 @@ def page_brain_3d():
         st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    st.subheader("Encodeur / Decodeur")
+    st.subheader("Encoder / decoder")
     col_enc, col_dec = st.columns(2)
 
     with col_enc:
-        st.markdown("**Coordonnees MNI -> Code Altius**")
+        st.markdown("**MNI coordinates -> PHVE code**")
         c1, c2, c3 = st.columns(3)
         x_in = c1.number_input("X (mm)", value=0.0, step=5.0, key="enc_x")
         y_in = c2.number_input("Y (mm)", value=0.0, step=5.0, key="enc_y")
         z_in = c3.number_input("Z (mm)", value=0.0, step=5.0, key="enc_z")
-        p_enc = st.slider("Precision", 3, 10, 8, key="enc_p")
-        code = mm_to_altius(x_in, y_in, z_in, p=p_enc, volume="CR")
+        p_enc = st.slider("Order $p$", 3, 10, 8, key="enc_p")
+        code = mm_to_phve(x_in, y_in, z_in, p=p_enc, volume="CR")
         decoded = decode(code)
         st.code(code, language=None)
-        st.caption(f"Resolution : {decoded['resolution_mm']:.1f} mm")
-        with st.expander("Hierarchie par troncature"):
+        st.caption(f"Resolution: {decoded['resolution_mm']:.1f} mm")
+        with st.expander("Truncation hierarchy (Theorem 6.1)"):
             raw_full = code.split(":")[1].replace("-", "")
             vol = code.split(":")[0]
             dims = VOLUMES[vol]["dims"]
@@ -251,7 +249,7 @@ def page_brain_3d():
                     st.text(f"  {c:20s}  ~{res:.0f} mm")
 
     with col_dec:
-        st.markdown("**Code Altius -> Coordonnees MNI**")
+        st.markdown("**PHVE code -> MNI coordinates**")
         code_input = st.text_input("Code", placeholder="CR:GSX-7X", key="dec_code")
         if code_input:
             try:
@@ -261,145 +259,29 @@ def page_brain_3d():
                 y_mni = result["y_mm"] - d[1] / 2
                 z_mni = result["z_mm"] - d[2] / 2
                 st.success(f"**({x_mni:.1f}, {y_mni:.1f}, {z_mni:.1f})** mm MNI")
-                st.caption(f"Resolution : {result['resolution_mm']:.1f} mm | Volume : {result['volume']}")
+                st.caption(f"Resolution: {result['resolution_mm']:.1f} mm | Volume: {result['volume']}")
             except ValueError as e:
                 st.error(str(e))
 
 
 # ===================================================================
-# Page : Explorateur coupes IRM
-# ===================================================================
-
-def page_explorer():
-    st.header("Explorateur IRM — Coupes orthogonales")
-    data, affine, mask = load_brain()
-
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        si = st.slider("Sagittale (i)", 0, data.shape[0] - 1, data.shape[0] // 2)
-    with col2:
-        sj = st.slider("Coronale (j)", 0, data.shape[1] - 1, data.shape[1] // 2)
-    with col3:
-        sk = st.slider("Axiale (k)", 0, data.shape[2] - 1, data.shape[2] // 2)
-
-    xyz = voxel_to_mm(si, sj, sk, affine)
-    fig = make_subplots(rows=1, cols=3,
-                        subplot_titles=["Sagittale", "Coronale", "Axiale"],
-                        horizontal_spacing=0.05)
-    for idx, s in enumerate([
-        np.rot90(data[si, :, :]),
-        np.rot90(data[:, sj, :]),
-        np.rot90(data[:, :, sk]),
-    ]):
-        fig.add_trace(go.Heatmap(z=s, colorscale="Gray", showscale=False),
-                       row=1, col=idx + 1)
-    for col_idx, (hx, hy) in enumerate([
-        (sj, data.shape[2] - sk - 1),
-        (si, data.shape[2] - sk - 1),
-        (si, data.shape[1] - sj - 1),
-    ], 1):
-        fig.add_hline(y=hy, line_dash="dot", line_color="cyan", line_width=1, row=1, col=col_idx)
-        fig.add_vline(x=hx, line_dash="dot", line_color="cyan", line_width=1, row=1, col=col_idx)
-    fig.update_layout(height=350, margin=dict(l=10, r=10, t=40, b=10))
-    fig.update_xaxes(showticklabels=False)
-    fig.update_yaxes(showticklabels=False)
-    st.plotly_chart(fig, use_container_width=True)
-
-    p = st.slider("Precision (p)", 3, 10, 8, key="expl_p")
-    code = mm_to_altius(xyz[0], xyz[1], xyz[2], p=p, volume="CR")
-    decoded = decode(code)
-    st.markdown(f"""
-    | | Valeur |
-    |---|---|
-    | **Coordonnees MNI** | ({xyz[0]:.1f}, {xyz[1]:.1f}, {xyz[2]:.1f}) mm |
-    | **Voxel** | ({si}, {sj}, {sk}) |
-    | **Code Altius** | `{code}` |
-    | **Resolution** | {decoded['resolution_mm']:.1f} mm |
-    | **Recherche SQL** | `WHERE code LIKE '{code.split(":")[1][:3]}%'` |
-    """)
-
-
-# ===================================================================
-# Page S2 : Comparaison inter-patients
-# ===================================================================
-
-def page_interpatient():
-    st.header("S2 — Comparaison inter-patients")
-    st.markdown("""
-    **Objectif** : Montrer que le meme point anatomique recoit un code identique
-    (ou tres proche) chez differents patients, une fois recale dans l'espace MNI.
-    """)
-
-    data, affine, mask = load_brain()
-    p = st.slider("Precision (p)", 3, 10, 6, key="s2_p")
-
-    rows = []
-    matches = 0
-    for name, (x, y, z) in LANDMARKS.items():
-        code_a = mm_to_altius(x, y, z, p=p, volume="CR")
-        rng_b = np.random.RandomState(hash(name) % 2**31)
-        residual = rng_b.normal(0, 0.5, size=3)
-        code_b = mm_to_altius(x + residual[0], y + residual[1], z + residual[2],
-                              p=p, volume="CR")
-        raw_a = code_a.split(":")[1].replace("-", "")
-        raw_b = code_b.split(":")[1].replace("-", "")
-        common = sum(1 for a, b in zip(raw_a, raw_b) if a == b)
-        is_match = code_a == code_b
-        if is_match:
-            matches += 1
-        rows.append({
-            "Point": name,
-            "MNI (mm)": f"({x:+d}, {y:+d}, {z:+d})",
-            "Patient A": code_a,
-            "Patient B": code_b,
-            "Match": "Identique" if is_match else f"Prefixe: {common}/{len(raw_a)}",
-        })
-
-    st.dataframe(rows, use_container_width=True, hide_index=True)
-    pct = matches / len(LANDMARKS) * 100
-    st.metric("Codes identiques", f"{matches}/{len(LANDMARKS)} ({pct:.0f}%)")
-
-    st.subheader("Robustesse vs. precision")
-    p_values = list(range(3, 11))
-    match_pcts = []
-    for p_test in p_values:
-        m = 0
-        for name, (x, y, z) in LANDMARKS.items():
-            code_a = mm_to_altius(x, y, z, p=p_test, volume="CR")
-            rng_b = np.random.RandomState(hash(name) % 2**31)
-            residual = rng_b.normal(0, 0.5, size=3)
-            code_b = mm_to_altius(x + residual[0], y + residual[1], z + residual[2],
-                                  p=p_test, volume="CR")
-            if code_a == code_b:
-                m += 1
-        match_pcts.append(m / len(LANDMARKS) * 100)
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=p_values, y=match_pcts, mode="lines+markers",
-                              line=dict(color="#2ecc71", width=3), marker=dict(size=10)))
-    fig.update_layout(xaxis_title="Ordre p", yaxis_title="Codes identiques (%)",
-                       height=350, yaxis=dict(range=[0, 105]))
-    st.plotly_chart(fig, use_container_width=True)
-
-
-# ===================================================================
-# Page : Recherche par prefixe
+# Tab 2: Prefix search (Proposition 10.1)
 # ===================================================================
 
 def page_prefix_search():
-    st.header("Recherche par prefixe")
-    st.markdown("Selectionnez un prefixe pour visualiser la region 3D correspondante.")
+    st.header("Prefix search as B-tree query (Proposition 10.1)")
+    st.caption("Codes starting with a fixed prefix form a contiguous lexicographic interval (Theorem 6.1), retrievable by a single B-tree range scan in $O(\\log N + |R|)$.")
 
     data, affine, mask = load_brain()
     col1, col2 = st.columns([1, 3])
 
     with col1:
-        p = st.slider("Precision (p)", 3, 6, 4, key="pf_p")
-        example = mm_to_altius(0, 0, 0, p=p, volume="CR")
+        p = st.slider("Order $p$", 3, 6, 4, key="pf_p")
+        example = mm_to_phve(0, 0, 0, p=p, volume="CR")
         example_raw = example.split(":")[1].replace("-", "")
-        st.caption(f"Centre cerveau = `{example}` (raw: `{example_raw}`)")
-        prefix = st.text_input("Prefixe", value=example_raw[:1],
-                               help="Premiers caracteres du code (sans 'CR:')")
+        st.caption(f"Brain centre = `{example}` (raw: `{example_raw}`)")
+        prefix = st.text_input("Prefix", value=example_raw[:1],
+                               help="Leading characters of the code (without the 'CR:' volume tag).")
 
     with col2:
         verts_mm, faces, normals, intensity = extract_brain_mesh(data, affine, mask)
@@ -429,7 +311,7 @@ def page_prefix_search():
             lighting=dict(ambient=0.4, diffuse=0.8, specular=0.3),
             lightposition=dict(x=100, y=200, z=300),
         ))
-        n_match = match_mask.sum()
+        n_match = int(match_mask.sum())
         n_total = verts_mm.shape[0]
         fig.update_layout(
             scene=dict(
@@ -437,19 +319,80 @@ def page_prefix_search():
                 aspectmode="data",
                 camera=dict(eye=dict(x=1.8, y=0.8, z=0.6)),
             ),
-            title=f"Prefixe 'CR:{prefix}...' — {n_match:,}/{n_total:,} vertices ({n_match/max(n_total,1)*100:.1f}%)",
+            title=f"Prefix 'CR:{prefix}...' -- {n_match:,}/{n_total:,} vertices ({n_match/max(n_total,1)*100:.1f}%)",
             height=600, margin=dict(l=0, r=0, t=40, b=0),
         )
         st.plotly_chart(fig, use_container_width=True)
-        st.code(f"SELECT * FROM voxels WHERE altius_code LIKE 'CR:{prefix}%';", language="sql")
+        st.code(f"SELECT * FROM voxels WHERE phve_code LIKE 'CR:{prefix}%';", language="sql")
 
 
 # ===================================================================
-# Page S4 : Compression DPCM
+# Tab 3: Inter-patient stability (Corollary 5.3)
+# ===================================================================
+
+def page_interpatient():
+    st.header("Inter-patient stability (Corollary 5.3)")
+    st.caption("After MNI registration, the same anatomical landmark receives an identical or near-identical PHVE code across patients.")
+
+    data, affine, mask = load_brain()
+    p = st.slider("Order $p$", 3, 10, 6, key="s2_p",
+                  help="$p=6$ corresponds to a $\\sim$5 mm grid.")
+    sigma = st.slider("Residual registration error $\\sigma$ (mm)", 0.1, 2.0, 0.5, 0.1, key="s2_sigma")
+
+    rows = []
+    matches = 0
+    for name, (x, y, z) in LANDMARKS.items():
+        code_a = mm_to_phve(x, y, z, p=p, volume="CR")
+        rng_b = np.random.RandomState(hash(name) % 2**31)
+        residual = rng_b.normal(0, sigma, size=3)
+        code_b = mm_to_phve(x + residual[0], y + residual[1], z + residual[2],
+                              p=p, volume="CR")
+        raw_a = code_a.split(":")[1].replace("-", "")
+        raw_b = code_b.split(":")[1].replace("-", "")
+        common = sum(1 for a, b in zip(raw_a, raw_b) if a == b)
+        is_match = code_a == code_b
+        if is_match:
+            matches += 1
+        rows.append({
+            "Landmark": name,
+            "MNI (mm)": f"({x:+d}, {y:+d}, {z:+d})",
+            "Patient A": code_a,
+            "Patient B": code_b,
+            "Match": "Identical" if is_match else f"Common prefix: {common}/{len(raw_a)}",
+        })
+
+    st.dataframe(rows, use_container_width=True, hide_index=True)
+    pct = matches / len(LANDMARKS) * 100
+    st.metric("Identical codes", f"{matches}/{len(LANDMARKS)} ({pct:.0f}%)")
+
+    st.subheader("Robustness vs. order $p$")
+    p_values = list(range(3, 11))
+    match_pcts = []
+    for p_test in p_values:
+        m = 0
+        for name, (x, y, z) in LANDMARKS.items():
+            code_a = mm_to_phve(x, y, z, p=p_test, volume="CR")
+            rng_b = np.random.RandomState(hash(name) % 2**31)
+            residual = rng_b.normal(0, sigma, size=3)
+            code_b = mm_to_phve(x + residual[0], y + residual[1], z + residual[2],
+                                  p=p_test, volume="CR")
+            if code_a == code_b:
+                m += 1
+        match_pcts.append(m / len(LANDMARKS) * 100)
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=p_values, y=match_pcts, mode="lines+markers",
+                              line=dict(color="#2ecc71", width=3), marker=dict(size=10)))
+    fig.update_layout(xaxis_title="Order $p$", yaxis_title="Identical codes (%)",
+                       height=350, yaxis=dict(range=[0, 105]))
+    st.plotly_chart(fig, use_container_width=True)
+
+
+# ===================================================================
+# Tab 4: DPCM compression (Theorem 8.2)
 # ===================================================================
 
 def _shannon_entropy(signal):
-    """Entropie de Shannon (bits)."""
     counts = Counter(signal)
     total = len(signal)
     h = 0.0
@@ -471,16 +414,14 @@ def _morton_index_3d(x, y, z):
 
 @st.cache_data
 def compute_dpcm_benchmark(_data, _mask, _affine, p):
-    """Calcule le benchmark DPCM pour les 3 ordres de parcours."""
+    """DPCM benchmark on the brain mask, three traversals."""
     dims = VOLUMES["CR"]["dims"]
     n = 1 << p
     brain_coords = np.argwhere(_mask)
     total = len(brain_coords)
 
-    # Raster
     raster_signal = _data[_mask].astype(np.int32)
 
-    # Hilbert & Morton
     hilbert_indices = np.zeros(total, dtype=np.int64)
     morton_indices = np.zeros(total, dtype=np.int64)
     intensities = np.zeros(total, dtype=np.float64)
@@ -501,7 +442,6 @@ def compute_dpcm_benchmark(_data, _mask, _affine, p):
     hilbert_signal = intensities[hilbert_order].astype(np.int32)
     morton_signal = intensities[morton_order].astype(np.int32)
 
-    # DPCM
     dpcm_raster = np.diff(raster_signal)
     dpcm_hilbert = np.diff(hilbert_signal)
     dpcm_morton = np.diff(morton_signal)
@@ -526,36 +466,35 @@ def compute_dpcm_benchmark(_data, _mask, _affine, p):
 
 
 def page_dpcm():
-    st.header("S4 — Compression DPCM : Hilbert vs Raster vs Morton")
-    st.markdown("""
-    **Revendication 9** : Le parcours de Hilbert 3D reduit l'entropie DPCM
-    de **5 a 15%** par rapport au raster sur des volumes cliniques.
+    st.header("DPCM compression along the Hilbert traversal (Theorem 8.2)")
+    st.markdown(r"""
+The empirical second moment of the DPCM residual along the Hilbert traversal
+$\gamma_H$ is bounded by $L^2$ for $L$-Lipschitz signals (independent of grid
+size $n$), versus $L^2 \cdot n$ for the raster traversal $\gamma_R$. Under a
+zero-mean Gaussian residual model (Section 10.2), this yields a Shannon-entropy
+advantage of $\tfrac{1}{2}\log_2 n$ bits per sample asymptotically.
 
-    La compression DPCM (prediction differentielle) encode la difference entre
-    valeurs consecutives. Un parcours preservant la localite spatiale produit
-    des differences plus petites = entropie plus basse = meilleure compression.
-    """)
+The MNI152 atlas is a near-binary averaged volume and falls outside the
+worst-case regime: see Remark 8.4 of the paper.
+""")
 
     data, affine, mask = load_brain()
-    p = st.slider("Ordre Hilbert (p)", 4, 7, 6, key="s4_p",
-                   help="p=6: 64^3 grid (~5mm), p=7: 128^3 (~2.5mm)")
+    p = st.slider("Hilbert order $p$", 4, 7, 6, key="s4_p",
+                   help="$p=6$: $64^3$ grid (~5 mm); $p=7$: $128^3$ (~2.5 mm).")
 
-    with st.spinner(f"Calcul DPCM (p={p}, {mask.sum():,} voxels)... peut prendre ~1 min"):
+    with st.spinner(f"Computing DPCM (p={p}, {mask.sum():,} voxels)... ~1 min"):
         r = compute_dpcm_benchmark(data, mask, affine, p)
 
-    # Metriques
     col1, col2, col3 = st.columns(3)
-    col1.metric("Entropie Raster", f"{r['h_raster']:.3f} bits")
-    col2.metric("Entropie Morton", f"{r['h_morton']:.3f} bits",
+    col1.metric("Raster entropy", f"{r['h_raster']:.3f} bits")
+    col2.metric("Morton entropy", f"{r['h_morton']:.3f} bits",
                 delta=f"{r['red_morton_vs_raster']:+.2f}%")
-    col3.metric("Entropie Hilbert", f"{r['h_hilbert']:.3f} bits",
+    col3.metric("Hilbert entropy", f"{r['h_hilbert']:.3f} bits",
                 delta=f"{r['red_hilbert_vs_raster']:+.2f}%")
 
-    # Graphiques
     col_a, col_b = st.columns(2)
 
     with col_a:
-        # Barplot
         fig = go.Figure()
         methods = ["Raster", "Morton", "Hilbert"]
         vals = [r['h_raster'], r['h_morton'], r['h_hilbert']]
@@ -563,14 +502,13 @@ def page_dpcm():
         fig.add_trace(go.Bar(x=methods, y=vals, marker_color=colors,
                              text=[f"{v:.3f}" for v in vals], textposition="outside"))
         fig.update_layout(
-            title="Entropie DPCM (bits) — plus bas = meilleur",
-            yaxis_title="Entropie de Shannon (bits)",
+            title="DPCM entropy (bits) -- lower is better",
+            yaxis_title="Shannon entropy (bits)",
             height=400, yaxis=dict(range=[0, max(vals) * 1.15]),
         )
         st.plotly_chart(fig, use_container_width=True)
 
     with col_b:
-        # Histogramme
         fig = go.Figure()
         bins_spec = dict(start=-200, end=200, size=5)
         fig.add_trace(go.Histogram(x=r['dpcm_raster'], name="Raster",
@@ -578,29 +516,30 @@ def page_dpcm():
         fig.add_trace(go.Histogram(x=r['dpcm_hilbert'], name="Hilbert",
                                     opacity=0.5, xbins=bins_spec, histnorm="probability density"))
         fig.update_layout(
-            title="Distribution des residus DPCM",
-            xaxis_title="Residu (diff)", yaxis_title="Densite",
+            title="DPCM residual distribution",
+            xaxis_title="residual $r^\\gamma_i$",
+            yaxis_title="density",
             barmode="overlay", height=400,
             xaxis=dict(range=[-200, 200]),
         )
         st.plotly_chart(fig, use_container_width=True)
 
-    # Tableau
-    st.subheader("Resume")
+    st.subheader("Summary")
     st.dataframe([
-        {"Metrique": "Voxels cerebraux", "Raster": f"{r['n_voxels']:,}",
+        {"Metric": "Brain voxels", "Raster": f"{r['n_voxels']:,}",
          "Morton": f"{r['n_voxels']:,}", "Hilbert": f"{r['n_voxels']:,}"},
-        {"Metrique": "H(original)", "Raster": f"{r['h_orig']:.3f}",
+        {"Metric": "H(original)", "Raster": f"{r['h_orig']:.3f}",
          "Morton": f"{r['h_orig']:.3f}", "Hilbert": f"{r['h_orig']:.3f}"},
-        {"Metrique": "H(DPCM)", "Raster": f"{r['h_raster']:.3f}",
+        {"Metric": "H(DPCM)", "Raster": f"{r['h_raster']:.3f}",
          "Morton": f"{r['h_morton']:.3f}", "Hilbert": f"{r['h_hilbert']:.3f}"},
-        {"Metrique": "Reduction vs raster", "Raster": "—",
+        {"Metric": "Reduction vs raster", "Raster": "--",
          "Morton": f"{r['red_morton_vs_raster']:+.2f}%",
          "Hilbert": f"{r['red_hilbert_vs_raster']:+.2f}%"},
-        {"Metrique": "|residu| moyen", "Raster": f"{np.abs(r['dpcm_raster']).mean():.1f}",
+        {"Metric": "Mean |residual|",
+         "Raster": f"{np.abs(r['dpcm_raster']).mean():.1f}",
          "Morton": f"{np.abs(r['dpcm_morton']).mean():.1f}",
          "Hilbert": f"{np.abs(r['dpcm_hilbert']).mean():.1f}"},
-        {"Metrique": "% residus = 0",
+        {"Metric": "Zero residuals",
          "Raster": f"{np.sum(r['dpcm_raster']==0)/len(r['dpcm_raster'])*100:.1f}%",
          "Morton": f"{np.sum(r['dpcm_morton']==0)/len(r['dpcm_morton'])*100:.1f}%",
          "Hilbert": f"{np.sum(r['dpcm_hilbert']==0)/len(r['dpcm_hilbert'])*100:.1f}%"},
@@ -608,201 +547,251 @@ def page_dpcm():
 
 
 # ===================================================================
-# Page S5 : Simulation cardiaque
+# Tab 5: FEM bandwidth (Theorem 10.2)
 # ===================================================================
 
-CA_DIMS = VOLUMES["CA"]["dims"]
-A_OUT, B_OUT, C_OUT = 55, 40, 35
-A_IN, B_IN, C_IN = 35, 25, 20
-CX, CY, CZ = CA_DIMS[0] / 2, CA_DIMS[1] / 2, CA_DIMS[2] / 2
+def _xy2d_2d(p, x, y):
+    """2D Hilbert encoder for the FEM tab."""
+    n = 1 << p
+    d = 0
+    s = n >> 1
+    while s > 0:
+        rx = 1 if (x & s) > 0 else 0
+        ry = 1 if (y & s) > 0 else 0
+        d += s * s * ((3 * rx) ^ ry)
+        if ry == 0:
+            if rx == 1:
+                x = s - 1 - x
+                y = s - 1 - y
+            x, y = y, x
+        s >>= 1
+    return d
 
 
 @st.cache_data
-def create_heart_model(spacing_mm=3.0, sa_offset=(30, 25, 20), speed=0.8, p=6):
-    """Cree le modele cardiaque et calcule tous les indices."""
-    nx = int(CA_DIMS[0] / spacing_mm)
-    ny = int(CA_DIMS[1] / spacing_mm)
-    nz = int(CA_DIMS[2] / spacing_mm)
-    n = 1 << p
+def build_fem_problem(n_points, mesh_type, seed=42):
+    """Generate mesh + assemble stiffness matrix and rhs for the FEM tab."""
+    rng = np.random.RandomState(seed)
+    if mesh_type == "structured":
+        nx = max(8, int(np.sqrt(n_points)))
+        x = np.linspace(0, 1, nx + 1)
+        y = np.linspace(0, 1, nx + 1)
+        xx, yy = np.meshgrid(x, y)
+        nodes = np.column_stack([xx.ravel(), yy.ravel()])
+        elements = []
+        for j in range(nx):
+            for i in range(nx):
+                n0 = j * (nx + 1) + i
+                n1 = n0 + 1
+                n2 = n0 + (nx + 1)
+                n3 = n2 + 1
+                elements.append([n0, n1, n2])
+                elements.append([n1, n3, n2])
+        elements = np.array(elements)
+        boundary = set()
+        for i in range(nx + 1):
+            boundary.add(i)
+            boundary.add(nx * (nx + 1) + i)
+        for j in range(nx + 1):
+            boundary.add(j * (nx + 1))
+            boundary.add(j * (nx + 1) + nx)
+        boundary = np.array(sorted(boundary))
+    else:
+        pts_int = rng.rand(n_points, 2)
+        n_edge = max(20, int(np.sqrt(n_points)))
+        t = np.linspace(0, 1, n_edge, endpoint=False)
+        pts_b = np.column_stack([t, np.zeros(n_edge)])
+        pts_t = np.column_stack([t, np.ones(n_edge)])
+        pts_l = np.column_stack([np.zeros(n_edge), t])
+        pts_r = np.column_stack([np.ones(n_edge), t])
+        nodes = np.vstack([pts_int, pts_b, pts_t, pts_l, pts_r])
+        _, uidx = np.unique(np.round(nodes, 8), axis=0, return_index=True)
+        nodes = nodes[np.sort(uidx)]
+        tri = Delaunay(nodes)
+        elements = tri.simplices
+        eps = 1e-6
+        boundary = np.where(
+            (nodes[:, 0] < eps) | (nodes[:, 0] > 1 - eps) |
+            (nodes[:, 1] < eps) | (nodes[:, 1] > 1 - eps)
+        )[0]
 
-    coords, hilbert_idx, raster_idx, morton_idx = [], [], [], []
+    # Assembly
+    N = len(nodes)
+    rows, cols, vals = [], [], []
+    for elem in elements:
+        x = nodes[elem, 0]; y = nodes[elem, 1]
+        area = 0.5 * abs((x[1] - x[0]) * (y[2] - y[0]) -
+                         (x[2] - x[0]) * (y[1] - y[0]))
+        if area < 1e-15:
+            continue
+        b = np.array([y[1] - y[2], y[2] - y[0], y[0] - y[1]])
+        c = np.array([x[2] - x[1], x[0] - x[2], x[1] - x[0]])
+        for i in range(3):
+            for j in range(3):
+                rows.append(elem[i]); cols.append(elem[j])
+                vals.append((b[i] * b[j] + c[i] * c[j]) / (4 * area))
+    K = sparse.coo_matrix((vals, (rows, cols)), shape=(N, N)).tocsr()
 
-    for i in range(nx):
-        for j in range(ny):
-            for k in range(nz):
-                x = (i + 0.5) * spacing_mm
-                y = (j + 0.5) * spacing_mm
-                z = (k + 0.5) * spacing_mm
-                dx = (x - CX) / A_OUT
-                dy = (y - CY) / B_OUT
-                dz = (z - CZ) / C_OUT
-                if dx**2 + dy**2 + dz**2 > 1.0:
-                    continue
-                dxi = (x - CX) / A_IN
-                dyi = (y - CY) / B_IN
-                dzi = (z - CZ) / C_IN
-                if dxi**2 + dyi**2 + dzi**2 < 1.0:
-                    continue
-                coords.append([x, y, z])
-                ix = max(0, min(n-1, int(x / CA_DIMS[0] * n)))
-                iy = max(0, min(n-1, int(y / CA_DIMS[1] * n)))
-                iz = max(0, min(n-1, int(z / CA_DIMS[2] * n)))
-                hilbert_idx.append(xyz2d(p, ix, iy, iz))
-                raster_idx.append(ix * n * n + iy * n + iz)
-                m = 0
-                for b in range(16):
-                    m |= ((ix >> b) & 1) << (3*b+2)
-                    m |= ((iy >> b) & 1) << (3*b+1)
-                    m |= ((iz >> b) & 1) << (3*b)
-                morton_idx.append(m)
+    # rhs: Gaussian source at (0.5, 0.5)
+    rhs = np.zeros(N)
+    cx, cy, sigma = 0.5, 0.5, 0.1
+    for elem in elements:
+        x = nodes[elem, 0]; y = nodes[elem, 1]
+        area = 0.5 * abs((x[1] - x[0]) * (y[2] - y[0]) -
+                         (x[2] - x[0]) * (y[1] - y[0]))
+        for i in range(3):
+            r2 = (nodes[elem[i], 0] - cx) ** 2 + (nodes[elem[i], 1] - cy) ** 2
+            rhs[elem[i]] += area / 3 * 100 * math.exp(-r2 / (2 * sigma ** 2))
 
-    coords = np.array(coords)
-    hilbert_idx = np.array(hilbert_idx, dtype=np.int64)
-    raster_idx = np.array(raster_idx, dtype=np.int64)
-    morton_idx = np.array(morton_idx, dtype=np.int64)
+    # Dirichlet
+    K = K.tolil()
+    for node in boundary:
+        K[node, :] = 0
+        K[:, node] = 0
+        K[node, node] = 1
+        rhs[node] = 0
+    K = K.tocsr()
 
-    sa = np.array([CX + sa_offset[0], CY + sa_offset[1], CZ + sa_offset[2]])
-    arrival = np.linalg.norm(coords - sa, axis=1) / speed
-
-    return coords, arrival, hilbert_idx, raster_idx, morton_idx, sa
+    return nodes, elements, boundary, K, rhs
 
 
-def _traversal_stats(arrival, indices, coords, threshold=5.0):
-    order = np.argsort(indices)
-    sorted_t = arrival[order]
-    jumps = np.abs(np.diff(sorted_t))
-    rho, _ = spearmanr(np.arange(len(arrival)), sorted_t)
-    sorted_c = coords[order]
-    dists = np.linalg.norm(np.diff(sorted_c, axis=0), axis=1)
-    cache = np.mean(dists < threshold)
-    return {"rho": rho, "jump_mean": jumps.mean(), "cache": cache * 100,
-            "dist_mean": dists.mean(), "jumps": jumps}
+def _solve_one_ordering(K, rhs, perm):
+    P = sparse.eye(K.shape[0], format="csr")[perm, :]
+    K_p = (P @ K @ P.T).tocsr()
+    rhs_p = P @ rhs
+    rows, cols = K_p.nonzero()
+    bw_avg = float(np.mean(np.abs(rows - cols))) if len(rows) > 0 else 0.0
+    bw_max = int(np.max(np.abs(rows - cols))) if len(rows) > 0 else 0
+
+    iter_count = [0]
+    t0 = time.perf_counter()
+    u_p, info = cg(K_p, rhs_p, rtol=1e-8, maxiter=2000,
+                    callback=lambda xk: iter_count.__setitem__(0, iter_count[0] + 1))
+    dt = (time.perf_counter() - t0) * 1000
+    return {
+        "K_p": K_p,
+        "u": P.T @ u_p,
+        "bw_avg": bw_avg,
+        "bw_max": bw_max,
+        "iter_cg": iter_count[0],
+        "time_ms": dt,
+    }
 
 
-def page_cardiac():
-    st.header("S5 — Simulation cardiaque : propagation d'onde via Hilbert 3D")
-    st.markdown("""
-    **Revendication 8** : Le parcours de Hilbert 3D suit naturellement la propagation
-    physique de l'onde de depolarisation dans le myocarde (de proche en proche).
+def page_fem():
+    st.header("FEM stiffness-matrix bandwidth (Theorem 10.2)")
+    st.markdown(r"""
+Reordering the nodes of an unstructured mesh by their 2D Hilbert index
+$\mathrm{Hil}_p^{(2)}$ reduces the bandwidth of the assembled stiffness matrix
+$\mathbf{K}$ to $C_d (h/\Delta)^d + O(n^{d-1})$ (Theorem 10.2(a)), against
+$N - 1$ in the worst-case natural ordering (10.2(b)).
+""")
 
-    Modele : myocarde ellipsoidal dans le volume **CA** (150x120x100 mm),
-    onde depuis le noeud sino-atrial (SA).
-    """)
-
-    col_ctrl, col_main = st.columns([1, 3])
-
+    col_ctrl, _ = st.columns([1, 3])
     with col_ctrl:
-        spacing = st.slider("Espacement (mm)", 2.0, 5.0, 3.0, 0.5, key="s5_sp")
-        speed = st.slider("Vitesse (mm/ms)", 0.3, 2.0, 0.8, 0.1, key="s5_v")
-        sa_x = st.slider("SA offset X", 0, 50, 30, key="s5_sx")
-        sa_y = st.slider("SA offset Y", 0, 40, 25, key="s5_sy")
-        sa_z = st.slider("SA offset Z", 0, 30, 20, key="s5_sz")
+        mesh_type = st.radio("Mesh type", ["unstructured", "structured"], key="fem_mesh")
+        n_points = st.slider("Number of nodes", 200, 3000, 1000, 100, key="fem_n")
+        run = st.button("Run", type="primary", key="fem_run")
 
-    with st.spinner("Calcul du modele cardiaque..."):
-        coords, arrival, h_idx, r_idx, m_idx, sa = create_heart_model(
-            spacing, (sa_x, sa_y, sa_z), speed)
+    if not run:
+        st.info("Click **Run** to assemble $\\mathbf{K}$ and benchmark the four orderings.")
+        return
 
-    st.sidebar.metric("Voxels myocardiques", f"{len(coords):,}")
+    with st.spinner("Building mesh and assembling K..."):
+        nodes, elements, boundary, K, rhs = build_fem_problem(n_points, mesh_type)
 
-    stats_h = _traversal_stats(arrival, h_idx, coords)
-    stats_m = _traversal_stats(arrival, m_idx, coords)
-    stats_r = _traversal_stats(arrival, r_idx, coords)
+    N = K.shape[0]
+    st.caption(f"{N} nodes, {len(elements)} elements")
 
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Coherence Raster", f"{stats_r['cache']:.1f}%")
-    c2.metric("Coherence Morton", f"{stats_m['cache']:.1f}%")
-    c3.metric("Coherence Hilbert", f"{stats_h['cache']:.1f}%")
+    natural_perm = np.arange(N)
 
-    with col_main:
-        tab1, tab2, tab3 = st.tabs(["Coeur 3D", "Correlation", "Statistiques"])
+    rng = np.random.RandomState(123)
+    random_perm = rng.permutation(N)
 
-        with tab1:
-            color_by = st.radio("Colorer par", ["Temps d'arrivee", "Index Hilbert"], key="s5_c",
-                                 horizontal=True)
-            if color_by == "Temps d'arrivee":
-                cvals = arrival
-                cscale = "Hot"
-                ctitle = "Temps (ms)"
-            else:
-                cvals = h_idx.astype(float) / h_idx.max()
-                cscale = "HSV"
-                ctitle = "Index Hilbert"
+    rcm_perm = np.array(reverse_cuthill_mckee(K))
 
-            fig = go.Figure()
-            fig.add_trace(go.Scatter3d(
-                x=coords[:, 0], y=coords[:, 1], z=coords[:, 2],
-                mode="markers",
-                marker=dict(size=2, color=cvals, colorscale=cscale,
-                            colorbar=dict(title=ctitle, len=0.6), opacity=0.7),
-                hovertemplate="(%{x:.0f}, %{y:.0f}, %{z:.0f}) mm<extra></extra>",
-            ))
-            fig.add_trace(go.Scatter3d(
-                x=[sa[0]], y=[sa[1]], z=[sa[2]],
-                mode="markers+text", text=["SA"],
-                marker=dict(size=8, color="cyan", symbol="diamond"),
-                name="Noeud SA",
-            ))
-            fig.update_layout(
-                scene=dict(xaxis_title="X", yaxis_title="Y", zaxis_title="Z",
-                           aspectmode="data"),
-                height=550, margin=dict(l=0, r=0, t=0, b=0),
-            )
-            st.plotly_chart(fig, use_container_width=True)
+    p_h = 7
+    n_h = 1 << p_h
+    h_idx = np.zeros(N, dtype=np.int64)
+    for i, (x, y) in enumerate(nodes):
+        ix = min(n_h - 1, max(0, int(x * n_h)))
+        iy = min(n_h - 1, max(0, int(y * n_h)))
+        h_idx[i] = _xy2d_2d(p_h, ix, iy)
+    hilbert_perm = np.argsort(h_idx)
 
-        with tab2:
-            fig = make_subplots(rows=1, cols=2,
-                                subplot_titles=["Hilbert vs onde", "Raster vs onde"])
-            h_rank = np.argsort(np.argsort(h_idx))
-            r_rank = np.argsort(np.argsort(r_idx))
-            step = max(1, len(arrival) // 3000)
-            fig.add_trace(go.Scattergl(
-                x=h_rank[::step], y=arrival[::step], mode="markers",
-                marker=dict(size=2, color="#2ecc71", opacity=0.4),
-                name=f"Hilbert (rho={stats_h['rho']:.3f})"), row=1, col=1)
-            fig.add_trace(go.Scattergl(
-                x=r_rank[::step], y=arrival[::step], mode="markers",
-                marker=dict(size=2, color="#3498db", opacity=0.4),
-                name=f"Raster (rho={stats_r['rho']:.3f})"), row=1, col=2)
-            fig.update_xaxes(title_text="Rang de parcours")
-            fig.update_yaxes(title_text="Temps d'arrivee (ms)")
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
+    orderings = [("Random", random_perm), ("Natural", natural_perm),
+                 ("RCM", rcm_perm), ("Hilbert", hilbert_perm)]
+    if mesh_type == "structured":
+        orderings = orderings[1:]
 
-        with tab3:
-            st.dataframe([
-                {"Metrique": "Correlation (Spearman rho)",
-                 "Raster": f"{stats_r['rho']:.3f}", "Morton": f"{stats_m['rho']:.3f}",
-                 "Hilbert": f"{stats_h['rho']:.3f}"},
-                {"Metrique": "Saut moyen (ms)",
-                 "Raster": f"{stats_r['jump_mean']:.2f}", "Morton": f"{stats_m['jump_mean']:.2f}",
-                 "Hilbert": f"{stats_h['jump_mean']:.2f}"},
-                {"Metrique": "Coherence cache (<5mm)",
-                 "Raster": f"{stats_r['cache']:.1f}%", "Morton": f"{stats_m['cache']:.1f}%",
-                 "Hilbert": f"{stats_h['cache']:.1f}%"},
-                {"Metrique": "Distance moy. consecutifs",
-                 "Raster": f"{stats_r['dist_mean']:.1f} mm", "Morton": f"{stats_m['dist_mean']:.1f} mm",
-                 "Hilbert": f"{stats_h['dist_mean']:.1f} mm"},
-            ], use_container_width=True, hide_index=True)
+    with st.spinner("Solving with each ordering..."):
+        results = {name: _solve_one_ordering(K, rhs, perm) for name, perm in orderings}
 
-            # Histogramme des sauts
-            fig = go.Figure()
-            bins_spec = dict(start=0, end=30, size=0.5)
-            fig.add_trace(go.Histogram(x=stats_h['jumps'], name="Hilbert",
-                                        opacity=0.6, xbins=bins_spec))
-            fig.add_trace(go.Histogram(x=stats_r['jumps'], name="Raster",
-                                        opacity=0.3, xbins=bins_spec))
-            fig.update_layout(title="Sauts temporels entre voxels consecutifs",
-                               xaxis_title="Saut (ms)", barmode="overlay", height=350)
-            st.plotly_chart(fig, use_container_width=True)
+    metrics_cols = st.columns(len(orderings))
+    for col, (name, _) in zip(metrics_cols, orderings):
+        r = results[name]
+        col.metric(f"{name} -- bandwidth (mean)", f"{r['bw_avg']:.0f}",
+                   delta=f"CG iters: {r['iter_cg']}")
+
+    st.subheader("Sparsity pattern of $\\mathbf{K}$ under each ordering")
+    n_cols = len(orderings)
+    fig = make_subplots(rows=1, cols=n_cols,
+                        subplot_titles=[name for name, _ in orderings],
+                        horizontal_spacing=0.04)
+    for col_idx, (name, _) in enumerate(orderings, 1):
+        K_p = results[name]["K_p"].tocoo()
+        fig.add_trace(go.Scattergl(
+            x=K_p.col, y=K_p.row, mode="markers",
+            marker=dict(size=2, color="#2c3e50"),
+            showlegend=False, hoverinfo="skip",
+        ), row=1, col=col_idx)
+        fig.update_xaxes(title_text="column $j$", row=1, col=col_idx,
+                         showgrid=False, scaleanchor=f"y{col_idx if col_idx > 1 else ''}",
+                         scaleratio=1)
+        fig.update_yaxes(title_text="row $i$" if col_idx == 1 else "",
+                         row=1, col=col_idx, autorange="reversed", showgrid=False)
+    fig.update_layout(height=320, margin=dict(l=10, r=10, t=40, b=10))
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.subheader("Summary")
+    rows_summary = []
+    for name, _ in orderings:
+        r = results[name]
+        rows_summary.append({
+            "Ordering": name,
+            "BW(K) max": r["bw_max"],
+            "BW(K) mean": f"{r['bw_avg']:.1f}",
+            "CG iterations": r["iter_cg"],
+            "Solve time (ms)": f"{r['time_ms']:.1f}",
+        })
+    st.dataframe(rows_summary, use_container_width=True, hide_index=True)
+
+    if "Hilbert" in results and "Natural" in results:
+        bw_gain = (1 - results["Hilbert"]["bw_avg"] / results["Natural"]["bw_avg"]) * 100
+        cg_gain = (1 - results["Hilbert"]["iter_cg"] / results["Natural"]["iter_cg"]) * 100
+        st.success(f"**Hilbert vs Natural** -- mean bandwidth: {bw_gain:+.1f}%, CG iterations: {cg_gain:+.1f}%")
+
+    st.subheader("FEM solution $u$")
+    import matplotlib.tri as mtri
+    triang = mtri.Triangulation(nodes[:, 0], nodes[:, 1], elements)
+    u = results["Hilbert" if "Hilbert" in results else "Natural"]["u"]
+    fig = go.Figure(data=go.Contour(
+        x=nodes[:, 0], y=nodes[:, 1], z=u,
+        colorscale="Viridis",
+        contours=dict(showlines=False),
+    ))
+    fig.update_layout(height=400, xaxis_title="x", yaxis_title="y",
+                      yaxis=dict(scaleanchor="x", scaleratio=1))
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # ===================================================================
-# Page S6 : Morphing de surfaces
+# Tab 6: Surface morphing (Proposition 10.4)
 # ===================================================================
 
 @st.cache_data
 def compute_surface_hilbert(_verts_mm, p=5):
-    """Calcule l'index Hilbert normalise pour chaque vertex."""
+    """Hilbert index normalised to [0, 1] for each surface vertex."""
     dims = VOLUMES["CR"]["dims"]
     n = 1 << p
     max_d = 8 ** p - 1
@@ -818,7 +807,7 @@ def compute_surface_hilbert(_verts_mm, p=5):
 
 
 def _edge_smoothness(displacements, faces):
-    """Diff. moyenne de deplacement entre voisins sur le mesh."""
+    """Mean per-edge displacement difference."""
     edges = set()
     for f in faces:
         for i in range(3):
@@ -828,14 +817,14 @@ def _edge_smoothness(displacements, faces):
 
 
 def page_morphing():
-    st.header("S6 — Animation et morphing de surfaces via Hilbert 3D")
-    st.markdown("""
-    **Revendication 8** : La surface d'un organe, parcourue par la courbe de Hilbert 3D,
-    permet de definir des animations comme des transformations continues dans l'espace 1D.
-
-    Une deformation sinusoidale dans l'espace Hilbert 1D produit une onde **spatialement
-    lisse** en 3D. La meme deformation avec un ordre aleatoire produit du **bruit spatial**.
-    """)
+    st.header("Surface morphing via Hilbert reparameterisation (Prop. 10.4)")
+    st.markdown(r"""
+A scalar deformation $D$ applied along the Hilbert-normalised parameter
+$h(v) = \mathrm{Hil}_p^{(3)}(v) / (n^d - 1)$ produces per-edge displacement
+differences bounded by $L_D \cdot C_d \cdot n^{-d} \cdot (\ell/\Delta)^d$,
+whereas a random reordering yields $\mathbb{E}[|D(r_i) - D(r_j)|] \le L_D / 3$
+independently of $n$ and $\ell$.
+""")
 
     data, affine, mask = load_brain()
 
@@ -843,39 +832,35 @@ def page_morphing():
 
     with col_ctrl:
         amplitude = st.slider("Amplitude (mm)", 0.5, 8.0, 3.0, 0.5, key="s6_a")
-        frequency = st.slider("Frequence", 1.0, 10.0, 4.0, 0.5, key="s6_f")
+        frequency = st.slider("Frequency", 1.0, 10.0, 4.0, 0.5, key="s6_f")
         phase = st.slider("Phase", 0.0, 6.28, 0.0, 0.1, key="s6_ph")
-        p_morph = st.slider("Precision (p)", 3, 6, 5, key="s6_p")
-        show_mode = st.radio("Afficher", ["Hilbert (lisse)", "Aleatoire (bruit)", "Cote a cote"],
+        p_morph = st.slider("Order $p$", 3, 6, 5, key="s6_p")
+        show_mode = st.radio("Display", ["Hilbert (smooth)", "Random (noise)", "Side by side"],
                               key="s6_mode")
 
-    with st.spinner("Extraction de la surface..."):
+    with st.spinner("Extracting brain surface..."):
         verts_mm, faces, normals, intensity = extract_brain_mesh(data, affine, mask)
 
-    with st.spinner(f"Calcul des index Hilbert (p={p_morph})..."):
+    with st.spinner(f"Computing Hilbert indices (p={p_morph})..."):
         h_norm = compute_surface_hilbert(verts_mm, p=p_morph)
 
-    # Normales unitaires
     norms_len = np.linalg.norm(normals, axis=1, keepdims=True)
     norms_len[norms_len == 0] = 1
     unit_normals = normals / norms_len
 
-    # Deformation Hilbert
     disp_h = amplitude * np.sin(2 * np.pi * frequency * h_norm + phase)
     deformed_h = verts_mm + unit_normals * disp_h[:, np.newaxis]
 
-    # Deformation aleatoire
     rng = np.random.RandomState(42)
     rand_norm = rng.permutation(len(verts_mm)).astype(np.float64) / len(verts_mm)
     disp_r = amplitude * np.sin(2 * np.pi * frequency * rand_norm + phase)
     deformed_r = verts_mm + unit_normals * disp_r[:, np.newaxis]
 
-    # Smoothness
     sm_h, _ = _edge_smoothness(disp_h, faces)
     sm_r, _ = _edge_smoothness(disp_r, faces)
 
-    st.sidebar.metric("Fluidite Hilbert", f"{sm_h:.4f} mm")
-    st.sidebar.metric("Fluidite Aleatoire", f"{sm_r:.4f} mm")
+    st.sidebar.metric("Hilbert smoothness", f"{sm_h:.4f} mm")
+    st.sidebar.metric("Random smoothness", f"{sm_r:.4f} mm")
     st.sidebar.metric("Ratio", f"{sm_r/sm_h:.1f}x")
 
     with col_main:
@@ -884,7 +869,7 @@ def page_morphing():
                 x=verts[:, 0], y=verts[:, 1], z=verts[:, 2],
                 i=faces[:, 0], j=faces[:, 1], k=faces[:, 2],
                 intensity=disp, colorscale=colorscale,
-                colorbar=dict(title="Depl. (mm)", len=0.6),
+                colorbar=dict(title="displ. (mm)", len=0.6),
                 cmin=-amplitude, cmax=amplitude,
                 opacity=0.85,
                 lighting=dict(ambient=0.4, diffuse=0.8, specular=0.3),
@@ -896,141 +881,142 @@ def page_morphing():
                      aspectmode="data",
                      camera=dict(eye=dict(x=1.8, y=0.8, z=0.6)))
 
-        if show_mode == "Cote a cote":
+        if show_mode == "Side by side":
             fig = make_subplots(rows=1, cols=2,
                                 specs=[[{"type": "scene"}, {"type": "scene"}]],
                                 subplot_titles=[
-                                    f"Hilbert (fluidite: {sm_h:.4f})",
-                                    f"Aleatoire (fluidite: {sm_r:.4f})"])
+                                    f"Hilbert (smoothness: {sm_h:.4f})",
+                                    f"Random  (smoothness: {sm_r:.4f})"])
             fig.add_trace(_make_mesh(deformed_h, disp_h, "Hilbert"), row=1, col=1)
-            fig.add_trace(_make_mesh(deformed_r, disp_r, "Aleatoire"), row=1, col=2)
+            fig.add_trace(_make_mesh(deformed_r, disp_r, "Random"), row=1, col=2)
             fig.update_layout(height=600, scene=scene, scene2=scene,
                               margin=dict(l=0, r=0, t=40, b=0))
         else:
-            if show_mode == "Hilbert (lisse)":
+            if show_mode == "Hilbert (smooth)":
                 fig = go.Figure(data=[_make_mesh(deformed_h, disp_h, "Hilbert")])
-                title = f"Deformation Hilbert — fluidite: {sm_h:.4f} mm"
+                title = f"Hilbert deformation -- smoothness: {sm_h:.4f} mm"
             else:
-                fig = go.Figure(data=[_make_mesh(deformed_r, disp_r, "Aleatoire")])
-                title = f"Deformation Aleatoire — fluidite: {sm_r:.4f} mm"
+                fig = go.Figure(data=[_make_mesh(deformed_r, disp_r, "Random")])
+                title = f"Random deformation -- smoothness: {sm_r:.4f} mm"
             fig.update_layout(height=600, scene=scene, title=title,
                               margin=dict(l=0, r=0, t=40, b=0))
 
         st.plotly_chart(fig, use_container_width=True)
 
-    # Resume
     st.divider()
     c1, c2 = st.columns(2)
     with c1:
         fig = go.Figure()
-        fig.add_trace(go.Bar(x=["Hilbert", "Aleatoire"], y=[sm_h, sm_r],
+        fig.add_trace(go.Bar(x=["Hilbert", "Random"], y=[sm_h, sm_r],
                              marker_color=["#2ecc71", "#e74c3c"],
                              text=[f"{sm_h:.4f}", f"{sm_r:.4f}"],
                              textposition="outside"))
-        fig.update_layout(title="Diff. moyenne entre voisins (mm) — plus bas = plus lisse",
+        fig.update_layout(title="Mean neighbour difference (mm) -- lower is smoother",
                            yaxis_title="mm", height=350)
         st.plotly_chart(fig, use_container_width=True)
 
     with c2:
         st.markdown(f"""
-        ### Resultats
+        ### Results
 
-        | | Hilbert | Aleatoire |
+        | | Hilbert | Random |
         |---|---|---|
-        | Diff. voisins | **{sm_h:.4f}** mm | {sm_r:.4f} mm |
-        | Ratio | **{sm_r/sm_h:.1f}x plus lisse** | — |
+        | Mean neighbour diff. | **{sm_h:.4f}** mm | {sm_r:.4f} mm |
+        | Ratio | **{sm_r/sm_h:.1f}x smoother** | -- |
         | Vertices | {len(verts_mm):,} | {len(verts_mm):,} |
         | Faces | {len(faces):,} | {len(faces):,} |
 
-        La deformation Hilbert est **{sm_r/sm_h:.0f}x plus lisse** car la courbe
-        de Hilbert preserve la localite : des points voisins en 3D ont des
-        indices Hilbert proches, donc des deplacements similaires.
+        The Hilbert deformation is **{sm_r/sm_h:.0f}x smoother** because the
+        Hilbert curve preserves locality: neighbouring vertices have nearby
+        Hilbert indices, hence nearly identical displacements.
         """)
 
 
 # ===================================================================
-# Page : A propos
+# About
 # ===================================================================
 
-def page_info():
-    st.header("A propos d'Altius-Code 3D")
-    st.markdown("""
-    ### Qu'est-ce qu'Altius-Code ?
+def page_about():
+    st.header("About PHVE")
+    st.markdown(r"""
+**PHVE** -- Parametric Hilbert Volumetric Encoding -- is a bijective encoding
+map $\mathcal{F}_p^{(d),\alpha}$ from points of a $d$-dimensional bounded
+volume ($d \in \{2, 3\}$) to fixed-length strings over a 29-symbol unambiguous
+alphabet, built from the Hilbert space-filling curve.
 
-    Altius-Code est un systeme d'encodage spatial bijectif qui transforme des coordonnees
-    3D (x, y, z) en codes alphanumeriques compacts via la **courbe de Hilbert 3D**.
+| Property | Description |
+|---|---|
+| **Bijective** | Each cell-centre maps to a unique code (Theorems 4.2, 4.3). |
+| **Compact** | 5--8 characters cover a 1 mm voxel in a $300 \times 250 \times 250$ mm cranium. |
+| **Hierarchical** | Truncating one character zooms out (Theorem 6.1). |
+| **Locality-preserving** | Neighbouring points share long prefixes (Cor. 5.3). |
+| **Indexable** | $O(\log N + |R|)$ B-tree range scans (Prop. 10.1). |
+| **Unambiguous** | base-29 alphabet without confusable characters (no 0/O, 1/I/L). |
 
-    | Propriete | Description |
-    |-----------|-------------|
-    | **Bijectif** | Chaque point 3D correspond a exactement un code, et inversement |
-    | **Compact** | 5-8 caracteres pour identifier un voxel a 1mm de resolution |
-    | **Hierarchique** | Tronquer un caractere = zoomer en arriere (~29x le volume) |
-    | **Locality-preserving** | Points proches = codes proches (prefixe commun) |
-    | **Indexable** | Compatible B-tree, recherche par prefixe en O(log n) |
-    | **Non-ambigu** | Alphabet base-29 sans caracteres confusables (0/O, 1/I/L) |
+### Tabs in this demonstrator
 
-    ### Applications du brevet (v3)
+| Tab | Theorem | Script |
+|---|---|---|
+| Bijectivity | Thm. 4.3 | `bijectivity_mni152.py` |
+| Prefix search | Prop. 10.1 | -- |
+| Inter-patient stability | Cor. 5.3 | `interpatient_stability.py` |
+| DPCM compression | Thm. 8.2 | `dpcm_compression.py` |
+| FEM bandwidth | Thm. 10.2 | `fem_bandwidth.py` |
+| Surface morphing | Prop. 10.4 | `surface_morphing.py` |
 
-    | # | Application | Revendication | Prototype |
-    |---|-------------|---------------|-----------|
-    | 1 | Indexation IRM/Scanner | Rev. 6 | S1 |
-    | 2 | Comparaison inter-patients | Rev. 7 | S2 |
-    | 3 | Compression DPCM | Rev. 9 | **S4** |
-    | 4 | Simulation cardiaque | Rev. 8 | **S5** |
-    | 5 | Renumerotage MEF | Rev. 10 | Proto 7 |
-    | 6 | Animation surfaces | Rev. 8 | **S6** |
-
-    ### Volumes anatomiques
-    """)
+### Reference anatomical volumes
+""")
 
     vol_rows = []
     for k, v in VOLUMES.items():
         vol_rows.append({
             "Code": k,
-            "Nom": v["name"],
+            "Name": v["name"],
             "Dimensions (mm)": f"{v['dims'][0]} x {v['dims'][1]} x {v['dims'][2]}",
         })
     st.dataframe(vol_rows, use_container_width=True, hide_index=True)
 
     st.markdown("""
-    ---
-    **Auteur** : Paul Guindo, Altius Academy SNC
+---
+**Author**: Paul Guindo, Altius Academy SNC, Echallens (Vaud), Switzerland.
 
-    **Licence** : Open-source (code) / Service commercial (API, SaaS)
+**Repository**: <https://github.com/Altius-Academy-SNC/PHVE>
 
-    **Modele d'utilite** : IPI (Institut Federal de la Propriete Intellectuelle), Suisse
-    """)
+**Live geolocation demos** (2D variant of $\\mathcal{F}_p^{(2),\\alpha}$):
+[Yoro Maps](https://altius-academy-snc.github.io/yoro-maps/) ·
+[Yoro](https://altius-academy-snc.github.io/yoro/)
 
-    st.subheader("Test de bijectivite")
-    p_test = st.slider("Ordre p", 1, 4, 3, key="bj_p",
-                        help="p=4 teste 4096 points")
-    if st.button("Lancer le test"):
-        with st.spinner(f"Verification de {(1 << p_test)**3} points..."):
+**License**: MIT (code).
+""")
+
+    st.subheader("Bijectivity self-test")
+    p_test = st.slider("Order $p$", 1, 4, 3, key="bj_p",
+                        help="$p=4$ tests $4096$ points exhaustively.")
+    if st.button("Run", key="bj_run"):
+        with st.spinner(f"Verifying {(1 << p_test)**3} points..."):
             ok, msg = verify_bijectivity(p_test)
         if ok:
-            st.success(f"PASS — {msg}")
+            st.success(f"PASS -- {msg}")
         else:
-            st.error(f"FAIL — {msg}")
+            st.error(f"FAIL -- {msg}")
 
 
 # ===================================================================
-# Main — Navigation
+# Navigation
 # ===================================================================
 
 PAGES = {
-    "Cerveau 3D": page_brain_3d,
-    "Coupes IRM": page_explorer,
-    "Inter-patients (S2)": page_interpatient,
-    "Recherche par prefixe": page_prefix_search,
+    "Bijectivity (Thm. 4.3)": page_bijectivity,
+    "Prefix search (Prop. 10.1)": page_prefix_search,
+    "Inter-patient stability (Cor. 5.3)": page_interpatient,
+    "DPCM compression (Thm. 8.2)": page_dpcm,
+    "FEM bandwidth (Thm. 10.2)": page_fem,
+    "Surface morphing (Prop. 10.4)": page_morphing,
     "---": None,
-    "Compression DPCM (S4)": page_dpcm,
-    "Simulation cardiaque (S5)": page_cardiac,
-    "Morphing surfaces (S6)": page_morphing,
-    " ": None,
-    "A propos": page_info,
+    "About": page_about,
 }
 
-st.sidebar.title("Altius-Code 3D")
+st.sidebar.title("PHVE")
 st.sidebar.caption("Altius Academy SNC")
 
 page_names = list(PAGES.keys())
