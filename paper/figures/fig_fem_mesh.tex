@@ -1,0 +1,36 @@
+% Figure 5: FEM mesh, natural vs Hilbert numbering, side by side.
+\begin{tikzpicture}[scale=0.7,>=Stealth]
+
+% --- Mesh with natural (insertion-order) numbering ---
+\begin{scope}[xshift=0cm]
+  \node[font=\small\bfseries] at (3,6.0) {Natural numbering};
+  \draw[gray!50] (0,0) rectangle (6,5);
+  \foreach \i/\x/\y in {
+    1/0.6/4.4, 2/2.2/4.5, 3/4.0/4.7, 4/5.4/3.4, 5/0.7/2.5,
+    6/2.6/2.8, 7/4.5/2.0, 8/3.7/0.6, 9/0.8/0.7, 10/2.4/0.6,
+    11/3.6/2.0, 12/5.4/4.7}
+    \node[circle,fill=blue!20,draw,inner sep=1.5pt,font=\tiny]
+      (n\i) at (\x,\y) {\i};
+  \draw (n1)--(n2) (n2)--(n3) (n3)--(n12) (n3)--(n4) (n4)--(n12)
+        (n2)--(n6) (n1)--(n5) (n5)--(n6) (n6)--(n11)
+        (n5)--(n9) (n9)--(n10) (n10)--(n8) (n8)--(n11) (n7)--(n11)
+        (n4)--(n7) (n6)--(n10);
+\end{scope}
+
+% --- Mesh with Hilbert numbering (same nodes, relabelled) ---
+\begin{scope}[xshift=9cm]
+  \node[font=\small\bfseries] at (3,6.0) {Hilbert numbering};
+  \draw[gray!50] (0,0) rectangle (6,5);
+  \foreach \i/\x/\y/\h in {
+    1/0.6/4.4/8, 2/2.2/4.5/7, 3/4.0/4.7/6, 4/5.4/3.4/4,
+    5/0.7/2.5/9, 6/2.6/2.8/10, 7/4.5/2.0/3, 8/3.7/0.6/2,
+    9/0.8/0.7/12, 10/2.4/0.6/11, 11/3.6/2.0/5, 12/5.4/4.7/1}
+    \node[circle,fill=red!20,draw,inner sep=1.5pt,font=\tiny]
+      (m\i) at (\x,\y) {\h};
+  \draw (m1)--(m2) (m2)--(m3) (m3)--(m12) (m3)--(m4) (m4)--(m12)
+        (m2)--(m6) (m1)--(m5) (m5)--(m6) (m6)--(m11)
+        (m5)--(m9) (m9)--(m10) (m10)--(m8) (m8)--(m11) (m7)--(m11)
+        (m4)--(m7) (m6)--(m10);
+\end{scope}
+
+\end{tikzpicture}

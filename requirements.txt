@@ -1,0 +1,24 @@
+# PHVE simulations — Python dependencies
+# Reproduces the five experiments of the arXiv paper.
+#
+# Setup:
+#   python3 -m venv venv
+#   source venv/bin/activate
+#   pip install -r requirements.txt
+
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+
+# 3D MRI: load MNI152 templates, read NIfTI volumes
+nibabel>=4.0
+nilearn>=0.10
+
+# Surface morphing: marching cubes
+scikit-image>=0.21
+
+# Interactive 3D visualisation (notebooks and Streamlit demo)
+plotly>=5.18
+
+# Browser-based demonstrator (app_demo.py)
+streamlit>=1.30

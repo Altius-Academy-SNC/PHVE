@@ -1,0 +1,29 @@
+% Figure 4: Nested supercells under code truncation.
+% Each panel shows the same 8x8 background grid; the blue rectangle is
+% the supercell S(\hat c) for the code below it.
+% From left to right: dropping a character zooms out (the supercell grows).
+\begin{tikzpicture}[scale=0.42,>=Stealth,thick]
+
+\foreach \i/\side/\xs/\label/\res in {%
+  0/1/0/{\texttt{CR:4H7}}/{$\sim 19$\,mm},
+  1/2/10/{\texttt{CR:4H}}/{$\sim 37$\,mm},
+  2/4/20/{\texttt{CR:4}}/{$\sim 75$\,mm},
+  3/8/30/{\texttt{CR}}/{$\sim 150$\,mm}}{%
+  \begin{scope}[xshift=\xs cm]
+    \draw[gray!40,step=1] (0,0) grid (8,8);
+    \draw[blue!70,thick,fill=blue!15,fill opacity=0.5]
+      (0,0) rectangle (\side,\side);
+    \node[font=\normalsize\bfseries] at (4,-0.9) {\label};
+    \node[font=\small,gray!50!black] at (4,-1.9) {\res};
+  \end{scope}
+}
+
+% Arrows: dropping one character grows the supercell (zoom out).
+\draw[->,thick,gray!70]
+  (8.3,4) -- node[above,font=\footnotesize] {drop char} (9.7,4);
+\draw[->,thick,gray!70]
+  (18.3,4) -- node[above,font=\footnotesize] {drop char} (19.7,4);
+\draw[->,thick,gray!70]
+  (28.3,4) -- node[above,font=\footnotesize] {drop char} (29.7,4);
+
+\end{tikzpicture}

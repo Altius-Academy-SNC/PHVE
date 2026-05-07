@@ -1,0 +1,20 @@
+% Figure 1 (logical Figure 3): commutative diagram of F = E o H o N.
+% Two-row layout: forward maps top, inverses bottom.
+\begin{tikzcd}[
+  ampersand replacement=\&,
+  column sep=3.6em,
+  row sep=2.8em,
+  every label/.append style={font=\footnotesize}
+]
+V_\alpha \arrow[r, "\Nor_p^{(d),\alpha}"]
+\& \Grid_p^{(d)} \arrow[r, "\Hil_p^{(d)}"]
+\& \{0,\dots,n^d{-}1\} \arrow[r, "\Enc_p^{(d)}"]
+\& \Sigma^{k_d(p)} \\
+V_\alpha
+\& \Grid_p^{(d)}
+   \arrow[l, dashed, "(\Nor_p^{(d),\alpha})^{-1}"']
+\& \{0,\dots,n^d{-}1\}
+   \arrow[l, dashed, "(\Hil_p^{(d)})^{-1}"']
+\& \Sigma^{k_d(p)}
+   \arrow[l, dashed, "(\Enc_p^{(d)})^{-1}"']
+\end{tikzcd}

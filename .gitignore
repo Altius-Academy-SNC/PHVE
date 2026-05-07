@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# LaTeX build artefacts
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.synctex.gz
+paper/*.bbl
+paper/*.blg
+paper/*.run.xml
+paper/*-blx.bib
+
+# Experiment outputs (large, regenerable)
+simulations/results/
+simulations/*.png
+simulations/*.json
+simulations/*.npy
+simulations/*.npz
+simulations/*.nii.gz
+
+# IDE
+.vscode/
+.idea/
+.DS_Store

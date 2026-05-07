@@ -1,0 +1,216 @@
+"""
+Constantes pour Altius-Code.
+
+Domaines geographiques pour l'Afrique de l'Ouest (focus TerrAF)
+et autres pays (hérité de AES Master).
+"""
+
+DOMAINS = {
+    # --- Domaine mondial ---
+    "XX": {
+        "name": "Mondial",
+        "lat_min": -90.0,
+        "lat_max": 90.0,
+        "lon_min": -180.0,
+        "lon_max": 180.0,
+    },
+    # --- Afrique de l'Ouest (focus) ---
+    "CI": {
+        "name": "Cote d'Ivoire",
+        "lat_min": 4.36,
+        "lat_max": 10.74,
+        "lon_min": -8.6,
+        "lon_max": -2.49,
+    },
+    "BF": {
+        "name": "Burkina Faso",
+        "lat_min": 9.0,
+        "lat_max": 15.5,
+        "lon_min": -5.5,
+        "lon_max": 2.5,
+    },
+    "ML": {
+        "name": "Mali",
+        "lat_min": 10.0,
+        "lat_max": 25.0,
+        "lon_min": -12.5,
+        "lon_max": 4.5,
+    },
+    "GN": {
+        "name": "Guinee",
+        "lat_min": 7.19,
+        "lat_max": 12.68,
+        "lon_min": -15.08,
+        "lon_max": -7.64,
+    },
+    "GH": {
+        "name": "Ghana",
+        "lat_min": 4.74,
+        "lat_max": 11.17,
+        "lon_min": -3.26,
+        "lon_max": 1.2,
+    },
+    "SN": {
+        "name": "Senegal",
+        "lat_min": 12.31,
+        "lat_max": 16.69,
+        "lon_min": -17.54,
+        "lon_max": -11.36,
+    },
+    "NE": {
+        "name": "Niger",
+        "lat_min": 11.5,
+        "lat_max": 24.0,
+        "lon_min": 0.0,
+        "lon_max": 16.0,
+    },
+    "NG": {
+        "name": "Nigeria",
+        "lat_min": 4.27,
+        "lat_max": 13.89,
+        "lon_min": 2.69,
+        "lon_max": 14.68,
+    },
+    "CM": {
+        "name": "Cameroun",
+        "lat_min": 1.65,
+        "lat_max": 13.08,
+        "lon_min": 8.49,
+        "lon_max": 16.19,
+    },
+    "TG": {
+        "name": "Togo",
+        "lat_min": 6.1,
+        "lat_max": 11.14,
+        "lon_min": -0.15,
+        "lon_max": 1.81,
+    },
+    "BJ": {
+        "name": "Benin",
+        "lat_min": 6.14,
+        "lat_max": 12.41,
+        "lon_min": 0.77,
+        "lon_max": 3.85,
+    },
+    "GM": {
+        "name": "Gambie",
+        "lat_min": 13.06,
+        "lat_max": 13.83,
+        "lon_min": -16.82,
+        "lon_max": -13.79,
+    },
+    "GW": {
+        "name": "Guinee-Bissau",
+        "lat_min": 10.87,
+        "lat_max": 12.68,
+        "lon_min": -16.71,
+        "lon_max": -13.64,
+    },
+    "SL": {
+        "name": "Sierra Leone",
+        "lat_min": 6.93,
+        "lat_max": 10.0,
+        "lon_min": -13.3,
+        "lon_max": -10.27,
+    },
+    "LR": {
+        "name": "Liberia",
+        "lat_min": 4.35,
+        "lat_max": 8.55,
+        "lon_min": -11.49,
+        "lon_max": -7.37,
+    },
+    "MR": {
+        "name": "Mauritanie",
+        "lat_min": 14.72,
+        "lat_max": 27.3,
+        "lon_min": -17.07,
+        "lon_max": -4.83,
+    },
+    # --- Autres Afrique ---
+    "CD": {
+        "name": "Republique democratique du Congo",
+        "lat_min": -13.46,
+        "lat_max": 5.39,
+        "lon_min": 12.18,
+        "lon_max": 31.31,
+    },
+    "MG": {
+        "name": "Madagascar",
+        "lat_min": -25.61,
+        "lat_max": -11.95,
+        "lon_min": 43.18,
+        "lon_max": 50.48,
+    },
+    "TZ": {
+        "name": "Tanzanie",
+        "lat_min": -11.75,
+        "lat_max": -0.99,
+        "lon_min": 29.33,
+        "lon_max": 40.44,
+    },
+    "KE": {
+        "name": "Kenya",
+        "lat_min": -4.68,
+        "lat_max": 5.03,
+        "lon_min": 33.91,
+        "lon_max": 41.91,
+    },
+    "UG": {
+        "name": "Ouganda",
+        "lat_min": -1.48,
+        "lat_max": 4.23,
+        "lon_min": 29.57,
+        "lon_max": 35.04,
+    },
+    "ET": {
+        "name": "Ethiopie",
+        "lat_min": 3.4,
+        "lat_max": 14.89,
+        "lon_min": 32.99,
+        "lon_max": 47.99,
+    },
+    # --- Europe (acheteurs) ---
+    "FR": {
+        "name": "France",
+        "lat_min": 41.36,
+        "lat_max": 51.09,
+        "lon_min": -5.14,
+        "lon_max": 9.56,
+    },
+    "DE": {
+        "name": "Allemagne",
+        "lat_min": 47.27,
+        "lat_max": 55.06,
+        "lon_min": 5.87,
+        "lon_max": 15.04,
+    },
+    "NL": {
+        "name": "Pays-Bas",
+        "lat_min": 50.75,
+        "lat_max": 53.47,
+        "lon_min": 3.36,
+        "lon_max": 7.21,
+    },
+    "BE": {
+        "name": "Belgique",
+        "lat_min": 49.5,
+        "lat_max": 51.51,
+        "lon_min": 2.54,
+        "lon_max": 6.41,
+    },
+    "CH": {
+        "name": "Suisse",
+        "lat_min": 45.82,
+        "lat_max": 47.81,
+        "lon_min": 5.96,
+        "lon_max": 10.49,
+    },
+    "US": {
+        "name": "Etats-Unis",
+        "lat_min": 24.52,
+        "lat_max": 49.38,
+        "lon_min": -124.77,
+        "lon_max": -66.95,
+    },
+}
