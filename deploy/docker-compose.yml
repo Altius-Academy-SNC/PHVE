@@ -1,11 +1,12 @@
-# PHVE deployment stack: Streamlit + Cloudflare Tunnel.
+# PHVE Streamlit demonstrator.
 #
-# Run from the repository root:
-#   docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
+# This compose file runs only the application container, bound to
+# 127.0.0.1:8501 on the host. SSL termination and routing for
+# phve.names.legal are expected to be handled by the host's nginx +
+# certbot (see deploy/DEPLOY.md).
 #
-# Required env vars (in deploy/.env):
-#   CF_TUNNEL_TOKEN -- token from Cloudflare Zero Trust dashboard
-#                      (Networks > Tunnels > <your tunnel> > Connectors).
+# From the repository root:
+#   docker compose -f deploy/docker-compose.yml up -d --build
 
 services:
   streamlit:
@@ -15,10 +16,8 @@ services:
     image: phve-streamlit:latest
     container_name: phve-streamlit
     restart: unless-stopped
-    expose:
-      - "8501"
-    networks:
-      - phve
+    ports:
+      - "127.0.0.1:8501:8501"
     volumes:
       - nilearn_cache:/data/nilearn_data
     healthcheck:
@@ -27,22 +26,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
-
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: phve-cloudflared
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CF_TUNNEL_TOKEN}
-    networks:
-      - phve
-    depends_on:
-      streamlit:
-        condition: service_healthy
-
-networks:
-  phve:
-    name: phve_network
-    driver: bridge
 
 volumes:
   nilearn_cache:
