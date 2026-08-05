@@ -1,0 +1,630 @@
+{
+  "experiment": "exp17_seam_closed_forms",
+  "params": {
+    "p2": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "p3": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "hrc_p2": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "hrc_p3": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "skilling": {
+    "d2": [
+      {
+        "p": 1,
+        "n_points": 4,
+        "A": 3,
+        "closed_form": 3,
+        "matches_closed_form": true,
+        "seam_lower_bound": 2.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.75,
+        "witness": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 2,
+        "n_points": 16,
+        "A": 13,
+        "closed_form": 13,
+        "matches_closed_form": true,
+        "seam_lower_bound": 8.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8125,
+        "witness": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 3,
+        "n_points": 64,
+        "A": 53,
+        "closed_form": 53,
+        "matches_closed_form": true,
+        "seam_lower_bound": 32.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.828125,
+        "witness": [
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 4,
+        "n_points": 256,
+        "A": 213,
+        "closed_form": 213,
+        "matches_closed_form": true,
+        "seam_lower_bound": 128.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.83203125,
+        "witness": [
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 5,
+        "n_points": 1024,
+        "A": 853,
+        "closed_form": 853,
+        "matches_closed_form": true,
+        "seam_lower_bound": 512.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8330078125,
+        "witness": [
+          [
+            15,
+            0
+          ],
+          [
+            16,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 6,
+        "n_points": 4096,
+        "A": 3413,
+        "closed_form": 3413,
+        "matches_closed_form": true,
+        "seam_lower_bound": 2048.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.833251953125,
+        "witness": [
+          [
+            31,
+            0
+          ],
+          [
+            32,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 7,
+        "n_points": 16384,
+        "A": 13653,
+        "closed_form": 13653,
+        "matches_closed_form": true,
+        "seam_lower_bound": 8192.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.83331298828125,
+        "witness": [
+          [
+            63,
+            0
+          ],
+          [
+            64,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 8,
+        "n_points": 65536,
+        "A": 54613,
+        "closed_form": 54613,
+        "matches_closed_form": true,
+        "seam_lower_bound": 32768.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8333282470703125,
+        "witness": [
+          [
+            127,
+            0
+          ],
+          [
+            128,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 9,
+        "n_points": 262144,
+        "A": 218453,
+        "closed_form": 218453,
+        "matches_closed_form": true,
+        "seam_lower_bound": 131072.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8333320617675781,
+        "witness": [
+          [
+            255,
+            0
+          ],
+          [
+            256,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 10,
+        "n_points": 1048576,
+        "A": 873813,
+        "closed_form": 873813,
+        "matches_closed_form": true,
+        "seam_lower_bound": 524288.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8333330154418945,
+        "witness": [
+          [
+            511,
+            0
+          ],
+          [
+            512,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 11,
+        "n_points": 4194304,
+        "A": 3495253,
+        "closed_form": 3495253,
+        "matches_closed_form": true,
+        "seam_lower_bound": 2097152.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8333332538604736,
+        "witness": [
+          [
+            1023,
+            0
+          ],
+          [
+            1024,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 12,
+        "n_points": 16777216,
+        "A": 13981013,
+        "closed_form": 13981013,
+        "matches_closed_form": true,
+        "seam_lower_bound": 8388608.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.8333333134651184,
+        "witness": [
+          [
+            2047,
+            0
+          ],
+          [
+            2048,
+            0
+          ]
+        ]
+      }
+    ],
+    "d3": [
+      {
+        "p": 1,
+        "n_points": 8,
+        "A": 7,
+        "closed_form": 7,
+        "matches_closed_form": true,
+        "seam_lower_bound": 6.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.875,
+        "witness": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 2,
+        "n_points": 64,
+        "A": 59,
+        "closed_form": 59,
+        "matches_closed_form": true,
+        "seam_lower_bound": 48.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.921875,
+        "witness": [
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 3,
+        "n_points": 512,
+        "A": 475,
+        "closed_form": 475,
+        "matches_closed_form": true,
+        "seam_lower_bound": 384.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.927734375,
+        "witness": [
+          [
+            3,
+            3,
+            0
+          ],
+          [
+            4,
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 4,
+        "n_points": 4096,
+        "A": 3803,
+        "closed_form": 3803,
+        "matches_closed_form": true,
+        "seam_lower_bound": 3072.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.928466796875,
+        "witness": [
+          [
+            7,
+            7,
+            0
+          ],
+          [
+            8,
+            7,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 5,
+        "n_points": 32768,
+        "A": 30427,
+        "closed_form": 30427,
+        "matches_closed_form": true,
+        "seam_lower_bound": 24576.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.928558349609375,
+        "witness": [
+          [
+            15,
+            15,
+            0
+          ],
+          [
+            16,
+            15,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 6,
+        "n_points": 262144,
+        "A": 243419,
+        "closed_form": 243419,
+        "matches_closed_form": true,
+        "seam_lower_bound": 196608.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.9285697937011719,
+        "witness": [
+          [
+            31,
+            31,
+            0
+          ],
+          [
+            32,
+            31,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 7,
+        "n_points": 2097152,
+        "A": 1947355,
+        "closed_form": 1947355,
+        "matches_closed_form": true,
+        "seam_lower_bound": 1572864.0,
+        "above_lower_bound": true,
+        "A_over_n_d": 0.9285712242126465,
+        "witness": [
+          [
+            63,
+            63,
+            0
+          ],
+          [
+            64,
+            63,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "hrc": {
+    "d2": [
+      {
+        "p": 1,
+        "n_points": 4,
+        "A": 3,
+        "skilling_closed_form": 3,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 2,
+        "n_points": 16,
+        "A": 13,
+        "skilling_closed_form": 13,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 3,
+        "n_points": 64,
+        "A": 53,
+        "skilling_closed_form": 53,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 4,
+        "n_points": 256,
+        "A": 213,
+        "skilling_closed_form": 213,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 5,
+        "n_points": 1024,
+        "A": 853,
+        "skilling_closed_form": 853,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            15,
+            0
+          ],
+          [
+            16,
+            0
+          ]
+        ]
+      }
+    ],
+    "d3": [
+      {
+        "p": 1,
+        "n_points": 8,
+        "A": 7,
+        "skilling_closed_form": 7,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "p": 2,
+        "n_points": 64,
+        "A": 59,
+        "skilling_closed_form": 59,
+        "same_as_skilling": true,
+        "witness": [
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            1
+          ]
+        ]
+      },
+      {
+        "p": 3,
+        "n_points": 512,
+        "A": 471,
+        "skilling_closed_form": 475,
+        "same_as_skilling": false,
+        "witness": [
+          [
+            3,
+            0,
+            3
+          ],
+          [
+            4,
+            0,
+            3
+          ]
+        ]
+      },
+      {
+        "p": 4,
+        "n_points": 4096,
+        "A": 3767,
+        "skilling_closed_form": 3803,
+        "same_as_skilling": false,
+        "witness": [
+          [
+            7,
+            1,
+            6
+          ],
+          [
+            8,
+            1,
+            6
+          ]
+        ]
+      }
+    ]
+  },
+  "verdict": {
+    "skilling_closed_form_confirmed": {
+      "d2": true,
+      "d3": true
+    },
+    "max_p_verified": {
+      "d2": 12,
+      "d3": 7
+    }
+  }
+}

@@ -1,0 +1,45 @@
+=== Skilling, d = 2 ===
+   p | grid points |      A(p) measured |    closed form | ok | lower bound | A/n^d
+   1 |           4 |                  3 |              3 | yes |         2.0 | 0.7500
+   2 |          16 |                 13 |             13 | yes |         8.0 | 0.8125
+   3 |          64 |                 53 |             53 | yes |        32.0 | 0.8281
+   4 |         256 |                213 |            213 | yes |       128.0 | 0.8320
+   5 |        1024 |                853 |            853 | yes |       512.0 | 0.8330
+   6 |        4096 |               3413 |           3413 | yes |      2048.0 | 0.8333
+   7 |       16384 |              13653 |          13653 | yes |      8192.0 | 0.8333
+   8 |       65536 |              54613 |          54613 | yes |     32768.0 | 0.8333
+   9 |      262144 |             218453 |         218453 | yes |    131072.0 | 0.8333
+  10 |     1048576 |             873813 |         873813 | yes |    524288.0 | 0.8333
+  11 |     4194304 |            3495253 |        3495253 | yes |   2097152.0 | 0.8333
+  12 |    16777216 |           13981013 |       13981013 | yes |   8388608.0 | 0.8333
+=== Skilling, d = 3 ===
+   p | grid points |      A(p) measured |    closed form | ok | lower bound | A/n^d
+   1 |           8 |                  7 |              7 | yes |         6.0 | 0.8750
+   2 |          64 |                 59 |             59 | yes |        48.0 | 0.9219
+   3 |         512 |                475 |            475 | yes |       384.0 | 0.9277
+   4 |        4096 |               3803 |           3803 | yes |      3072.0 | 0.9285
+   5 |       32768 |              30427 |          30427 | yes |     24576.0 | 0.9286
+   6 |      262144 |             243419 |         243419 | yes |    196608.0 | 0.9286
+   7 |     2097152 |            1947355 |        1947355 | yes |   1572864.0 | 0.9286
+
+=== Hamilton & Rau-Chaplin, d = 2 ===
+   p | grid points |      A(p) measured | Skilling closed form | same? |
+   1 |           4 |                  3 |                    3 | yes   |
+   2 |          16 |                 13 |                   13 | yes   |
+   3 |          64 |                 53 |                   53 | yes   |
+   4 |         256 |                213 |                  213 | yes   |
+   5 |        1024 |                853 |                  853 | yes   |
+
+=== Hamilton & Rau-Chaplin, d = 3 ===
+   p | grid points |      A(p) measured | Skilling closed form | same? |
+   1 |           8 |                  7 |                    7 | yes   |
+   2 |          64 |                 59 |                   59 | yes   |
+   3 |         512 |                471 |                  475 | NO    |
+   4 |        4096 |               3767 |                 3803 | NO    |
+
+=== Verdict ===
+   Skilling d=2: closed form holds exhaustively up to p = 12  -> confirmed
+   Skilling d=2: A(p)/n^d -> 0.833333  (predicted 0.833333)
+   Skilling d=3: closed form holds exhaustively up to p = 7  -> confirmed
+   Skilling d=3: A(p)/n^d -> 0.928571  (predicted 0.928571)
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp17_seam_closed_forms.json

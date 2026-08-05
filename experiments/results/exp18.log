@@ -1,0 +1,35 @@
+=== (A) non-obtuse condition and (B) discrete maximum principle ===
+   seed=1 step= 0 N= 12000 | positive off-diagonals  33.78 % (weight 0.219) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 1 N= 14306 | positive off-diagonals  33.53 % (weight 0.230) | overshoot 1.29e-03 undershoot 0.00e+00
+   seed=1 step= 2 N= 17044 | positive off-diagonals  33.09 % (weight 0.242) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 3 N= 20311 | positive off-diagonals  32.86 % (weight 0.245) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 4 N= 24213 | positive off-diagonals  32.45 % (weight 0.246) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 5 N= 28882 | positive off-diagonals  32.36 % (weight 0.249) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 6 N= 34457 | positive off-diagonals  32.19 % (weight 0.251) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 7 N= 41133 | positive off-diagonals  32.14 % (weight 0.241) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 8 N= 49122 | positive off-diagonals  32.00 % (weight 0.238) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1 step= 9 N= 58685 | positive off-diagonals  31.96 % (weight 0.236) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=1: DMP violated on 1 of 10 steps; worst overshoot 1.294e-03, worst undershoot 0.000e+00 (relative to the range of u)
+   seed=2 step= 0 N= 12000 | positive off-diagonals  33.70 % (weight 0.211) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 1 N= 14303 | positive off-diagonals  33.25 % (weight 0.224) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 2 N= 17029 | positive off-diagonals  33.04 % (weight 0.259) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 3 N= 20277 | positive off-diagonals  32.83 % (weight 0.265) | overshoot 3.99e-03 undershoot 0.00e+00
+   seed=2 step= 4 N= 24164 | positive off-diagonals  32.59 % (weight 0.266) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 5 N= 28808 | positive off-diagonals  32.37 % (weight 0.232) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 6 N= 34367 | positive off-diagonals  32.19 % (weight 0.231) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 7 N= 41011 | positive off-diagonals  32.09 % (weight 0.238) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 8 N= 48967 | positive off-diagonals  32.08 % (weight 0.235) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2 step= 9 N= 58499 | positive off-diagonals  31.96 % (weight 0.231) | overshoot 0.00e+00 undershoot 0.00e+00
+   seed=2: DMP violated on 1 of 10 steps; worst overshoot 3.995e-03, worst undershoot 0.000e+00 (relative to the range of u)
+   positive off-diagonal fraction over all steps: min 0.3196 max 0.3378
+
+=== (C) observed self-convergence in space ===
+   built N=  4000  median edge 10.239 mm
+   built N=  8000  median edge 8.102 mm
+   built N= 16000  median edge 6.414 mm
+   built N= 32000  median edge 5.075 mm
+   N=  4000 h=10.239  rel L2 vs reference 6.5162e-02   Linf 3.7912e-01
+   N=  8000 h=8.102  rel L2 vs reference 5.6547e-02   Linf 2.9803e-01
+   N= 16000 h=6.414  rel L2 vs reference 4.9199e-02   Linf 2.5457e-01
+   observed order in the median edge length: 0.60
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp18_scheme_properties.json

@@ -1,13 +1,17 @@
 """
 PHVE -- interactive demonstrator (Streamlit)
 
-Six tabs, one per experiment of the paper:
-  - Bijectivity (Theorem 4.3)        : MNI152 brain encoded by Hil_p^{(3)}.
-  - Prefix search (Proposition 10.1) : B-tree query as anatomical region selection.
-  - Inter-patient stability (Cor. 5.3): same code across MNI-registered patients.
-  - DPCM compression (Theorem 8.2)   : Hilbert vs raster vs Morton on MNI152.
-  - FEM bandwidth (Theorem 10.2)     : reordering K for unstructured meshes.
-  - Surface morphing (Prop. 10.4)    : sinusoidal deformation along Hil(v).
+Two tabs, matching the two claims of the software paper that survived
+verification:
+  - Bijectivity      : the order at which the code separates MNI152 voxels.
+  - Prefix search    : a dyadic-region query as a range scan on a sorted column.
+
+Four further tabs (inter-patient stability, DPCM compression, FEM bandwidth,
+surface morphing) were removed from the navigation on 2026-08-05: the
+statements they displayed were refuted by the experimental campaign in
+`experiments/`, and `experiments/LOGBOOK.md` records each refutation with the
+script that produced it. Their page functions are kept below, unreferenced, so
+that the history is not lost.
 
 Usage:
     streamlit run app_demo.py
@@ -946,23 +950,41 @@ alphabet, built from the Hilbert space-filling curve.
 
 | Property | Description |
 |---|---|
-| **Bijective** | Each cell-centre maps to a unique code (Theorems 4.2, 4.3). |
-| **Compact** | 5--8 characters cover a 1 mm voxel in a $300 \times 250 \times 250$ mm cranium. |
-| **Hierarchical** | Truncating one character zooms out (Theorem 6.1). |
-| **Locality-preserving** | Neighbouring points share long prefixes (Cor. 5.3). |
-| **Indexable** | $O(\log N + |R|)$ B-tree range scans (Prop. 10.1). |
+| **Bijective** | Each cell-centre maps to a unique code. Verified exhaustively on the MNI152 brain mask: injective from $p = 8$ onwards, $14.1\%$ of voxels colliding at $p = 7$. |
+| **Compact** | 5 characters at $p = 8$ cover a $\sim$1 mm cell in a $300 \times 250 \times 250$ mm cranium. |
+| **Hierarchical** | Truncating a code yields the code of the enclosing dyadic cell, so a prefix denotes a region. |
+| **Prefix implies proximity** | Two points sharing a long prefix are close in space, with an explicit constant. |
+| **Indexable** | A dyadic-cell query is two binary searches on an ordered integer column: no spatial index needed. |
 | **Unambiguous** | base-29 alphabet without confusable characters (no 0/O, 1/I/L). |
 
-### Tabs in this demonstrator
+### One property PHVE does **not** have
 
-| Tab | Theorem | Script |
+Proximity does *not* imply a shared prefix. Two spatially adjacent points can
+receive codes whose indices differ by $\Theta(n^d)$ -- almost the whole range.
+This is not a defect of the implementation: it is a theorem, and it holds for
+every space-filling curve. The maximum index gap between adjacent cells is
+$\tfrac{5}{6}n^2$ in $d = 2$ and $\tfrac{13}{14}n^3$ in $d = 3$, verified
+exhaustively up to grids of $16\,777\,216$ and $2\,097\,152$ points.
+
+Only the *inverse* direction holds. Its constant is the worst-case $L_2$
+dilation: $6$ in $d = 2$, and about $29.5$ in $d = 3$ for the Skilling variant
+implemented here -- against $22.9$ for the best published three-dimensional
+Hilbert curve, so this variant is roughly $24\%$ less tight.
+
+### Demonstrations in this application
+
+| Tab | What it shows | Script |
 |---|---|---|
-| Bijectivity | Thm. 4.3 | `bijectivity_mni152.py` |
-| Prefix search | Prop. 10.1 | -- |
-| Inter-patient stability | Cor. 5.3 | `interpatient_stability.py` |
-| DPCM compression | Thm. 8.2 | `dpcm_compression.py` |
-| FEM bandwidth | Thm. 10.2 | `fem_bandwidth.py` |
-| Surface morphing | Prop. 10.4 | `surface_morphing.py` |
+| Bijectivity | the order at which the code separates voxels | `bijectivity_mni152.py` |
+| Prefix search | a region query as a range scan | `experiments/exp22_prefix_index.py` |
+
+Four further demonstrations were removed on 2026-08-05 because the statements
+they displayed were refuted by the experimental campaign in `experiments/`:
+inter-patient stability (measures quantisation, not anatomy), DPCM compression
+(the Hilbert traversal loses to a raster scan), FEM bandwidth (the bandwidth
+theorem is false; the maximum index gap is $\Theta(n^d)$), and surface morphing.
+The laboratory notebook `experiments/LOGBOOK.md` records each refutation with
+the script that produced it.
 
 ### Reference anatomical volumes
 """)
@@ -1005,13 +1027,25 @@ alphabet, built from the Hilbert space-filling curve.
 # Navigation
 # ===================================================================
 
+# Four demonstrations were removed on 2026-08-05 because the statements they
+# displayed were refuted by the experimental campaign of `experiments/`:
+#
+#   Inter-patient stability  the experiment uses no inter-patient data; it
+#                            jitters fixed landmarks, and the measured rate
+#                            agrees with pure quantisation (exp15).
+#   DPCM compression         the Hilbert traversal *loses* to a raster scan on
+#                            MNI152; the earlier gain came from a script that
+#                            binarised the signal with round() (exp07).
+#   FEM bandwidth            the bandwidth theorem is false: the maximum index
+#                            gap is Theta(n^d), essentially unchanged from the
+#                            natural ordering (exp03, seam theorem).
+#   Surface morphing         the pointwise morphing bound is refuted.
+#
+# The page functions are kept in the file, unreferenced, so the history is not
+# lost; they are not reachable from the navigation.
 PAGES = {
     "Bijectivity (Thm. 4.3)": page_bijectivity,
     "Prefix search (Prop. 10.1)": page_prefix_search,
-    "Inter-patient stability (Cor. 5.3)": page_interpatient,
-    "DPCM compression (Thm. 8.2)": page_dpcm,
-    "FEM bandwidth (Thm. 10.2)": page_fem,
-    "Surface morphing (Prop. 10.4)": page_morphing,
     "---": None,
     "About": page_about,
 }

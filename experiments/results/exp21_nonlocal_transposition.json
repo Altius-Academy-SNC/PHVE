@@ -1,0 +1,179 @@
+{
+  "experiment": "exp21_nonlocal_transposition",
+  "params": {
+    "d": [
+      2,
+      3
+    ],
+    "p2": [
+      4,
+      5
+    ],
+    "p3": [
+      3
+    ],
+    "s": [
+      0.25,
+      0.5
+    ],
+    "tol": 2.0
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "rows": [
+    {
+      "d": 2,
+      "p": 4,
+      "s": 0.25,
+      "N": 256,
+      "tol": 2.0,
+      "fitted_c": 1177.3167714355523,
+      "kernel_exponent_space": 2.5,
+      "kernel_exponent_1d_predicted": 1.25,
+      "ratio_percentiles_1_5_25_50_75_95_99": [
+        0.2150124451272834,
+        0.2975869940557144,
+        0.4925625165074509,
+        0.8480846846458497,
+        1.6082319621645498,
+        6.829844334744897,
+        27.39857555450817
+      ],
+      "fraction_pairs_outside_tol": 0.45704656862745097,
+      "seam_mass_fraction_mean": 0.5047376880350307,
+      "seam_mass_fraction_median": 0.5119947375684852,
+      "seam_mass_fraction_max": 0.7020844782383256,
+      "seam_mass_fraction_p95": 0.6257018993151974
+    },
+    {
+      "d": 2,
+      "p": 4,
+      "s": 0.5,
+      "N": 256,
+      "tol": 2.0,
+      "fitted_c": 4842.5263990115,
+      "kernel_exponent_space": 3.0,
+      "kernel_exponent_1d_predicted": 1.5,
+      "ratio_percentiles_1_5_25_50_75_95_99": [
+        0.15810890015903867,
+        0.23352680411034843,
+        0.4275172385922909,
+        0.8205915953966859,
+        1.768554415553966,
+        10.029816014726853,
+        53.121897735747055
+      ],
+      "fraction_pairs_outside_tol": 0.5439644607843137,
+      "seam_mass_fraction_mean": 0.5169161799161284,
+      "seam_mass_fraction_median": 0.5281004427991643,
+      "seam_mass_fraction_max": 0.6759024069072841,
+      "seam_mass_fraction_p95": 0.6279425392438156
+    },
+    {
+      "d": 2,
+      "p": 5,
+      "s": 0.25,
+      "N": 1024,
+      "tol": 2.0,
+      "fitted_c": 6650.925891630162,
+      "kernel_exponent_space": 2.5,
+      "kernel_exponent_1d_predicted": 1.25,
+      "ratio_percentiles_1_5_25_50_75_95_99": [
+        0.2225747279909723,
+        0.3121107179587273,
+        0.5565360606987791,
+        1.0347333636179283,
+        2.4496616018371933,
+        11.963945424874032,
+        47.97304772652769
+      ],
+      "fraction_pairs_outside_tol": 0.50238,
+      "seam_mass_fraction_mean": 0.5401247802583851,
+      "seam_mass_fraction_median": 0.5428816920294306,
+      "seam_mass_fraction_max": 0.7376383886654807,
+      "seam_mass_fraction_p95": 0.6437872229915402
+    },
+    {
+      "d": 2,
+      "p": 5,
+      "s": 0.5,
+      "N": 1024,
+      "tol": 2.0,
+      "fitted_c": 38677.51208073861,
+      "kernel_exponent_space": 3.0,
+      "kernel_exponent_1d_predicted": 1.5,
+      "ratio_percentiles_1_5_25_50_75_95_99": [
+        0.16480524210082526,
+        0.24726942517677958,
+        0.4949849239618984,
+        1.0418234848045798,
+        2.9304027531090275,
+        19.65392561042142,
+        104.03914452854215
+      ],
+      "fraction_pairs_outside_tol": 0.581355,
+      "seam_mass_fraction_mean": 0.5511690642307301,
+      "seam_mass_fraction_median": 0.5560618833670723,
+      "seam_mass_fraction_max": 0.6951696378042821,
+      "seam_mass_fraction_p95": 0.6448064742195981
+    },
+    {
+      "d": 3,
+      "p": 3,
+      "s": 0.25,
+      "N": 512,
+      "tol": 2.0,
+      "fitted_c": 1490.8157428213797,
+      "kernel_exponent_space": 3.5,
+      "kernel_exponent_1d_predicted": 1.1666666666666667,
+      "ratio_percentiles_1_5_25_50_75_95_99": [
+        0.1109302315270345,
+        0.17436523017668584,
+        0.395103896628962,
+        0.8078015555434215,
+        1.884832632929131,
+        9.026181473518156,
+        36.965659730540054
+      ],
+      "fraction_pairs_outside_tol": 0.562415,
+      "seam_mass_fraction_mean": 0.617416485439445,
+      "seam_mass_fraction_median": 0.6291520261520023,
+      "seam_mass_fraction_max": 0.7683636345629048,
+      "seam_mass_fraction_p95": 0.7200892290264975
+    },
+    {
+      "d": 3,
+      "p": 3,
+      "s": 0.5,
+      "N": 512,
+      "tol": 2.0,
+      "fitted_c": 4234.1891178828955,
+      "kernel_exponent_space": 4.0,
+      "kernel_exponent_1d_predicted": 1.3333333333333333,
+      "ratio_percentiles_1_5_25_50_75_95_99": [
+        0.08102676114352027,
+        0.1358616905250235,
+        0.3460179615069331,
+        0.7835423905895733,
+        2.063466758171374,
+        12.359606411857571,
+        61.911263928398284
+      ],
+      "fraction_pairs_outside_tol": 0.612645,
+      "seam_mass_fraction_mean": 0.6347901209749256,
+      "seam_mass_fraction_median": 0.6468244958848117,
+      "seam_mass_fraction_max": 0.763987695294562,
+      "seam_mass_fraction_p95": 0.730705027150515
+    }
+  ]
+}

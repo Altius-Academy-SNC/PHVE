@@ -1,0 +1,30 @@
+volume                     alpha    beta     a/3 |      W/B M2_H/M2_R   dH-dR | pred/meas
+MNI152-2mm                 0.470   0.190   0.157 |   20.964    0.7007 -0.0678 | True / True
+MNI152-1mm                 0.531   0.202   0.177 |   10.397    0.7551 -0.0643 | True / True
+fBm-H0.20                  0.336   0.123   0.112 |    6.639    0.9124 -0.0526 | True / True
+fBm-H0.35                  0.429   0.153   0.143 |   12.436    0.8441 -0.0725 | True / True
+fBm-H0.50                  0.532   0.187   0.177 |   26.792    0.7133 -0.0930 | True / True
+fBm-H0.65                  0.637   0.224   0.212 |   62.142    0.5185 -0.1028 | True / True
+fBm-H0.80                  0.737   0.259   0.246 |  142.268    0.3241 -0.0905 | True / True
+MNI152-2mm-tight-crop      0.490   0.182   0.163 |   43.521    0.6733 -0.0765 | True / True
+
+criterion agrees with the measured sign on 8/8 volumes
+
+replication of the v4 DPCM protocol (mask-restricted, p=7)
+   template range [-0.000, 0.988];  Hilbert index collisions: 33183
+   as_published_round_to_unit levels=   2  H_orig=0.4617  raster=0.4802  hilbert=0.5638  gain=-0.0836 bits (-17.42%)
+   corrected_8bit             levels= 191  H_orig=7.0232  raster=6.1716  hilbert=6.3394  gain=-0.1678 bits (-2.72%)
+
+collision sweep of the v4 protocol (8-bit quantisation, 235375 voxels)
+   raster DPCM entropy = 6.1716 bits
+   p= 6  collisions=207171 (88.02%)  hilbert=6.4661 bits  gain=-0.2945  wins=False
+   p= 7  collisions= 33183 (14.10%)  hilbert=6.3394 bits  gain=-0.1678  wins=False
+   p= 8  collisions=     0 ( 0.00%)  hilbert=6.2762 bits  gain=-0.1047  wins=False
+   p= 9  collisions=     0 ( 0.00%)  hilbert=6.2762 bits  gain=-0.1047  wins=False
+   p=10  collisions=     0 ( 0.00%)  hilbert=6.2762 bits  gain=-0.1047  wins=False
+   p=11  collisions=     0 ( 0.00%)  hilbert=6.2762 bits  gain=-0.1047  wins=False
+   criterion, mask-compacted raster : W/B = 4.260 (wrap frac 0.0230), B_H/B = 1.246, Hilbert unit-step fraction 0.9706
+      reduced criterion (W > B)        predicts gain: True   [WRONG]
+      full criterion ((1-f)B + fW > B_H) predicts gain: False   [RIGHT]
+   criterion, full-volume raster    : W/B = 0.011 -> gain predicted: False
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp07_R4_dpcm.json

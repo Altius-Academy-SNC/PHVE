@@ -1,0 +1,576 @@
+{
+  "experiment": "exp11_meangap_constants",
+  "params": {
+    "seeds": [
+      1
+    ],
+    "sizes": [
+      4000,
+      8000,
+      16000,
+      32000,
+      64000
+    ],
+    "order": 10,
+    "max_level": null
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "records": [
+    {
+      "seed": 1,
+      "N": 4000,
+      "E": 29902,
+      "D_max_degree": 33,
+      "mean_degree": 14.951,
+      "h_max_edge": 65.62011073739637,
+      "L": [
+        144.0,
+        178.0,
+        154.0
+      ],
+      "S_sum_inv_L": 0.019055928466040824,
+      "c1": 268435.456,
+      "c2": 2.4555658042827826,
+      "c1_per_level": [
+        {
+          "level": 1,
+          "max_occupancy": 602,
+          "n_nonempty_cells": 8,
+          "c1_level": 1.204
+        },
+        {
+          "level": 2,
+          "max_occupancy": 147,
+          "n_nonempty_cells": 59,
+          "c1_level": 2.352
+        },
+        {
+          "level": 3,
+          "max_occupancy": 30,
+          "n_nonempty_cells": 348,
+          "c1_level": 3.84
+        },
+        {
+          "level": 4,
+          "max_occupancy": 8,
+          "n_nonempty_cells": 1850,
+          "c1_level": 8.192
+        },
+        {
+          "level": 5,
+          "max_occupancy": 4,
+          "n_nonempty_cells": 3537,
+          "c1_level": 32.768
+        },
+        {
+          "level": 6,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 3941,
+          "c1_level": 131.072
+        },
+        {
+          "level": 7,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 3991,
+          "c1_level": 1048.576
+        },
+        {
+          "level": 8,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 3998,
+          "c1_level": 8388.608
+        },
+        {
+          "level": 9,
+          "max_occupancy": 1,
+          "n_nonempty_cells": 4000,
+          "c1_level": 33554.432
+        },
+        {
+          "level": 10,
+          "max_occupancy": 1,
+          "n_nonempty_cells": 4000,
+          "c1_level": 268435.456
+        }
+      ],
+      "c2_per_axis": [
+        {
+          "axis": 0,
+          "max_slab_count": 3937,
+          "L_i": 144.0,
+          "c2_axis": 2.1598866324257524
+        },
+        {
+          "axis": 1,
+          "max_slab_count": 3621,
+          "L_i": 178.0,
+          "c2_axis": 2.4555658042827826
+        },
+        {
+          "axis": 2,
+          "max_slab_count": 3954,
+          "L_i": 154.0,
+          "c2_axis": 2.319852836109981
+        }
+      ],
+      "l_star": 3,
+      "c1_restricted": 3.84,
+      "bound_mean_gap_restricted": 555207.4632645689,
+      "ratio_restricted_over_measured": 2773.1535223031797,
+      "bound_mean_gap": 38811814733.340576,
+      "measured_mean_gap_phve": 200.20797939937128,
+      "measured_median_gap_phve": 15.0,
+      "measured_max_gap_phve": 3947,
+      "measured_mean_gap_rcm": 233.12219918400106,
+      "ratio_bound_over_measured": 193857481.85350528,
+      "bound_constants_one": 1785.2493637730402
+    },
+    {
+      "seed": 1,
+      "N": 8000,
+      "E": 60461,
+      "D_max_degree": 33,
+      "mean_degree": 15.11525,
+      "h_max_edge": 61.68981113424838,
+      "L": [
+        144.0,
+        178.0,
+        154.0
+      ],
+      "S_sum_inv_L": 0.019055928466040824,
+      "c1": 134217.728,
+      "c2": 2.5131864914063162,
+      "c1_per_level": [
+        {
+          "level": 1,
+          "max_occupancy": 1225,
+          "n_nonempty_cells": 8,
+          "c1_level": 1.225
+        },
+        {
+          "level": 2,
+          "max_occupancy": 295,
+          "n_nonempty_cells": 60,
+          "c1_level": 2.36
+        },
+        {
+          "level": 3,
+          "max_occupancy": 50,
+          "n_nonempty_cells": 359,
+          "c1_level": 3.2
+        },
+        {
+          "level": 4,
+          "max_occupancy": 12,
+          "n_nonempty_cells": 2157,
+          "c1_level": 6.144
+        },
+        {
+          "level": 5,
+          "max_occupancy": 6,
+          "n_nonempty_cells": 6299,
+          "c1_level": 24.576
+        },
+        {
+          "level": 6,
+          "max_occupancy": 3,
+          "n_nonempty_cells": 7785,
+          "c1_level": 98.304
+        },
+        {
+          "level": 7,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 7967,
+          "c1_level": 524.288
+        },
+        {
+          "level": 8,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 7993,
+          "c1_level": 4194.304
+        },
+        {
+          "level": 9,
+          "max_occupancy": 1,
+          "n_nonempty_cells": 8000,
+          "c1_level": 16777.216
+        },
+        {
+          "level": 10,
+          "max_occupancy": 1,
+          "n_nonempty_cells": 8000,
+          "c1_level": 134217.728
+        }
+      ],
+      "c2_per_axis": [
+        {
+          "axis": 0,
+          "max_slab_count": 7741,
+          "L_i": 144.0,
+          "c2_axis": 2.258687414308578
+        },
+        {
+          "axis": 1,
+          "max_slab_count": 6968,
+          "L_i": 178.0,
+          "c2_axis": 2.5131864914063162
+        },
+        {
+          "axis": 2,
+          "max_slab_count": 7761,
+          "L_i": 154.0,
+          "c2_axis": 2.4217816079040952
+        }
+      ],
+      "l_star": 4,
+      "c1_restricted": 6.144,
+      "bound_mean_gap_restricted": 1690862.8270251064,
+      "ratio_restricted_over_measured": 5286.960698230427,
+      "bound_mean_gap": 36937462077.305786,
+      "measured_mean_gap_phve": 319.81755181025784,
+      "measured_median_gap_phve": 16.0,
+      "measured_max_gap_phve": 7843,
+      "measured_mean_gap_rcm": 352.82008236714574,
+      "ratio_bound_over_measured": 115495418.7730764,
+      "bound_constants_one": 3319.3098392109323
+    },
+    {
+      "seed": 1,
+      "N": 16000,
+      "E": 121854,
+      "D_max_degree": 31,
+      "mean_degree": 15.23175,
+      "h_max_edge": 55.24119545395058,
+      "L": [
+        144.0,
+        178.0,
+        154.0
+      ],
+      "S_sum_inv_L": 0.019055928466040824,
+      "c1": 67108.864,
+      "c2": 2.6073906224579955,
+      "c1_per_level": [
+        {
+          "level": 1,
+          "max_occupancy": 2296,
+          "n_nonempty_cells": 8,
+          "c1_level": 1.148
+        },
+        {
+          "level": 2,
+          "max_occupancy": 545,
+          "n_nonempty_cells": 60,
+          "c1_level": 2.18
+        },
+        {
+          "level": 3,
+          "max_occupancy": 87,
+          "n_nonempty_cells": 363,
+          "c1_level": 2.784
+        },
+        {
+          "level": 4,
+          "max_occupancy": 21,
+          "n_nonempty_cells": 2302,
+          "c1_level": 5.376
+        },
+        {
+          "level": 5,
+          "max_occupancy": 8,
+          "n_nonempty_cells": 10156,
+          "c1_level": 16.384
+        },
+        {
+          "level": 6,
+          "max_occupancy": 4,
+          "n_nonempty_cells": 14997,
+          "c1_level": 65.536
+        },
+        {
+          "level": 7,
+          "max_occupancy": 3,
+          "n_nonempty_cells": 15845,
+          "c1_level": 393.216
+        },
+        {
+          "level": 8,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 15979,
+          "c1_level": 2097.152
+        },
+        {
+          "level": 9,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 15997,
+          "c1_level": 16777.216
+        },
+        {
+          "level": 10,
+          "max_occupancy": 1,
+          "n_nonempty_cells": 16000,
+          "c1_level": 67108.864
+        }
+      ],
+      "c2_per_axis": [
+        {
+          "axis": 0,
+          "max_slab_count": 14685,
+          "L_i": 144.0,
+          "c2_axis": 2.392507962833165
+        },
+        {
+          "axis": 1,
+          "max_slab_count": 12947,
+          "L_i": 178.0,
+          "c2_axis": 2.6073906224579955
+        },
+        {
+          "axis": 2,
+          "max_slab_count": 14852,
+          "L_i": 154.0,
+          "c2_axis": 2.587751746233741
+        }
+      ],
+      "l_star": 4,
+      "c1_restricted": 5.376,
+      "bound_mean_gap_restricted": 2562654.476435311,
+      "ratio_restricted_over_measured": 5124.991832066925,
+      "bound_mean_gap": 31989737860.50753,
+      "measured_mean_gap_phve": 500.03093866430316,
+      "measured_median_gap_phve": 17.0,
+      "measured_max_gap_phve": 15683,
+      "measured_mean_gap_rcm": 672.8180117189423,
+      "ratio_bound_over_measured": 63975517.08692151,
+      "bound_constants_one": 5898.4204288401925
+    },
+    {
+      "seed": 1,
+      "N": 32000,
+      "E": 244494,
+      "D_max_degree": 38,
+      "mean_degree": 15.280875,
+      "h_max_edge": 49.264336511258044,
+      "L": [
+        144.0,
+        178.0,
+        154.0
+      ],
+      "S_sum_inv_L": 0.019055928466040824,
+      "c1": 67108.864,
+      "c2": 2.7350490139902464,
+      "c1_per_level": [
+        {
+          "level": 1,
+          "max_occupancy": 4718,
+          "n_nonempty_cells": 8,
+          "c1_level": 1.1795
+        },
+        {
+          "level": 2,
+          "max_occupancy": 1075,
+          "n_nonempty_cells": 60,
+          "c1_level": 2.15
+        },
+        {
+          "level": 3,
+          "max_occupancy": 156,
+          "n_nonempty_cells": 371,
+          "c1_level": 2.496
+        },
+        {
+          "level": 4,
+          "max_occupancy": 32,
+          "n_nonempty_cells": 2381,
+          "c1_level": 4.096
+        },
+        {
+          "level": 5,
+          "max_occupancy": 9,
+          "n_nonempty_cells": 14174,
+          "c1_level": 9.216
+        },
+        {
+          "level": 6,
+          "max_occupancy": 4,
+          "n_nonempty_cells": 28285,
+          "c1_level": 32.768
+        },
+        {
+          "level": 7,
+          "max_occupancy": 3,
+          "n_nonempty_cells": 31537,
+          "c1_level": 196.608
+        },
+        {
+          "level": 8,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 31934,
+          "c1_level": 1048.576
+        },
+        {
+          "level": 9,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 31992,
+          "c1_level": 8388.608
+        },
+        {
+          "level": 10,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 31999,
+          "c1_level": 67108.864
+        }
+      ],
+      "c2_per_axis": [
+        {
+          "axis": 0,
+          "max_slab_count": 27285,
+          "L_i": 144.0,
+          "c2_axis": 2.4923201791612755
+        },
+        {
+          "axis": 1,
+          "max_slab_count": 23847,
+          "L_i": 178.0,
+          "c2_axis": 2.692595635986829
+        },
+        {
+          "axis": 2,
+          "max_slab_count": 27998,
+          "L_i": 154.0,
+          "c2_axis": 2.7350490139902464
+        }
+      ],
+      "l_star": 4,
+      "c1_restricted": 4.096,
+      "bound_mean_gap_restricted": 4463466.625646041,
+      "ratio_restricted_over_measured": 5658.010543631515,
+      "bound_mean_gap": 73129437194.58473,
+      "measured_mean_gap_phve": 788.8756288497877,
+      "measured_median_gap_phve": 16.0,
+      "measured_max_gap_phve": 31369,
+      "measured_mean_gap_rcm": 1158.486228700909,
+      "ratio_bound_over_measured": 92700844.74685875,
+      "bound_constants_one": 10485.874465905348
+    },
+    {
+      "seed": 1,
+      "N": 64000,
+      "E": 490751,
+      "D_max_degree": 35,
+      "mean_degree": 15.33596875,
+      "h_max_edge": 44.08611387708809,
+      "L": [
+        144.0,
+        178.0,
+        154.0
+      ],
+      "S_sum_inv_L": 0.019055928466040824,
+      "c1": 33554.432,
+      "c2": 2.8606825122216932,
+      "c1_per_level": [
+        {
+          "level": 1,
+          "max_occupancy": 9480,
+          "n_nonempty_cells": 8,
+          "c1_level": 1.185
+        },
+        {
+          "level": 2,
+          "max_occupancy": 2195,
+          "n_nonempty_cells": 60,
+          "c1_level": 2.195
+        },
+        {
+          "level": 3,
+          "max_occupancy": 304,
+          "n_nonempty_cells": 375,
+          "c1_level": 2.432
+        },
+        {
+          "level": 4,
+          "max_occupancy": 56,
+          "n_nonempty_cells": 2420,
+          "c1_level": 3.584
+        },
+        {
+          "level": 5,
+          "max_occupancy": 14,
+          "n_nonempty_cells": 16376,
+          "c1_level": 7.168
+        },
+        {
+          "level": 6,
+          "max_occupancy": 6,
+          "n_nonempty_cells": 50313,
+          "c1_level": 24.576
+        },
+        {
+          "level": 7,
+          "max_occupancy": 4,
+          "n_nonempty_cells": 61980,
+          "c1_level": 131.072
+        },
+        {
+          "level": 8,
+          "max_occupancy": 3,
+          "n_nonempty_cells": 63746,
+          "c1_level": 786.432
+        },
+        {
+          "level": 9,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 63965,
+          "c1_level": 4194.304
+        },
+        {
+          "level": 10,
+          "max_occupancy": 2,
+          "n_nonempty_cells": 63995,
+          "c1_level": 33554.432
+        }
+      ],
+      "c2_per_axis": [
+        {
+          "axis": 0,
+          "max_slab_count": 50120,
+          "L_i": 144.0,
+          "c2_axis": 2.557948298967841
+        },
+        {
+          "axis": 1,
+          "max_slab_count": 43867,
+          "L_i": 178.0,
+          "c2_axis": 2.7674268158484034
+        },
+        {
+          "axis": 2,
+          "max_slab_count": 52412,
+          "L_i": 154.0,
+          "c2_axis": 2.8606825122216932
+        }
+      ],
+      "l_star": 5,
+      "c1_restricted": 7.168,
+      "bound_mean_gap_restricted": 13419469.668235047,
+      "ratio_restricted_over_measured": 10716.872810744766,
+      "bound_mean_gap": 62818454584.10373,
+      "measured_mean_gap_phve": 1252.1814810362077,
+      "measured_median_gap_phve": 18.0,
+      "measured_max_gap_phve": 62735,
+      "measured_mean_gap_rcm": 1923.3900104126126,
+      "ratio_bound_over_measured": 50167212.60892636,
+      "bound_constants_one": 18699.183561978996
+    }
+  ]
+}

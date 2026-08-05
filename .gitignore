@@ -38,3 +38,6 @@ simulations/*.nii.gz
 .vscode/
 .idea/
 .DS_Store
+
+# Compiled C extensions (built from the .c sources, see experiments/README.md)
+*.so

@@ -1,0 +1,27 @@
+seed=1 N=  3864 | max: nat   3846 rcm    902 phve   3801 | mean: nat  1135.9 rcm  272.5 phve  184.9 | N^{2/3}= 246.2
+seed=1 N=  7771 | max: nat   7734 rcm   1113 phve   7684 | mean: nat  2245.3 rcm  353.4 phve  286.4 | N^{2/3}= 392.3
+seed=1 N= 15671 | max: nat  15602 rcm   1689 phve  15392 | mean: nat  4494.0 rcm  540.6 phve  462.9 | N^{2/3}= 626.2
+seed=1 N= 31537 | max: nat  31460 rcm   3534 phve  30911 | mean: nat  8893.7 rcm 1157.7 phve  705.6 | N^{2/3}= 998.2
+seed=1 N= 63265 | max: nat  63167 rcm   4999 phve  61935 | mean: nat 17404.1 rcm 1659.1 phve 1111.1 | N^{2/3}=1587.7
+seed=1 N=126920 | max: nat 126767 rcm   8971 phve 124272 | mean: nat 34406.1 rcm 2988.2 phve 1760.3 | N^{2/3}=2525.5
+seed=2 N=  3859 | max: nat   3855 rcm    731 phve   3806 | mean: nat  1131.4 rcm  234.4 phve  185.1 | N^{2/3}= 246.0
+seed=2 N=  7770 | max: nat   7733 rcm   1307 phve   7611 | mean: nat  2261.2 rcm  376.5 phve  296.3 | N^{2/3}= 392.3
+seed=2 N= 15676 | max: nat  15613 rcm   2073 phve  15400 | mean: nat  4480.9 rcm  691.0 phve  453.6 | N^{2/3}= 626.4
+seed=2 N= 31527 | max: nat  31450 rcm   3326 phve  30979 | mean: nat  8870.7 rcm 1157.1 phve  714.5 | N^{2/3}= 998.0
+seed=2 N= 63195 | max: nat  63062 rcm   4507 phve  61878 | mean: nat 17492.3 rcm 1525.8 phve 1120.3 | N^{2/3}=1586.6
+seed=2 N=126830 | max: nat 126786 rcm   9373 phve 124149 | mean: nat 34505.1 rcm 3108.2 phve 1760.2 | N^{2/3}=2524.3
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp03_ordering_scaling.json
+
+fitted exponents  metric ~ N^alpha
+   natural.max      alpha =  1.001   (R^2 = 1.0000)
+   natural.mean     alpha =  0.977   (R^2 = 1.0000)
+   natural.median   alpha =  0.955   (R^2 = 1.0000)
+   natural.p99      alpha =  0.999   (R^2 = 1.0000)
+   phve.max         alpha =  0.998   (R^2 = 1.0000)
+   phve.mean        alpha =  0.643   (R^2 = 0.9998)
+   phve.median      alpha =  0.064   (R^2 = 0.8781)
+   phve.p99         alpha =  0.761   (R^2 = 0.9949)
+   rcm.max          alpha =  0.689   (R^2 = 0.9853)
+   rcm.mean         alpha =  0.716   (R^2 = 0.9876)
+   rcm.median       alpha =  0.528   (R^2 = 0.9393)
+   rcm.p99          alpha =  0.691   (R^2 = 0.9837)

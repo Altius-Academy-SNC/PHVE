@@ -1,0 +1,238 @@
+{
+  "experiment": "exp15_v4_carryover",
+  "params": {
+    "volume": "CR",
+    "orders": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "sigmas": [
+      0.5
+    ],
+    "jitter_orders": [
+      6
+    ],
+    "n_patients": 20000,
+    "seed": 42
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "mni152_collisions": {
+    "rows": [
+      {
+        "p": 4,
+        "cell_mm": [
+          18.75,
+          15.625,
+          15.625
+        ],
+        "cell_smaller_than_voxel": false,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 626,
+          "n_colliding_voxels": 234749,
+          "collision_rate": 0.9973404142326076,
+          "max_multiplicity": 640
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 626,
+          "n_colliding_voxels": 234749,
+          "collision_rate": 0.9973404142326076,
+          "max_multiplicity": 640
+        }
+      },
+      {
+        "p": 5,
+        "cell_mm": [
+          9.375,
+          7.8125,
+          7.8125
+        ],
+        "cell_smaller_than_voxel": false,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 4036,
+          "n_colliding_voxels": 231339,
+          "collision_rate": 0.9828528943175784,
+          "max_multiplicity": 80
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 4036,
+          "n_colliding_voxels": 231339,
+          "collision_rate": 0.9828528943175784,
+          "max_multiplicity": 80
+        }
+      },
+      {
+        "p": 6,
+        "cell_mm": [
+          4.6875,
+          3.90625,
+          3.90625
+        ],
+        "cell_smaller_than_voxel": false,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 28204,
+          "n_colliding_voxels": 207171,
+          "collision_rate": 0.8801741901221455,
+          "max_multiplicity": 12
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 28204,
+          "n_colliding_voxels": 207171,
+          "collision_rate": 0.8801741901221455,
+          "max_multiplicity": 12
+        }
+      },
+      {
+        "p": 7,
+        "cell_mm": [
+          2.34375,
+          1.953125,
+          1.953125
+        ],
+        "cell_smaller_than_voxel": false,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 202192,
+          "n_colliding_voxels": 33183,
+          "collision_rate": 0.14097928836962295,
+          "max_multiplicity": 2
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 202192,
+          "n_colliding_voxels": 33183,
+          "collision_rate": 0.14097928836962295,
+          "max_multiplicity": 2
+        }
+      },
+      {
+        "p": 8,
+        "cell_mm": [
+          1.171875,
+          0.9765625,
+          0.9765625
+        ],
+        "cell_smaller_than_voxel": true,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 235375,
+          "n_colliding_voxels": 0,
+          "collision_rate": 0.0,
+          "max_multiplicity": 1
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 235375,
+          "n_colliding_voxels": 0,
+          "collision_rate": 0.0,
+          "max_multiplicity": 1
+        }
+      },
+      {
+        "p": 9,
+        "cell_mm": [
+          0.5859375,
+          0.48828125,
+          0.48828125
+        ],
+        "cell_smaller_than_voxel": true,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 235375,
+          "n_colliding_voxels": 0,
+          "collision_rate": 0.0,
+          "max_multiplicity": 1
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 235375,
+          "n_colliding_voxels": 0,
+          "collision_rate": 0.0,
+          "max_multiplicity": 1
+        }
+      },
+      {
+        "p": 10,
+        "cell_mm": [
+          0.29296875,
+          0.244140625,
+          0.244140625
+        ],
+        "cell_smaller_than_voxel": true,
+        "all": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 235375,
+          "n_colliding_voxels": 0,
+          "collision_rate": 0.0,
+          "max_multiplicity": 1
+        },
+        "inside_box": {
+          "n_voxels": 235375,
+          "n_distinct_codes": 235375,
+          "n_colliding_voxels": 0,
+          "collision_rate": 0.0,
+          "max_multiplicity": 1
+        }
+      }
+    ],
+    "voxel_spacing_mm": [
+      2.0,
+      2.0,
+      2.0
+    ],
+    "volume": "CR",
+    "dims_mm": [
+      300.0,
+      250.0,
+      250.0
+    ],
+    "n_voxels": 235375,
+    "n_outside_box": 0,
+    "mask": "nilearn load_mni152_brain_mask(resolution=2)",
+    "first_p_without_collision_inside_box": 8
+  },
+  "jitter_protocol": [
+    {
+      "p": 6,
+      "sigma_mm": 0.5,
+      "cell_mm": [
+        4.6875,
+        3.90625,
+        3.90625
+      ],
+      "rate_identical": 0.43435,
+      "independent_axis_prediction": 0.40280849346825653,
+      "per_landmark": {
+        "Brain centre": 0.1279,
+        "Frontal cortex": 0.4617,
+        "Occipital cortex": 0.15755,
+        "L. hippocampus": 0.745,
+        "R. hippocampus": 0.74585,
+        "Cerebellum": 0.31075,
+        "Brain stem": 0.4917
+      }
+    }
+  ],
+  "jitter_max_deviation_from_quantisation_model": 0.03154150653174348
+}

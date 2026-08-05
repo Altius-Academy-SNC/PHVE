@@ -1,0 +1,414 @@
+{
+  "experiment": "exp12_compact_hilbert",
+  "params": {
+    "dims": [
+      2,
+      3
+    ],
+    "cube_orders": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "aniso_cases": [
+      "2,1",
+      "3,1",
+      "3,2",
+      "4,2",
+      "2,1,1",
+      "3,2,1",
+      "4,2,2",
+      "3,3,1",
+      "4,3,2"
+    ]
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "selftest_compact_reduces_to_standard": {
+    "rows": [
+      {
+        "d": 2,
+        "M": 1,
+        "points": 4,
+        "identical": true
+      },
+      {
+        "d": 2,
+        "M": 2,
+        "points": 16,
+        "identical": true
+      },
+      {
+        "d": 2,
+        "M": 3,
+        "points": 64,
+        "identical": true
+      },
+      {
+        "d": 2,
+        "M": 4,
+        "points": 256,
+        "identical": true
+      },
+      {
+        "d": 3,
+        "M": 1,
+        "points": 8,
+        "identical": true
+      },
+      {
+        "d": 3,
+        "M": 2,
+        "points": 64,
+        "identical": true
+      },
+      {
+        "d": 3,
+        "M": 3,
+        "points": 512,
+        "identical": true
+      },
+      {
+        "d": 3,
+        "M": 4,
+        "points": 4096,
+        "identical": true
+      }
+    ],
+    "all_ok": true
+  },
+  "selftest_compact_bijective": {
+    "rows": [
+      {
+        "m": [
+          2,
+          1
+        ],
+        "points": 8,
+        "range": 8,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          3,
+          1
+        ],
+        "points": 16,
+        "range": 16,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          3,
+          2
+        ],
+        "points": 32,
+        "range": 32,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          4,
+          2
+        ],
+        "points": 64,
+        "range": 64,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          2,
+          1,
+          1
+        ],
+        "points": 16,
+        "range": 16,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          3,
+          2,
+          1
+        ],
+        "points": 64,
+        "range": 64,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          4,
+          2,
+          2
+        ],
+        "points": 256,
+        "range": 256,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          3,
+          3,
+          1
+        ],
+        "points": 128,
+        "range": 128,
+        "bijective_onto_range": true
+      },
+      {
+        "m": [
+          4,
+          3,
+          2
+        ],
+        "points": 512,
+        "range": 512,
+        "bijective_onto_range": true
+      }
+    ],
+    "all_ok": true
+  },
+  "Q1_skilling_vs_hrc_cube": [
+    {
+      "d": 2,
+      "M": 1,
+      "identical_index": true,
+      "same_total_order": true
+    },
+    {
+      "d": 2,
+      "M": 2,
+      "identical_index": true,
+      "same_total_order": true
+    },
+    {
+      "d": 2,
+      "M": 3,
+      "identical_index": true,
+      "same_total_order": true
+    },
+    {
+      "d": 2,
+      "M": 4,
+      "identical_index": true,
+      "same_total_order": true
+    },
+    {
+      "d": 3,
+      "M": 1,
+      "identical_index": false,
+      "same_total_order": false
+    },
+    {
+      "d": 3,
+      "M": 2,
+      "identical_index": false,
+      "same_total_order": false
+    },
+    {
+      "d": 3,
+      "M": 3,
+      "identical_index": false,
+      "same_total_order": false
+    },
+    {
+      "d": 3,
+      "M": 4,
+      "identical_index": false,
+      "same_total_order": false
+    }
+  ],
+  "Q2_hrc_restricted_cube_vs_compact": [
+    {
+      "m": [
+        2,
+        1
+      ],
+      "M": 2,
+      "points": 8,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        3,
+        1
+      ],
+      "M": 3,
+      "points": 16,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        3,
+        2
+      ],
+      "M": 3,
+      "points": 32,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        4,
+        2
+      ],
+      "M": 4,
+      "points": 64,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        2,
+        1,
+        1
+      ],
+      "M": 2,
+      "points": 16,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        3,
+        2,
+        1
+      ],
+      "M": 3,
+      "points": 64,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        4,
+        2,
+        2
+      ],
+      "M": 4,
+      "points": 256,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        3,
+        3,
+        1
+      ],
+      "M": 3,
+      "points": 128,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        4,
+        3,
+        2
+      ],
+      "M": 4,
+      "points": 512,
+      "same_total_order": true
+    }
+  ],
+  "Q3_ours_vs_compact": [
+    {
+      "m": [
+        2,
+        1
+      ],
+      "M": 2,
+      "points": 8,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        3,
+        1
+      ],
+      "M": 3,
+      "points": 16,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        3,
+        2
+      ],
+      "M": 3,
+      "points": 32,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        4,
+        2
+      ],
+      "M": 4,
+      "points": 64,
+      "same_total_order": true
+    },
+    {
+      "m": [
+        2,
+        1,
+        1
+      ],
+      "M": 2,
+      "points": 16,
+      "same_total_order": false
+    },
+    {
+      "m": [
+        3,
+        2,
+        1
+      ],
+      "M": 3,
+      "points": 64,
+      "same_total_order": false
+    },
+    {
+      "m": [
+        4,
+        2,
+        2
+      ],
+      "M": 4,
+      "points": 256,
+      "same_total_order": false
+    },
+    {
+      "m": [
+        3,
+        3,
+        1
+      ],
+      "M": 3,
+      "points": 128,
+      "same_total_order": false
+    },
+    {
+      "m": [
+        4,
+        3,
+        2
+      ],
+      "M": 4,
+      "points": 512,
+      "same_total_order": false
+    }
+  ],
+  "verdict": {
+    "Q1_all_same_order": false,
+    "Q1_all_same_index": false,
+    "Q2_all_same_order": true,
+    "Q3_all_same_order": false
+  }
+}

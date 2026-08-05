@@ -1,0 +1,13 @@
+N=  7771 | median: nat    1972 rcm    206 phve    15 | tail exponent (10..1000): nat -0.056 rcm -0.239 phve -0.400
+N= 15671 | median: nat    3897 rcm    413 phve    16 | tail exponent (10..1000): nat -0.029 rcm -0.144 phve -0.376
+N= 31537 | median: nat    7616 rcm    598 phve    16 | tail exponent (10..1000): nat -0.015 rcm -0.101 phve -0.361
+N= 63265 | median: nat   14623 rcm    778 phve    17 | tail exponent (10..1000): nat -0.008 rcm -0.090 phve -0.348
+N=126920 | median: nat   28493 rcm   1392 phve    17 | tail exponent (10..1000): nat -0.004 rcm -0.080 phve -0.340
+
+collapse of the PHVE ccdf over N in [7771, 126920], t in [10, 1000]:
+   max |P_N(t) - mean_N P(t)| = 0.0210   (RCM, same window: 0.2683)
+   predicted tail exponent -1/d = -0.3333
+   measured PHVE tail exponents: -0.400, -0.376, -0.361, -0.348, -0.340
+   mean -0.3651, spread 0.0596
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp08_gap_distribution.json
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/figures/gap_distribution.png

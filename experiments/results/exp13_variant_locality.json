@@ -1,0 +1,131 @@
+{
+  "experiment": "exp13_variant_locality",
+  "params": {
+    "d": 3,
+    "sym_orders": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "loc_orders": [
+      1,
+      2,
+      3
+    ],
+    "restricted_order": 4,
+    "gap_fraction": 0.08
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "symmetry_search": [
+    {
+      "p": 1,
+      "n_points": 8,
+      "n_matches": 2,
+      "matches": [
+        {
+          "perm": [
+            0,
+            2,
+            1
+          ],
+          "flips": [
+            false,
+            false,
+            false
+          ],
+          "reversed": false
+        },
+        {
+          "perm": [
+            0,
+            2,
+            1
+          ],
+          "flips": [
+            true,
+            false,
+            false
+          ],
+          "reversed": true
+        }
+      ]
+    },
+    {
+      "p": 2,
+      "n_points": 64,
+      "n_matches": 0,
+      "matches": []
+    },
+    {
+      "p": 3,
+      "n_points": 512,
+      "n_matches": 0,
+      "matches": []
+    },
+    {
+      "p": 4,
+      "n_points": 4096,
+      "n_matches": 0,
+      "matches": []
+    }
+  ],
+  "locality": [
+    {
+      "p": 1,
+      "n_points": 8,
+      "A_skilling": 7,
+      "A_hrc": 7,
+      "WL2_skilling": 1.7320508075688774,
+      "WL2_hrc": 1.7320508075688774,
+      "WL2_equal": true,
+      "A_equal": true
+    },
+    {
+      "p": 2,
+      "n_points": 64,
+      "A_skilling": 59,
+      "A_hrc": 59,
+      "WL2_skilling": 9.0,
+      "WL2_hrc": 7.905694150420948,
+      "WL2_equal": false,
+      "A_equal": true
+    },
+    {
+      "p": 3,
+      "n_points": 512,
+      "A_skilling": 475,
+      "A_hrc": 471,
+      "WL2_skilling": 18.05263157894737,
+      "WL2_hrc": 13.803588754378334,
+      "WL2_equal": false,
+      "A_equal": false
+    }
+  ],
+  "locality_restricted": {
+    "p": 4,
+    "n_points": 4096,
+    "max_gap_swept": 327,
+    "gap_fraction": 0.08,
+    "A_skilling": 3803,
+    "A_hrc": 3767,
+    "WL2_skilling_lower": 22.959183673469386,
+    "WL2_hrc_lower": 18.240601099911053
+  },
+  "verdict": {
+    "same_curve_up_to_cube_symmetry": false,
+    "A_identical_all_orders": false,
+    "WL2_identical_all_orders": false
+  }
+}

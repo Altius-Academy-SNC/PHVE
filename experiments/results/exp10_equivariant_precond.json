@@ -1,0 +1,2674 @@
+{
+  "experiment": "exp10_equivariant_precond",
+  "params": {
+    "seeds": [
+      1,
+      2
+    ],
+    "sizes": [
+      4000,
+      8000,
+      16000,
+      32000,
+      64000
+    ],
+    "order": 10,
+    "tau": 1.0,
+    "rtol": 1e-10,
+    "maxiter": 20000,
+    "cheb_degree": 4,
+    "power_iters": 30
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "caches": [
+    "L1 32 KiB 8-way",
+    "L2 1 MiB 16-way",
+    "L3 16 MiB 16-way"
+  ],
+  "preconditioners": [
+    "none",
+    "jacobi",
+    "cheb4",
+    "ic0"
+  ],
+  "records": [
+    {
+      "seed": 1,
+      "N": 7771,
+      "nnz": 123189,
+      "working_set_kib": 60.7109375,
+      "lmax_bound": 3.9203283512777443,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 7734,
+          "gap_mean": 2245.322131034427,
+          "gap_median": 1797.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 54081,
+              "accesses": 130960,
+              "miss_rate": 0.4129581551618815
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 200,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 125,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 32,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 20,
+              "converged": true,
+              "nnz": 65480,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 10816200,
+              "L2 1 MiB 16-way": 388800,
+              "L3 16 MiB 16-way": 388800
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 6760125,
+              "L2 1 MiB 16-way": 243000,
+              "L3 16 MiB 16-way": 243000
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 1730592,
+              "L2 1 MiB 16-way": 62208,
+              "L3 16 MiB 16-way": 62208
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 1081620,
+              "L2 1 MiB 16-way": 38880,
+              "L3 16 MiB 16-way": 38880
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.014993423000305484,
+          "gap_max": 1113,
+          "gap_mean": 353.42964063349814,
+          "gap_median": 140.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 203,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 125,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 32,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 16,
+              "converged": true,
+              "nnz": 65480,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 394632,
+              "L2 1 MiB 16-way": 394632,
+              "L3 16 MiB 16-way": 394632
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 243000,
+              "L2 1 MiB 16-way": 243000,
+              "L3 16 MiB 16-way": 243000
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 62208,
+              "L2 1 MiB 16-way": 62208,
+              "L3 16 MiB 16-way": 62208
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 31104,
+              "L2 1 MiB 16-way": 31104,
+              "L3 16 MiB 16-way": 31104
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.00858437899933051,
+          "gap_max": 7684,
+          "gap_mean": 286.35797027331984,
+          "gap_median": 12.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 2360,
+              "accesses": 130960,
+              "miss_rate": 0.01802076970067196
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 130960,
+              "miss_rate": 0.014844227244960293
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 204,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 125,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 32,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 25,
+              "converged": true,
+              "nnz": 65480,
+              "shift": 0.016
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 481440,
+              "L2 1 MiB 16-way": 396576,
+              "L3 16 MiB 16-way": 396576
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 295000,
+              "L2 1 MiB 16-way": 243000,
+              "L3 16 MiB 16-way": 243000
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 75520,
+              "L2 1 MiB 16-way": 62208,
+              "L3 16 MiB 16-way": 62208
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 59000,
+              "L2 1 MiB 16-way": 48600,
+              "L3 16 MiB 16-way": 48600
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "N": 15671,
+      "nnz": 250261,
+      "working_set_kib": 122.4296875,
+      "lmax_bound": 3.80671257587188,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 15602,
+          "gap_mean": 4494.03039227047,
+          "gap_median": 3550.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 172152,
+              "accesses": 265932,
+              "miss_rate": 0.647353458778936
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 3918,
+              "accesses": 265932,
+              "miss_rate": 0.014733089662018861
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 3918,
+              "accesses": 265932,
+              "miss_rate": 0.014733089662018861
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 242,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 131,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 32,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 28,
+              "converged": true,
+              "nnz": 132966,
+              "shift": 0.008
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 41660784,
+              "L2 1 MiB 16-way": 948156,
+              "L3 16 MiB 16-way": 948156
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 22551912,
+              "L2 1 MiB 16-way": 513258,
+              "L3 16 MiB 16-way": 513258
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 5508864,
+              "L2 1 MiB 16-way": 125376,
+              "L3 16 MiB 16-way": 125376
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 4820256,
+              "L2 1 MiB 16-way": 109704,
+              "L3 16 MiB 16-way": 109704
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.05863606799994159,
+          "gap_max": 1689,
+          "gap_mean": 540.6381817382653,
+          "gap_median": 294.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 4992,
+              "accesses": 265932,
+              "miss_rate": 0.018771716077794324
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 3918,
+              "accesses": 265932,
+              "miss_rate": 0.014733089662018861
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 3918,
+              "accesses": 265932,
+              "miss_rate": 0.014733089662018861
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 243,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 131,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 32,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 21,
+              "converged": true,
+              "nnz": 132966,
+              "shift": 0.008
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 1213056,
+              "L2 1 MiB 16-way": 952074,
+              "L3 16 MiB 16-way": 952074
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 653952,
+              "L2 1 MiB 16-way": 513258,
+              "L3 16 MiB 16-way": 513258
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 159744,
+              "L2 1 MiB 16-way": 125376,
+              "L3 16 MiB 16-way": 125376
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 104832,
+              "L2 1 MiB 16-way": 82278,
+              "L3 16 MiB 16-way": 82278
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.01859885699923325,
+          "gap_max": 15392,
+          "gap_mean": 462.9002841033961,
+          "gap_median": 13.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 5323,
+              "accesses": 265932,
+              "miss_rate": 0.02001639516868974
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 3918,
+              "accesses": 265932,
+              "miss_rate": 0.014733089662018861
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 3918,
+              "accesses": 265932,
+              "miss_rate": 0.014733089662018861
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 241,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 130,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 32,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 24,
+              "converged": true,
+              "nnz": 132966,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 1282843,
+              "L2 1 MiB 16-way": 944238,
+              "L3 16 MiB 16-way": 944238
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 691990,
+              "L2 1 MiB 16-way": 509340,
+              "L3 16 MiB 16-way": 509340
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 170336,
+              "L2 1 MiB 16-way": 125376,
+              "L3 16 MiB 16-way": 125376
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 127752,
+              "L2 1 MiB 16-way": 94032,
+              "L3 16 MiB 16-way": 94032
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "N": 31537,
+      "nnz": 506521,
+      "working_set_kib": 246.3828125,
+      "lmax_bound": 4.086505813232164,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 31460,
+          "gap_mean": 8893.669391792246,
+          "gap_median": 6943.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 413713,
+              "accesses": 538058,
+              "miss_rate": 0.7689003787695751
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 7886,
+              "accesses": 538058,
+              "miss_rate": 0.014656412505714997
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 7886,
+              "accesses": 538058,
+              "miss_rate": 0.014656412505714997
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 520,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 308,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 76,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 44,
+              "converged": true,
+              "nnz": 269029,
+              "shift": 0.001
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 215130760,
+              "L2 1 MiB 16-way": 4100720,
+              "L3 16 MiB 16-way": 4100720
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 127423604,
+              "L2 1 MiB 16-way": 2428888,
+              "L3 16 MiB 16-way": 2428888
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 31442188,
+              "L2 1 MiB 16-way": 599336,
+              "L3 16 MiB 16-way": 599336
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 18203372,
+              "L2 1 MiB 16-way": 346984,
+              "L3 16 MiB 16-way": 346984
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.1336359849992732,
+          "gap_max": 3534,
+          "gap_mean": 1157.6553430163804,
+          "gap_median": 356.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 17432,
+              "accesses": 538058,
+              "miss_rate": 0.03239799426827591
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 7886,
+              "accesses": 538058,
+              "miss_rate": 0.014656412505714997
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 7886,
+              "accesses": 538058,
+              "miss_rate": 0.014656412505714997
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 515,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 309,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 76,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 43,
+              "converged": true,
+              "nnz": 269029,
+              "shift": 0.032
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 8977480,
+              "L2 1 MiB 16-way": 4061290,
+              "L3 16 MiB 16-way": 4061290
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 5386488,
+              "L2 1 MiB 16-way": 2436774,
+              "L3 16 MiB 16-way": 2436774
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 1324832,
+              "L2 1 MiB 16-way": 599336,
+              "L3 16 MiB 16-way": 599336
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 749576,
+              "L2 1 MiB 16-way": 339098,
+              "L3 16 MiB 16-way": 339098
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.045501231999878655,
+          "gap_max": 30911,
+          "gap_mean": 705.628951218212,
+          "gap_median": 13.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 11204,
+              "accesses": 538058,
+              "miss_rate": 0.02082303394801304
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 7886,
+              "accesses": 538058,
+              "miss_rate": 0.014656412505714997
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 7886,
+              "accesses": 538058,
+              "miss_rate": 0.014656412505714997
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 518,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 308,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 76,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 75,
+              "converged": true,
+              "nnz": 269029,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 5803672,
+              "L2 1 MiB 16-way": 4084948,
+              "L3 16 MiB 16-way": 4084948
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 3450832,
+              "L2 1 MiB 16-way": 2428888,
+              "L3 16 MiB 16-way": 2428888
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 851504,
+              "L2 1 MiB 16-way": 599336,
+              "L3 16 MiB 16-way": 599336
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 840300,
+              "L2 1 MiB 16-way": 591450,
+              "L3 16 MiB 16-way": 591450
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "N": 63265,
+      "nnz": 1020621,
+      "working_set_kib": 494.2578125,
+      "lmax_bound": 3.986780953950306,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 63167,
+          "gap_mean": 17404.09319032236,
+          "gap_median": 13292.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 900340,
+              "accesses": 1083886,
+              "miss_rate": 0.8306593128797678
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 15818,
+              "accesses": 1083886,
+              "miss_rate": 0.014593785693329373
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 15818,
+              "accesses": 1083886,
+              "miss_rate": 0.014593785693329373
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 606,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 291,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 70,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 69,
+              "converged": true,
+              "nnz": 541943,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 545606040,
+              "L2 1 MiB 16-way": 9585708,
+              "L3 16 MiB 16-way": 9585708
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 261998940,
+              "L2 1 MiB 16-way": 4603038,
+              "L3 16 MiB 16-way": 4603038
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 63023800,
+              "L2 1 MiB 16-way": 1107260,
+              "L3 16 MiB 16-way": 1107260
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 62123460,
+              "L2 1 MiB 16-way": 1091442,
+              "L3 16 MiB 16-way": 1091442
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.32978263499990135,
+          "gap_max": 4999,
+          "gap_mean": 1659.0787099226843,
+          "gap_median": 413.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 37167,
+              "accesses": 1083886,
+              "miss_rate": 0.0342905065661887
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 15818,
+              "accesses": 1083886,
+              "miss_rate": 0.014593785693329373
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 15818,
+              "accesses": 1083886,
+              "miss_rate": 0.014593785693329373
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 609,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 296,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 70,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 34,
+              "converged": true,
+              "nnz": 541943,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 22634703,
+              "L2 1 MiB 16-way": 9633162,
+              "L3 16 MiB 16-way": 9633162
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 11001432,
+              "L2 1 MiB 16-way": 4682128,
+              "L3 16 MiB 16-way": 4682128
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 2601690,
+              "L2 1 MiB 16-way": 1107260,
+              "L3 16 MiB 16-way": 1107260
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 1263678,
+              "L2 1 MiB 16-way": 537812,
+              "L3 16 MiB 16-way": 537812
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.08319766900058312,
+          "gap_max": 61935,
+          "gap_mean": 1111.1015861911521,
+          "gap_median": 14.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 23381,
+              "accesses": 1083886,
+              "miss_rate": 0.0215714567768197
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 15818,
+              "accesses": 1083886,
+              "miss_rate": 0.014593785693329373
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 15818,
+              "accesses": 1083886,
+              "miss_rate": 0.014593785693329373
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 614,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 291,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 70,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 69,
+              "converged": true,
+              "nnz": 541943,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 14355934,
+              "L2 1 MiB 16-way": 9712252,
+              "L3 16 MiB 16-way": 9712252
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 6803871,
+              "L2 1 MiB 16-way": 4603038,
+              "L3 16 MiB 16-way": 4603038
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 1636670,
+              "L2 1 MiB 16-way": 1107260,
+              "L3 16 MiB 16-way": 1107260
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 1613289,
+              "L2 1 MiB 16-way": 1091442,
+              "L3 16 MiB 16-way": 1091442
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "N": 126920,
+      "nnz": 2055150,
+      "working_set_kib": 991.5625,
+      "lmax_bound": 4.0270123193654515,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 126767,
+          "gap_mean": 34406.097007031116,
+          "gap_median": 25912.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 1884329,
+              "accesses": 2182070,
+              "miss_rate": 0.863551123474499
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 53936,
+              "accesses": 2182070,
+              "miss_rate": 0.024717813818988393
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 31730,
+              "accesses": 2182070,
+              "miss_rate": 0.014541238365405326
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 837,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 368,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 88,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 112,
+              "converged": true,
+              "nnz": 1091035,
+              "shift": 0.256
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 1577183373,
+              "L2 1 MiB 16-way": 45144432,
+              "L3 16 MiB 16-way": 26558010
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 693433072,
+              "L2 1 MiB 16-way": 19848448,
+              "L3 16 MiB 16-way": 11676640
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 165820952,
+              "L2 1 MiB 16-way": 4746368,
+              "L3 16 MiB 16-way": 2792240
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 211044848,
+              "L2 1 MiB 16-way": 6040832,
+              "L3 16 MiB 16-way": 3553760
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.7169807069994931,
+          "gap_max": 8971,
+          "gap_mean": 2988.1926234094835,
+          "gap_median": 713.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 84976,
+              "accesses": 2182070,
+              "miss_rate": 0.038942838680702266
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 31730,
+              "accesses": 2182070,
+              "miss_rate": 0.014541238365405326
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 31730,
+              "accesses": 2182070,
+              "miss_rate": 0.014541238365405326
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 836,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 372,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 88,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 64,
+              "converged": true,
+              "nnz": 1091035,
+              "shift": 0.064
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 71039936,
+              "L2 1 MiB 16-way": 26526280,
+              "L3 16 MiB 16-way": 26526280
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 31611072,
+              "L2 1 MiB 16-way": 11803560,
+              "L3 16 MiB 16-way": 11803560
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 7477888,
+              "L2 1 MiB 16-way": 2792240,
+              "L3 16 MiB 16-way": 2792240
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 5438464,
+              "L2 1 MiB 16-way": 2030720,
+              "L3 16 MiB 16-way": 2030720
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.1692653629997949,
+          "gap_max": 124272,
+          "gap_mean": 1760.3211493078363,
+          "gap_median": 14.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 48135,
+              "accesses": 2182070,
+              "miss_rate": 0.022059328985779558
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 32640,
+              "accesses": 2182070,
+              "miss_rate": 0.014958273565925932
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 31730,
+              "accesses": 2182070,
+              "miss_rate": 0.014541238365405326
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 829,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 368,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 88,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 71,
+              "converged": true,
+              "nnz": 1091035,
+              "shift": 0.064
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 39903915,
+              "L2 1 MiB 16-way": 27058560,
+              "L3 16 MiB 16-way": 26304170
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 17713680,
+              "L2 1 MiB 16-way": 12011520,
+              "L3 16 MiB 16-way": 11676640
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 4235880,
+              "L2 1 MiB 16-way": 2872320,
+              "L3 16 MiB 16-way": 2792240
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 3417585,
+              "L2 1 MiB 16-way": 2317440,
+              "L3 16 MiB 16-way": 2252830
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "N": 7770,
+      "nnz": 123246,
+      "working_set_kib": 60.703125,
+      "lmax_bound": 3.4661288189529573,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 7733,
+          "gap_mean": 2261.232250945264,
+          "gap_median": 1816.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 55006,
+              "accesses": 131016,
+              "miss_rate": 0.4198418513769311
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 131016,
+              "miss_rate": 0.014837882396043231
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 131016,
+              "miss_rate": 0.014837882396043231
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 166,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 73,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 18,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 18,
+              "converged": true,
+              "nnz": 65508,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 9130996,
+              "L2 1 MiB 16-way": 322704,
+              "L3 16 MiB 16-way": 322704
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 4015438,
+              "L2 1 MiB 16-way": 141912,
+              "L3 16 MiB 16-way": 141912
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 990108,
+              "L2 1 MiB 16-way": 34992,
+              "L3 16 MiB 16-way": 34992
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 990108,
+              "L2 1 MiB 16-way": 34992,
+              "L3 16 MiB 16-way": 34992
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.01656602399998519,
+          "gap_max": 1307,
+          "gap_mean": 376.5273680281713,
+          "gap_median": 158.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 1995,
+              "accesses": 131016,
+              "miss_rate": 0.01522714782927276
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 131016,
+              "miss_rate": 0.014837882396043231
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 131016,
+              "miss_rate": 0.014837882396043231
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 164,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 73,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 18,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 19,
+              "converged": true,
+              "nnz": 65508,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 327180,
+              "L2 1 MiB 16-way": 318816,
+              "L3 16 MiB 16-way": 318816
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 145635,
+              "L2 1 MiB 16-way": 141912,
+              "L3 16 MiB 16-way": 141912
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 35910,
+              "L2 1 MiB 16-way": 34992,
+              "L3 16 MiB 16-way": 34992
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 37905,
+              "L2 1 MiB 16-way": 36936,
+              "L3 16 MiB 16-way": 36936
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.0111756169999353,
+          "gap_max": 7611,
+          "gap_mean": 296.27627671486295,
+          "gap_median": 12.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 2356,
+              "accesses": 131016,
+              "miss_rate": 0.017982536484093547
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 131016,
+              "miss_rate": 0.014837882396043231
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 1944,
+              "accesses": 131016,
+              "miss_rate": 0.014837882396043231
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 167,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 73,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 18,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 18,
+              "converged": true,
+              "nnz": 65508,
+              "shift": 0.0
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 393452,
+              "L2 1 MiB 16-way": 324648,
+              "L3 16 MiB 16-way": 324648
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 171988,
+              "L2 1 MiB 16-way": 141912,
+              "L3 16 MiB 16-way": 141912
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 42408,
+              "L2 1 MiB 16-way": 34992,
+              "L3 16 MiB 16-way": 34992
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 42408,
+              "L2 1 MiB 16-way": 34992,
+              "L3 16 MiB 16-way": 34992
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "N": 15676,
+      "nnz": 250404,
+      "working_set_kib": 122.46875,
+      "lmax_bound": 3.914938902286431,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 15613,
+          "gap_mean": 4480.851160524592,
+          "gap_median": 3541.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 172570,
+              "accesses": 266080,
+              "miss_rate": 0.6485643415514131
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 3920,
+              "accesses": 266080,
+              "miss_rate": 0.014732411304870716
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 3920,
+              "accesses": 266080,
+              "miss_rate": 0.014732411304870716
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 300,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 146,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 37,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 32,
+              "converged": true,
+              "nnz": 133040,
+              "shift": 0.016
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 51771000,
+              "L2 1 MiB 16-way": 1176000,
+              "L3 16 MiB 16-way": 1176000
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 25195220,
+              "L2 1 MiB 16-way": 572320,
+              "L3 16 MiB 16-way": 572320
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 6385090,
+              "L2 1 MiB 16-way": 145040,
+              "L3 16 MiB 16-way": 145040
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 5522240,
+              "L2 1 MiB 16-way": 125440,
+              "L3 16 MiB 16-way": 125440
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.03756077500020183,
+          "gap_max": 2073,
+          "gap_mean": 690.9607274644175,
+          "gap_median": 189.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 6444,
+              "accesses": 266080,
+              "miss_rate": 0.02421828021647625
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 3920,
+              "accesses": 266080,
+              "miss_rate": 0.014732411304870716
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 3920,
+              "accesses": 266080,
+              "miss_rate": 0.014732411304870716
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 297,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 148,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 37,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 35,
+              "converged": true,
+              "nnz": 133040,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 1913868,
+              "L2 1 MiB 16-way": 1164240,
+              "L3 16 MiB 16-way": 1164240
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 953712,
+              "L2 1 MiB 16-way": 580160,
+              "L3 16 MiB 16-way": 580160
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 238428,
+              "L2 1 MiB 16-way": 145040,
+              "L3 16 MiB 16-way": 145040
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 225540,
+              "L2 1 MiB 16-way": 137200,
+              "L3 16 MiB 16-way": 137200
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.022940914000173507,
+          "gap_max": 15400,
+          "gap_mean": 453.620038018562,
+          "gap_median": 13.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 5279,
+              "accesses": 266080,
+              "miss_rate": 0.019839897775105232
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 3920,
+              "accesses": 266080,
+              "miss_rate": 0.014732411304870716
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 3920,
+              "accesses": 266080,
+              "miss_rate": 0.014732411304870716
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 296,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 150,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 37,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 38,
+              "converged": true,
+              "nnz": 133040,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 1562584,
+              "L2 1 MiB 16-way": 1160320,
+              "L3 16 MiB 16-way": 1160320
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 791850,
+              "L2 1 MiB 16-way": 588000,
+              "L3 16 MiB 16-way": 588000
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 195323,
+              "L2 1 MiB 16-way": 145040,
+              "L3 16 MiB 16-way": 145040
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 200602,
+              "L2 1 MiB 16-way": 148960,
+              "L3 16 MiB 16-way": 148960
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "N": 31527,
+      "nnz": 506413,
+      "working_set_kib": 246.3046875,
+      "lmax_bound": 3.445175005539176,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 31450,
+          "gap_mean": 8870.677980225626,
+          "gap_median": 6913.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 413714,
+              "accesses": 537940,
+              "miss_rate": 0.7690709001003829
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 7882,
+              "accesses": 537940,
+              "miss_rate": 0.014652191694240993
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 7882,
+              "accesses": 537940,
+              "miss_rate": 0.014652191694240993
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 342,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 157,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 37,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 29,
+              "converged": true,
+              "nnz": 268970,
+              "shift": 0.004
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 141490188,
+              "L2 1 MiB 16-way": 2695644,
+              "L3 16 MiB 16-way": 2695644
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 64953098,
+              "L2 1 MiB 16-way": 1237474,
+              "L3 16 MiB 16-way": 1237474
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 15307418,
+              "L2 1 MiB 16-way": 291634,
+              "L3 16 MiB 16-way": 291634
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 11997706,
+              "L2 1 MiB 16-way": 228578,
+              "L3 16 MiB 16-way": 228578
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.13759843699972407,
+          "gap_max": 3326,
+          "gap_mean": 1157.1342876268975,
+          "gap_median": 280.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 16413,
+              "accesses": 537940,
+              "miss_rate": 0.03051083763988549
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 7882,
+              "accesses": 537940,
+              "miss_rate": 0.014652191694240993
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 7882,
+              "accesses": 537940,
+              "miss_rate": 0.014652191694240993
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 340,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 159,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 37,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 34,
+              "converged": true,
+              "nnz": 268970,
+              "shift": 0.064
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 5580420,
+              "L2 1 MiB 16-way": 2679880,
+              "L3 16 MiB 16-way": 2679880
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 2609667,
+              "L2 1 MiB 16-way": 1253238,
+              "L3 16 MiB 16-way": 1253238
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 607281,
+              "L2 1 MiB 16-way": 291634,
+              "L3 16 MiB 16-way": 291634
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 558042,
+              "L2 1 MiB 16-way": 267988,
+              "L3 16 MiB 16-way": 267988
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.042212768999888794,
+          "gap_max": 30979,
+          "gap_mean": 714.5095327331644,
+          "gap_median": 13.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 11340,
+              "accesses": 537940,
+              "miss_rate": 0.021080417890471055
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 7882,
+              "accesses": 537940,
+              "miss_rate": 0.014652191694240993
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 7882,
+              "accesses": 537940,
+              "miss_rate": 0.014652191694240993
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 338,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 157,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 37,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 28,
+              "converged": true,
+              "nnz": 268970,
+              "shift": 0.016
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 3832920,
+              "L2 1 MiB 16-way": 2664116,
+              "L3 16 MiB 16-way": 2664116
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 1780380,
+              "L2 1 MiB 16-way": 1237474,
+              "L3 16 MiB 16-way": 1237474
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 419580,
+              "L2 1 MiB 16-way": 291634,
+              "L3 16 MiB 16-way": 291634
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 317520,
+              "L2 1 MiB 16-way": 220696,
+              "L3 16 MiB 16-way": 220696
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "N": 63195,
+      "nnz": 1018929,
+      "working_set_kib": 493.7109375,
+      "lmax_bound": 4.161060621828027,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 63062,
+          "gap_mean": 17492.28918992393,
+          "gap_median": 13467.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 900499,
+              "accesses": 1082124,
+              "miss_rate": 0.832158791413923
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 15800,
+              "accesses": 1082124,
+              "miss_rate": 0.014600914497783987
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 15800,
+              "accesses": 1082124,
+              "miss_rate": 0.014600914497783987
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 600,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 292,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 73,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 77,
+              "converged": true,
+              "nnz": 541062,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 540299400,
+              "L2 1 MiB 16-way": 9480000,
+              "L3 16 MiB 16-way": 9480000
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 262945708,
+              "L2 1 MiB 16-way": 4613600,
+              "L3 16 MiB 16-way": 4613600
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 65736427,
+              "L2 1 MiB 16-way": 1153400,
+              "L3 16 MiB 16-way": 1153400
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 69338423,
+              "L2 1 MiB 16-way": 1216600,
+              "L3 16 MiB 16-way": 1216600
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.2337951219997194,
+          "gap_max": 4507,
+          "gap_mean": 1525.82680441915,
+          "gap_median": 655.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 40048,
+              "accesses": 1082124,
+              "miss_rate": 0.03700869770931982
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 15800,
+              "accesses": 1082124,
+              "miss_rate": 0.014600914497783987
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 15800,
+              "accesses": 1082124,
+              "miss_rate": 0.014600914497783987
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 598,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 291,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 73,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 64,
+              "converged": true,
+              "nnz": 541062,
+              "shift": 0.064
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 23948704,
+              "L2 1 MiB 16-way": 9448400,
+              "L3 16 MiB 16-way": 9448400
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 11653968,
+              "L2 1 MiB 16-way": 4597800,
+              "L3 16 MiB 16-way": 4597800
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 2923504,
+              "L2 1 MiB 16-way": 1153400,
+              "L3 16 MiB 16-way": 1153400
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 2563072,
+              "L2 1 MiB 16-way": 1011200,
+              "L3 16 MiB 16-way": 1011200
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.07658374000038748,
+          "gap_max": 61878,
+          "gap_mean": 1120.3411209220662,
+          "gap_median": 13.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 23429,
+              "accesses": 1082124,
+              "miss_rate": 0.021650938339783612
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 15800,
+              "accesses": 1082124,
+              "miss_rate": 0.014600914497783987
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 15800,
+              "accesses": 1082124,
+              "miss_rate": 0.014600914497783987
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 600,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 291,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 73,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 74,
+              "converged": true,
+              "nnz": 541062,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 14057400,
+              "L2 1 MiB 16-way": 9480000,
+              "L3 16 MiB 16-way": 9480000
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 6817839,
+              "L2 1 MiB 16-way": 4597800,
+              "L3 16 MiB 16-way": 4597800
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 1710317,
+              "L2 1 MiB 16-way": 1153400,
+              "L3 16 MiB 16-way": 1153400
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 1733746,
+              "L2 1 MiB 16-way": 1169200,
+              "L3 16 MiB 16-way": 1169200
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "N": 126830,
+      "nnz": 2054454,
+      "working_set_kib": 990.859375,
+      "lmax_bound": 3.67074536141056,
+      "orderings": {
+        "natural": {
+          "order_time_s": 0.0,
+          "gap_max": 126786,
+          "gap_mean": 34505.12512132177,
+          "gap_median": 26079.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 1883399,
+              "accesses": 2181284,
+              "miss_rate": 0.8634359395658704
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 53481,
+              "accesses": 2181284,
+              "miss_rate": 0.024518127854969825
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 31708,
+              "accesses": 2181284,
+              "miss_rate": 0.014536392326721326
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 556,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 216,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 51,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 54,
+              "converged": true,
+              "nnz": 1090642,
+              "shift": 0.064
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 1047169844,
+              "L2 1 MiB 16-way": 29735436,
+              "L3 16 MiB 16-way": 17629648
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 406814184,
+              "L2 1 MiB 16-way": 11551896,
+              "L3 16 MiB 16-way": 6848928
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 96053349,
+              "L2 1 MiB 16-way": 2727531,
+              "L3 16 MiB 16-way": 1617108
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 101703546,
+              "L2 1 MiB 16-way": 2887974,
+              "L3 16 MiB 16-way": 1712232
+            }
+          }
+        },
+        "rcm": {
+          "order_time_s": 0.6786532729993269,
+          "gap_max": 9373,
+          "gap_mean": 3108.1750041616897,
+          "gap_median": 563.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 79168,
+              "accesses": 2181284,
+              "miss_rate": 0.03629421936804194
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 31708,
+              "accesses": 2181284,
+              "miss_rate": 0.014536392326721326
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 31708,
+              "accesses": 2181284,
+              "miss_rate": 0.014536392326721326
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 550,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 216,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 51,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 54,
+              "converged": true,
+              "nnz": 1090642,
+              "shift": 0.128
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 43542400,
+              "L2 1 MiB 16-way": 17439400,
+              "L3 16 MiB 16-way": 17439400
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 17100288,
+              "L2 1 MiB 16-way": 6848928,
+              "L3 16 MiB 16-way": 6848928
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 4037568,
+              "L2 1 MiB 16-way": 1617108,
+              "L3 16 MiB 16-way": 1617108
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 4275072,
+              "L2 1 MiB 16-way": 1712232,
+              "L3 16 MiB 16-way": 1712232
+            }
+          }
+        },
+        "phve": {
+          "order_time_s": 0.15888754600018729,
+          "gap_max": 124149,
+          "gap_mean": 1760.23360561979,
+          "gap_median": 14.0,
+          "cache": {
+            "L1 32 KiB 8-way": {
+              "misses": 48105,
+              "accesses": 2181284,
+              "miss_rate": 0.022053524437899878
+            },
+            "L2 1 MiB 16-way": {
+              "misses": 32610,
+              "accesses": 2181284,
+              "miss_rate": 0.0149499102363562
+            },
+            "L3 16 MiB 16-way": {
+              "misses": 31708,
+              "accesses": 2181284,
+              "miss_rate": 0.014536392326721326
+            }
+          },
+          "iters": {
+            "none": {
+              "iters": 555,
+              "converged": true
+            },
+            "jacobi": {
+              "iters": 215,
+              "converged": true
+            },
+            "cheb4": {
+              "iters": 51,
+              "converged": true
+            },
+            "ic0": {
+              "iters": 49,
+              "converged": true,
+              "nnz": 1090642,
+              "shift": 0.064
+            }
+          },
+          "total_misses": {
+            "none": {
+              "L1 32 KiB 8-way": 26698275,
+              "L2 1 MiB 16-way": 18098550,
+              "L3 16 MiB 16-way": 17597940
+            },
+            "jacobi": {
+              "L1 32 KiB 8-way": 10342575,
+              "L2 1 MiB 16-way": 7011150,
+              "L3 16 MiB 16-way": 6817220
+            },
+            "cheb4": {
+              "L1 32 KiB 8-way": 2453355,
+              "L2 1 MiB 16-way": 1663110,
+              "L3 16 MiB 16-way": 1617108
+            },
+            "ic0": {
+              "L1 32 KiB 8-way": 2357145,
+              "L2 1 MiB 16-way": 1597890,
+              "L3 16 MiB 16-way": 1553692
+            }
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "equivariance": {
+      "none": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "natural": 200,
+            "rcm": 203,
+            "phve": 204,
+            "spread_rel": 0.0196078431372549
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "natural": 242,
+            "rcm": 243,
+            "phve": 241,
+            "spread_rel": 0.00823045267489712
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "natural": 520,
+            "rcm": 515,
+            "phve": 518,
+            "spread_rel": 0.009615384615384616
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "natural": 606,
+            "rcm": 609,
+            "phve": 614,
+            "spread_rel": 0.013029315960912053
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "natural": 837,
+            "rcm": 836,
+            "phve": 829,
+            "spread_rel": 0.009557945041816009
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "natural": 166,
+            "rcm": 164,
+            "phve": 167,
+            "spread_rel": 0.017964071856287425
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "natural": 300,
+            "rcm": 297,
+            "phve": 296,
+            "spread_rel": 0.013333333333333334
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "natural": 342,
+            "rcm": 340,
+            "phve": 338,
+            "spread_rel": 0.011695906432748537
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "natural": 600,
+            "rcm": 598,
+            "phve": 600,
+            "spread_rel": 0.0033333333333333335
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "natural": 556,
+            "rcm": 550,
+            "phve": 555,
+            "spread_rel": 0.01079136690647482
+          }
+        ],
+        "worst_spread_rel": 0.0196078431372549,
+        "worst_at_N": 7771
+      },
+      "jacobi": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "natural": 125,
+            "rcm": 125,
+            "phve": 125,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "natural": 131,
+            "rcm": 131,
+            "phve": 130,
+            "spread_rel": 0.007633587786259542
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "natural": 308,
+            "rcm": 309,
+            "phve": 308,
+            "spread_rel": 0.003236245954692557
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "natural": 291,
+            "rcm": 296,
+            "phve": 291,
+            "spread_rel": 0.016891891891891893
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "natural": 368,
+            "rcm": 372,
+            "phve": 368,
+            "spread_rel": 0.010752688172043012
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "natural": 73,
+            "rcm": 73,
+            "phve": 73,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "natural": 146,
+            "rcm": 148,
+            "phve": 150,
+            "spread_rel": 0.02666666666666667
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "natural": 157,
+            "rcm": 159,
+            "phve": 157,
+            "spread_rel": 0.012578616352201259
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "natural": 292,
+            "rcm": 291,
+            "phve": 291,
+            "spread_rel": 0.003424657534246575
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "natural": 216,
+            "rcm": 216,
+            "phve": 215,
+            "spread_rel": 0.004629629629629629
+          }
+        ],
+        "worst_spread_rel": 0.02666666666666667,
+        "worst_at_N": 15676
+      },
+      "cheb4": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "natural": 32,
+            "rcm": 32,
+            "phve": 32,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "natural": 32,
+            "rcm": 32,
+            "phve": 32,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "natural": 76,
+            "rcm": 76,
+            "phve": 76,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "natural": 70,
+            "rcm": 70,
+            "phve": 70,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "natural": 88,
+            "rcm": 88,
+            "phve": 88,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "natural": 18,
+            "rcm": 18,
+            "phve": 18,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "natural": 37,
+            "rcm": 37,
+            "phve": 37,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "natural": 37,
+            "rcm": 37,
+            "phve": 37,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "natural": 73,
+            "rcm": 73,
+            "phve": 73,
+            "spread_rel": 0.0
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "natural": 51,
+            "rcm": 51,
+            "phve": 51,
+            "spread_rel": 0.0
+          }
+        ],
+        "worst_spread_rel": 0.0,
+        "worst_at_N": 7771
+      },
+      "ic0": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "natural": 20,
+            "rcm": 16,
+            "phve": 25,
+            "spread_rel": 0.36
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "natural": 28,
+            "rcm": 21,
+            "phve": 24,
+            "spread_rel": 0.25
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "natural": 44,
+            "rcm": 43,
+            "phve": 75,
+            "spread_rel": 0.4266666666666667
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "natural": 69,
+            "rcm": 34,
+            "phve": 69,
+            "spread_rel": 0.5072463768115942
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "natural": 112,
+            "rcm": 64,
+            "phve": 71,
+            "spread_rel": 0.42857142857142855
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "natural": 18,
+            "rcm": 19,
+            "phve": 18,
+            "spread_rel": 0.05263157894736842
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "natural": 32,
+            "rcm": 35,
+            "phve": 38,
+            "spread_rel": 0.15789473684210525
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "natural": 29,
+            "rcm": 34,
+            "phve": 28,
+            "spread_rel": 0.17647058823529413
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "natural": 77,
+            "rcm": 64,
+            "phve": 74,
+            "spread_rel": 0.16883116883116883
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "natural": 54,
+            "rcm": 54,
+            "phve": 49,
+            "spread_rel": 0.09259259259259259
+          }
+        ],
+        "worst_spread_rel": 0.5072463768115942,
+        "worst_at_N": 63265
+      }
+    },
+    "cache_crossover": {
+      "L1 32 KiB 8-way": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "ratio": 1.213991769547325
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "ratio": 1.0663060897435896
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "ratio": 0.6427260211106012
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "ratio": 0.6290795598245755
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "ratio": 0.5664540576162681
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "ratio": 1.180952380952381
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "ratio": 0.819211669770329
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "ratio": 0.6909157375251325
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "ratio": 0.5850229724330803
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "ratio": 0.6076318714632175
+          }
+        ],
+        "crossover_N": 15676
+      },
+      "L2 1 MiB 16-way": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "ratio": 1.0286794831389852
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "ratio": 1.0284470796013625
+          }
+        ],
+        "crossover_N": null
+      },
+      "L3 16 MiB 16-way": {
+        "rows": [
+          {
+            "N": 7771,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 15671,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 31537,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 63265,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 126920,
+            "seed": 1,
+            "ratio": 1.0
+          },
+          {
+            "N": 7770,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 15676,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 31527,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 63195,
+            "seed": 2,
+            "ratio": 1.0
+          },
+          {
+            "N": 126830,
+            "seed": 2,
+            "ratio": 1.0
+          }
+        ],
+        "crossover_N": null
+      }
+    },
+    "order_cost": [
+      {
+        "N": 7771,
+        "seed": 1,
+        "rcm_s": 0.014993423000305484,
+        "phve_s": 0.00858437899933051,
+        "speedup": 1.746593784066944
+      },
+      {
+        "N": 15671,
+        "seed": 1,
+        "rcm_s": 0.05863606799994159,
+        "phve_s": 0.01859885699923325,
+        "speedup": 3.152670511008225
+      },
+      {
+        "N": 31537,
+        "seed": 1,
+        "rcm_s": 0.1336359849992732,
+        "phve_s": 0.045501231999878655,
+        "speedup": 2.936975091127853
+      },
+      {
+        "N": 63265,
+        "seed": 1,
+        "rcm_s": 0.32978263499990135,
+        "phve_s": 0.08319766900058312,
+        "speedup": 3.963844648070488
+      },
+      {
+        "N": 126920,
+        "seed": 1,
+        "rcm_s": 0.7169807069994931,
+        "phve_s": 0.1692653629997949,
+        "speedup": 4.2358382972915845
+      },
+      {
+        "N": 7770,
+        "seed": 2,
+        "rcm_s": 0.01656602399998519,
+        "phve_s": 0.0111756169999353,
+        "speedup": 1.4823364115002418
+      },
+      {
+        "N": 15676,
+        "seed": 2,
+        "rcm_s": 0.03756077500020183,
+        "phve_s": 0.022940914000173507,
+        "speedup": 1.6372832834784938
+      },
+      {
+        "N": 31527,
+        "seed": 2,
+        "rcm_s": 0.13759843699972407,
+        "phve_s": 0.042212768999888794,
+        "speedup": 3.2596401576993577
+      },
+      {
+        "N": 63195,
+        "seed": 2,
+        "rcm_s": 0.2337951219997194,
+        "phve_s": 0.07658374000038748,
+        "speedup": 3.0528036630038766
+      },
+      {
+        "N": 126830,
+        "seed": 2,
+        "rcm_s": 0.6786532729993269,
+        "phve_s": 0.15888754600018729,
+        "speedup": 4.271280475302494
+      }
+    ]
+  }
+}

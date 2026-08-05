@@ -1,0 +1,5 @@
+seed=1 N=  3864 ws=   30.2 KiB | IC0 its: nat   21 rcm   13 phve   15 | L1 misses: rcm      966 phve     1061  (phve/rcm 1.098)
+seed=1 N=  7771 ws=   60.7 KiB | IC0 its: nat   20 rcm   16 phve   25 | L1 misses: rcm     1944 phve     2360  (phve/rcm 1.214)
+seed=1 N= 15671 ws=  122.4 KiB | IC0 its: nat   28 rcm   21 phve   24 | L1 misses: rcm     4992 phve     5323  (phve/rcm 1.066)
+seed=1 N= 31537 ws=  246.4 KiB | IC0 its: nat   44 rcm   43 phve   75 | L1 misses: rcm    17432 phve    11204  (phve/rcm 0.643)
+seed=1 N= 63265 ws=  494.3 KiB | IC0 its: nat   69 rcm   34 phve   69 | L1 misses: rcm    37167 phve    23381  (phve/rcm 0.629)

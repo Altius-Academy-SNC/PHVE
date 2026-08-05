@@ -1,0 +1,144 @@
+seed=1 N=  7771 ws=   60.7 KiB
+   none     its: nat   200  rcm   203  phve   204   spread 1.96%
+   jacobi   its: nat   125  rcm   125  phve   125   spread 0.00%
+   cheb4    its: nat    32  rcm    32  phve    32   spread 0.00%
+   ic0      its: nat    20  rcm    16  phve    25   spread 36.00%
+   L1 32 KiB 8-way  misses/SpMV: rcm       1944  phve       2360  (phve/rcm 1.214)
+   L2 1 MiB 16-way  misses/SpMV: rcm       1944  phve       1944  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm       1944  phve       1944  (phve/rcm 1.000)
+   order time: rcm 0.0150 s  phve 0.0086 s  (rcm/phve 1.75)
+seed=1 N= 15671 ws=  122.4 KiB
+   none     its: nat   242  rcm   243  phve   241   spread 0.82%
+   jacobi   its: nat   131  rcm   131  phve   130   spread 0.76%
+   cheb4    its: nat    32  rcm    32  phve    32   spread 0.00%
+   ic0      its: nat    28  rcm    21  phve    24   spread 25.00%
+   L1 32 KiB 8-way  misses/SpMV: rcm       4992  phve       5323  (phve/rcm 1.066)
+   L2 1 MiB 16-way  misses/SpMV: rcm       3918  phve       3918  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm       3918  phve       3918  (phve/rcm 1.000)
+   order time: rcm 0.0586 s  phve 0.0186 s  (rcm/phve 3.15)
+seed=1 N= 31537 ws=  246.4 KiB
+   none     its: nat   520  rcm   515  phve   518   spread 0.96%
+   jacobi   its: nat   308  rcm   309  phve   308   spread 0.32%
+   cheb4    its: nat    76  rcm    76  phve    76   spread 0.00%
+   ic0      its: nat    44  rcm    43  phve    75   spread 42.67%
+   L1 32 KiB 8-way  misses/SpMV: rcm      17432  phve      11204  (phve/rcm 0.643)
+   L2 1 MiB 16-way  misses/SpMV: rcm       7886  phve       7886  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm       7886  phve       7886  (phve/rcm 1.000)
+   order time: rcm 0.1336 s  phve 0.0455 s  (rcm/phve 2.94)
+seed=1 N= 63265 ws=  494.3 KiB
+   none     its: nat   606  rcm   609  phve   614   spread 1.30%
+   jacobi   its: nat   291  rcm   296  phve   291   spread 1.69%
+   cheb4    its: nat    70  rcm    70  phve    70   spread 0.00%
+   ic0      its: nat    69  rcm    34  phve    69   spread 50.72%
+   L1 32 KiB 8-way  misses/SpMV: rcm      37167  phve      23381  (phve/rcm 0.629)
+   L2 1 MiB 16-way  misses/SpMV: rcm      15818  phve      15818  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm      15818  phve      15818  (phve/rcm 1.000)
+   order time: rcm 0.3298 s  phve 0.0832 s  (rcm/phve 3.96)
+seed=1 N=126920 ws=  991.6 KiB
+   none     its: nat   837  rcm   836  phve   829   spread 0.96%
+   jacobi   its: nat   368  rcm   372  phve   368   spread 1.08%
+   cheb4    its: nat    88  rcm    88  phve    88   spread 0.00%
+   ic0      its: nat   112  rcm    64  phve    71   spread 42.86%
+   L1 32 KiB 8-way  misses/SpMV: rcm      84976  phve      48135  (phve/rcm 0.566)
+   L2 1 MiB 16-way  misses/SpMV: rcm      31730  phve      32640  (phve/rcm 1.029)
+   L3 16 MiB 16-way misses/SpMV: rcm      31730  phve      31730  (phve/rcm 1.000)
+   order time: rcm 0.7170 s  phve 0.1693 s  (rcm/phve 4.24)
+seed=2 N=  7770 ws=   60.7 KiB
+   none     its: nat   166  rcm   164  phve   167   spread 1.80%
+   jacobi   its: nat    73  rcm    73  phve    73   spread 0.00%
+   cheb4    its: nat    18  rcm    18  phve    18   spread 0.00%
+   ic0      its: nat    18  rcm    19  phve    18   spread 5.26%
+   L1 32 KiB 8-way  misses/SpMV: rcm       1995  phve       2356  (phve/rcm 1.181)
+   L2 1 MiB 16-way  misses/SpMV: rcm       1944  phve       1944  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm       1944  phve       1944  (phve/rcm 1.000)
+   order time: rcm 0.0166 s  phve 0.0112 s  (rcm/phve 1.48)
+seed=2 N= 15676 ws=  122.5 KiB
+   none     its: nat   300  rcm   297  phve   296   spread 1.33%
+   jacobi   its: nat   146  rcm   148  phve   150   spread 2.67%
+   cheb4    its: nat    37  rcm    37  phve    37   spread 0.00%
+   ic0      its: nat    32  rcm    35  phve    38   spread 15.79%
+   L1 32 KiB 8-way  misses/SpMV: rcm       6444  phve       5279  (phve/rcm 0.819)
+   L2 1 MiB 16-way  misses/SpMV: rcm       3920  phve       3920  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm       3920  phve       3920  (phve/rcm 1.000)
+   order time: rcm 0.0376 s  phve 0.0229 s  (rcm/phve 1.64)
+seed=2 N= 31527 ws=  246.3 KiB
+   none     its: nat   342  rcm   340  phve   338   spread 1.17%
+   jacobi   its: nat   157  rcm   159  phve   157   spread 1.26%
+   cheb4    its: nat    37  rcm    37  phve    37   spread 0.00%
+   ic0      its: nat    29  rcm    34  phve    28   spread 17.65%
+   L1 32 KiB 8-way  misses/SpMV: rcm      16413  phve      11340  (phve/rcm 0.691)
+   L2 1 MiB 16-way  misses/SpMV: rcm       7882  phve       7882  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm       7882  phve       7882  (phve/rcm 1.000)
+   order time: rcm 0.1376 s  phve 0.0422 s  (rcm/phve 3.26)
+seed=2 N= 63195 ws=  493.7 KiB
+   none     its: nat   600  rcm   598  phve   600   spread 0.33%
+   jacobi   its: nat   292  rcm   291  phve   291   spread 0.34%
+   cheb4    its: nat    73  rcm    73  phve    73   spread 0.00%
+   ic0      its: nat    77  rcm    64  phve    74   spread 16.88%
+   L1 32 KiB 8-way  misses/SpMV: rcm      40048  phve      23429  (phve/rcm 0.585)
+   L2 1 MiB 16-way  misses/SpMV: rcm      15800  phve      15800  (phve/rcm 1.000)
+   L3 16 MiB 16-way misses/SpMV: rcm      15800  phve      15800  (phve/rcm 1.000)
+   order time: rcm 0.2338 s  phve 0.0766 s  (rcm/phve 3.05)
+seed=2 N=126830 ws=  990.9 KiB
+   none     its: nat   556  rcm   550  phve   555   spread 1.08%
+   jacobi   its: nat   216  rcm   216  phve   215   spread 0.46%
+   cheb4    its: nat    51  rcm    51  phve    51   spread 0.00%
+   ic0      its: nat    54  rcm    54  phve    49   spread 9.26%
+   L1 32 KiB 8-way  misses/SpMV: rcm      79168  phve      48105  (phve/rcm 0.608)
+   L2 1 MiB 16-way  misses/SpMV: rcm      31708  phve      32610  (phve/rcm 1.028)
+   L3 16 MiB 16-way misses/SpMV: rcm      31708  phve      31708  (phve/rcm 1.000)
+   order time: rcm 0.6787 s  phve 0.1589 s  (rcm/phve 4.27)
+
+=== Equivariance: relative spread of the iteration count ===
+  none     worst spread 1.961 % at N=7771
+  jacobi   worst spread 2.667 % at N=15676
+  cheb4    worst spread 0.000 % at N=7771
+  ic0      worst spread 50.725 % at N=63265
+
+=== Cache crossover (PHVE/RCM misses per SpMV) ===
+  L1 32 KiB 8-way  crossover at N >= 15676
+      N=  7770 seed=2 ratio 1.181
+      N=  7771 seed=1 ratio 1.214
+      N= 15671 seed=1 ratio 1.066
+      N= 15676 seed=2 ratio 0.819
+      N= 31527 seed=2 ratio 0.691
+      N= 31537 seed=1 ratio 0.643
+      N= 63195 seed=2 ratio 0.585
+      N= 63265 seed=1 ratio 0.629
+      N=126830 seed=2 ratio 0.608
+      N=126920 seed=1 ratio 0.566
+  L2 1 MiB 16-way  crossover at N >= None
+      N=  7770 seed=2 ratio 1.000
+      N=  7771 seed=1 ratio 1.000
+      N= 15671 seed=1 ratio 1.000
+      N= 15676 seed=2 ratio 1.000
+      N= 31527 seed=2 ratio 1.000
+      N= 31537 seed=1 ratio 1.000
+      N= 63195 seed=2 ratio 1.000
+      N= 63265 seed=1 ratio 1.000
+      N=126830 seed=2 ratio 1.028
+      N=126920 seed=1 ratio 1.029
+  L3 16 MiB 16-way crossover at N >= None
+      N=  7770 seed=2 ratio 1.000
+      N=  7771 seed=1 ratio 1.000
+      N= 15671 seed=1 ratio 1.000
+      N= 15676 seed=2 ratio 1.000
+      N= 31527 seed=2 ratio 1.000
+      N= 31537 seed=1 ratio 1.000
+      N= 63195 seed=2 ratio 1.000
+      N= 63265 seed=1 ratio 1.000
+      N=126830 seed=2 ratio 1.000
+      N=126920 seed=1 ratio 1.000
+
+=== Ordering cost ===
+  N=  7771 seed=1  rcm 0.0150 s  phve 0.0086 s  x1.75
+  N= 15671 seed=1  rcm 0.0586 s  phve 0.0186 s  x3.15
+  N= 31537 seed=1  rcm 0.1336 s  phve 0.0455 s  x2.94
+  N= 63265 seed=1  rcm 0.3298 s  phve 0.0832 s  x3.96
+  N=126920 seed=1  rcm 0.7170 s  phve 0.1693 s  x4.24
+  N=  7770 seed=2  rcm 0.0166 s  phve 0.0112 s  x1.48
+  N= 15676 seed=2  rcm 0.0376 s  phve 0.0229 s  x1.64
+  N= 31527 seed=2  rcm 0.1376 s  phve 0.0422 s  x3.26
+  N= 63195 seed=2  rcm 0.2338 s  phve 0.0766 s  x3.05
+  N=126830 seed=2  rcm 0.6787 s  phve 0.1589 s  x4.27
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp10_equivariant_precond.json

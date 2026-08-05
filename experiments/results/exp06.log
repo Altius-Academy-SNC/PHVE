@@ -1,0 +1,39 @@
+
+inverse (Hoelder) constant  max ||H^{-1}(i)-H^{-1}(j)||_q^d / |i-j|
+   d=2 p=1  C'_2 =    1.00000  C'_inf =    1.00000  [exhaustive]  argmax gap/N = 0.5000
+   d=2 p=2  C'_2 =    2.50000  C'_inf =    2.25000  [exhaustive]  argmax gap/N = 0.2500
+   d=2 p=3  C'_2 =    3.62500  C'_inf =    3.57143  [exhaustive]  argmax gap/N = 0.2500
+   d=2 p=4  C'_2 =    4.48148  C'_inf =    4.48148  [exhaustive]  argmax gap/N = 0.1055
+   d=2 p=5  C'_2 =    5.23256  C'_inf =    5.23256  [exhaustive]  argmax gap/N = 0.0420
+   d=2 p=6  C'_2 =    5.61988  C'_inf =    5.61988  [exhaustive]  argmax gap/N = 0.0417
+   d=2 p=7  C'_2 =    5.81113  C'_inf =    5.81113  [exhaustive]  argmax gap/N = 0.0417
+   d=2 p=8  C'_2 =    5.90590  C'_inf =    5.90590  [gap-sweep g<=5242]  argmax gap/N = 0.0417
+   d=3 p=1  C'_2 =    1.73205  C'_inf =    1.00000  [exhaustive]  argmax gap/N = 0.3750
+   d=3 p=2  C'_2 =    9.00000  C'_inf =    9.00000  [exhaustive]  argmax gap/N = 0.0469
+   d=3 p=3  C'_2 =   18.05263  C'_inf =   18.05263  [exhaustive]  argmax gap/N = 0.0371
+   d=3 p=4  C'_2 =   22.95918  C'_inf =   22.95918  [exhaustive]  argmax gap/N = 0.0359
+   d=3 p=5  C'_2 =   25.96033  C'_inf =   25.44065  [exhaustive]  argmax gap/N = 0.0382
+   d=3 p=6  C'_2 =   27.58027  C'_inf =   26.70586  [gap-sweep g<=20971]  argmax gap/N = 0.0382
+   geometric extrapolation C(p) = L - c r^p:
+      d=2 : L = 5.9990  (r = 0.4955)   [classical value: 6 -- calibration]
+      d=3 : L = 29.4802  (r = 0.5398)   [no value in the literature]
+d=2, exhaustive over all pairs
+   p=1  n=    4  C_inf=  3.0000  C_2=  3.0000
+   p=2  n=   16  C_inf= 13.0000  C_2= 13.0000
+   p=3  n=   64  C_inf= 53.0000  C_2= 53.0000
+   p=4  n=  256  C_inf=213.0000  C_2=213.0000
+   p=5  n= 1024  C_inf=853.0000  C_2=853.0000
+   p=6  n= 4096  C_inf=3413.0000  C_2=3413.0000
+d=2, restricted to ||x-y||_inf <= 4
+   p=7  C_inf>=13653.0000  C_2>=13653.0000
+   p=8  C_inf>=54613.0000  C_2>=54613.0000
+   p=9  C_inf>=218453.0000  C_2>=218453.0000
+d=3, exhaustive over all pairs
+   p=1  n=    8  C_inf=  7.0000  C_2=  7.0000
+   p=2  n=   64  C_inf= 59.0000  C_2= 59.0000
+   p=3  n=  512  C_inf=475.0000  C_2=475.0000
+   p=4  n= 4096  C_inf=3803.0000  C_2=3803.0000
+d=3, restricted to ||x-y||_inf <= 4
+   p=5  C_inf>=30427.0000  C_2>=30427.0000
+   p=6  C_inf>=243419.0000  C_2>=243419.0000
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp06_R3_C3.json

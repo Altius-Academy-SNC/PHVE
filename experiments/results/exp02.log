@@ -1,0 +1,37 @@
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp02_hypotheses.json
+
+(a) collisions, finest mesh (N=84044)
+   p= 3  N<=n^d:False  collided=83675 (99.56%)  max/cell=1360
+   p= 4  N<=n^d:False  collided=81746 (97.27%)  max/cell=549
+   p= 5  N<=n^d:False  collided=69774 (83.02%)  max/cell=142
+   p= 6  N<=n^d:True   collided=34025 (40.48%)  max/cell=30
+   p= 7  N<=n^d:True   collided= 5279 (6.28%)  max/cell=6
+   p= 8  N<=n^d:True   collided=  226 (0.27%)  max/cell=3
+   p= 9  N<=n^d:True   collided=    7 (0.01%)  max/cell=2
+   p=10  N<=n^d:True   collided=    0 (0.00%)  max/cell=1
+   p=11  N<=n^d:True   collided=    0 (0.00%)  max/cell=1
+   p=12  N<=n^d:True   collided=    0 (0.00%)  max/cell=1
+   naive condition holds from p=6 ; zero collisions only from p=10
+
+(b) h/Delta along refinement (p=8)
+   level 0  N=  3000  h_med/D=   16.2  h_max/D=    88.1  (h_max/D)^3/N=       228  regime_ok(max)=False
+   level 1  N=  5797  h_med/D=   12.2  h_max/D=    88.1  (h_max/D)^3/N=       118  regime_ok(max)=False
+   level 2  N= 11225  h_med/D=    9.0  h_max/D=    88.1  (h_max/D)^3/N=        61  regime_ok(max)=False
+   level 3  N= 21863  h_med/D=    6.7  h_max/D=    84.6  (h_max/D)^3/N=      27.7  regime_ok(max)=False
+   level 4  N= 42761  h_med/D=    5.1  h_max/D=    84.6  (h_max/D)^3/N=      14.2  regime_ok(max)=False
+   level 5  N= 84044  h_med/D=    4.1  h_max/D=    86.2  (h_max/D)^3/N=      7.62  regime_ok(max)=False
+
+(c) anisotropy
+   kappa=  1.0  r_grid_max/(h/Delta)=  1.17  mean=  1.01
+   kappa=  2.0  r_grid_max/(h/Delta)=  2.34  mean=  1.56
+   kappa=  3.0  r_grid_max/(h/Delta)=  3.12  mean=  2.16
+   kappa=  5.0  r_grid_max/(h/Delta)=  5.08  mean=  3.38
+   kappa=  8.0  r_grid_max/(h/Delta)=  8.20  mean=  5.20
+   kappa= 13.0  r_grid_max/(h/Delta)= 13.28  mean=  8.25
+   kappa= 20.0  r_grid_max/(h/Delta)= 20.31  mean= 12.33
+
+(d) round trip, finest mesh
+   p= 6  grid exact=True  collisions=34025  err=1.3906 mm <= 1.3906 mm : True
+   p= 8  grid exact=True  collisions=  226  err=0.3477 mm <= 0.3477 mm : True
+   p=10  grid exact=True  collisions=    0  err=0.0869 mm <= 0.0869 mm : True
+   p=12  grid exact=True  collisions=    0  err=0.0217 mm <= 0.0217 mm : True

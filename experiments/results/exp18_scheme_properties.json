@@ -1,0 +1,397 @@
+{
+  "experiment": "exp18_scheme_properties",
+  "params": {
+    "seeds": [
+      1,
+      2
+    ],
+    "n_target": 12000,
+    "steps": 10,
+    "tau": 1.0,
+    "refine_fraction": 0.03,
+    "conv_sizes": [
+      4000,
+      8000,
+      16000,
+      32000
+    ]
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "maximum_principle": [
+    {
+      "seed": 1,
+      "steps": [
+        {
+          "step": 0,
+          "N": 12000,
+          "offdiag": {
+            "n_offdiag": 182136,
+            "n_positive": 61522,
+            "fraction_positive": 0.33778055958185094,
+            "sum_positive": 225707.64832467184,
+            "sum_negative_abs": 1030342.6554298243,
+            "weight_ratio": 0.21906076307256658,
+            "max_positive": 4534.556303770961
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 1,
+          "N": 14306,
+          "offdiag": {
+            "n_offdiag": 215828,
+            "n_positive": 72358,
+            "fraction_positive": 0.33525770520970405,
+            "sum_positive": 297679.60982528504,
+            "sum_negative_abs": 1295471.5233340738,
+            "weight_ratio": 0.22978475749058974,
+            "max_positive": 7502.312608987349
+          },
+          "overshoot_rel": 0.0012936715324717762,
+          "undershoot_rel": 0.0,
+          "dmp_violated": true
+        },
+        {
+          "step": 2,
+          "N": 17044,
+          "offdiag": {
+            "n_offdiag": 256524,
+            "n_positive": 84888,
+            "fraction_positive": 0.33091640548252793,
+            "sum_positive": 384560.7132539546,
+            "sum_negative_abs": 1588638.8514977181,
+            "weight_ratio": 0.24206931165721082,
+            "max_positive": 9189.172439653446
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 3,
+          "N": 20311,
+          "offdiag": {
+            "n_offdiag": 305588,
+            "n_positive": 100416,
+            "fraction_positive": 0.32859929054805814,
+            "sum_positive": 456549.8488647855,
+            "sum_negative_abs": 1863450.6928646972,
+            "weight_ratio": 0.2450023768339842,
+            "max_positive": 13200.543464498953
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 4,
+          "N": 24213,
+          "offdiag": {
+            "n_offdiag": 364160,
+            "n_positive": 118162,
+            "fraction_positive": 0.32447825131810193,
+            "sum_positive": 514612.59378703823,
+            "sum_negative_abs": 2088369.7089316358,
+            "weight_ratio": 0.24641833847049177,
+            "max_positive": 14388.914873820273
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 5,
+          "N": 28882,
+          "offdiag": {
+            "n_offdiag": 434828,
+            "n_positive": 140696,
+            "fraction_positive": 0.3235670196031534,
+            "sum_positive": 587249.9356689157,
+            "sum_negative_abs": 2354891.038926609,
+            "weight_ratio": 0.249374568063494,
+            "max_positive": 15107.241535209638
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 6,
+          "N": 34457,
+          "offdiag": {
+            "n_offdiag": 519296,
+            "n_positive": 167164,
+            "fraction_positive": 0.3219050406704461,
+            "sum_positive": 616510.658206521,
+            "sum_negative_abs": 2453078.1888377797,
+            "weight_ratio": 0.251321242434026,
+            "max_positive": 15231.335356652198
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 7,
+          "N": 41133,
+          "offdiag": {
+            "n_offdiag": 620406,
+            "n_positive": 199408,
+            "fraction_positive": 0.32141533125082605,
+            "sum_positive": 604140.2783292863,
+            "sum_negative_abs": 2502690.3375413087,
+            "weight_ratio": 0.24139633628138163,
+            "max_positive": 15315.965431365383
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 8,
+          "N": 49122,
+          "offdiag": {
+            "n_offdiag": 741368,
+            "n_positive": 237270,
+            "fraction_positive": 0.32004348717506015,
+            "sum_positive": 631197.3856702194,
+            "sum_negative_abs": 2655783.9960966688,
+            "weight_ratio": 0.23766894694670954,
+            "max_positive": 15455.402926878302
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 9,
+          "N": 58685,
+          "offdiag": {
+            "n_offdiag": 886896,
+            "n_positive": 283426,
+            "fraction_positive": 0.3195707275712147,
+            "sum_positive": 665043.3455026341,
+            "sum_negative_abs": 2819808.8277444895,
+            "weight_ratio": 0.23584696202068045,
+            "max_positive": 15476.800674611666
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        }
+      ],
+      "n_steps_violating_dmp": 1,
+      "worst_overshoot_rel": 0.0012936715324717762,
+      "worst_undershoot_rel": 0.0
+    },
+    {
+      "seed": 2,
+      "steps": [
+        {
+          "step": 0,
+          "N": 12000,
+          "offdiag": {
+            "n_offdiag": 182206,
+            "n_positive": 61410,
+            "fraction_positive": 0.33703610199444584,
+            "sum_positive": 241239.41050602501,
+            "sum_negative_abs": 1142641.7475440586,
+            "weight_ratio": 0.21112427497466627,
+            "max_positive": 8511.510217936642
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 1,
+          "N": 14303,
+          "offdiag": {
+            "n_offdiag": 215856,
+            "n_positive": 71782,
+            "fraction_positive": 0.3325457712549107,
+            "sum_positive": 371814.8915012179,
+            "sum_negative_abs": 1661112.040896224,
+            "weight_ratio": 0.22383492645120534,
+            "max_positive": 32353.89669802999
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 2,
+          "N": 17029,
+          "offdiag": {
+            "n_offdiag": 256500,
+            "n_positive": 84738,
+            "fraction_positive": 0.3303625730994152,
+            "sum_positive": 530651.9970646823,
+            "sum_negative_abs": 2047061.6887674646,
+            "weight_ratio": 0.2592261874551459,
+            "max_positive": 40564.77301247059
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 3,
+          "N": 20277,
+          "offdiag": {
+            "n_offdiag": 305100,
+            "n_positive": 100152,
+            "fraction_positive": 0.32825958702064895,
+            "sum_positive": 644599.203897549,
+            "sum_negative_abs": 2430940.292348982,
+            "weight_ratio": 0.2651645562527092,
+            "max_positive": 41543.44013662715
+          },
+          "overshoot_rel": 0.003994503956878314,
+          "undershoot_rel": 0.0,
+          "dmp_violated": true
+        },
+        {
+          "step": 4,
+          "N": 24164,
+          "offdiag": {
+            "n_offdiag": 363708,
+            "n_positive": 118550,
+            "fraction_positive": 0.3259482881872271,
+            "sum_positive": 707982.2062284383,
+            "sum_negative_abs": 2660699.7541758697,
+            "weight_ratio": 0.2660887253878558,
+            "max_positive": 44163.031949955846
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 5,
+          "N": 28808,
+          "offdiag": {
+            "n_offdiag": 433738,
+            "n_positive": 140382,
+            "fraction_positive": 0.3236562164255841,
+            "sum_positive": 529116.1280133476,
+            "sum_negative_abs": 2276372.840009276,
+            "weight_ratio": 0.23243825383683261,
+            "max_positive": 44118.29158765558
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 6,
+          "N": 34367,
+          "offdiag": {
+            "n_offdiag": 518040,
+            "n_positive": 166758,
+            "fraction_positive": 0.3219017836460505,
+            "sum_positive": 553946.5431782249,
+            "sum_negative_abs": 2396123.093556528,
+            "weight_ratio": 0.2311845099560435,
+            "max_positive": 44255.024967369245
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 7,
+          "N": 41011,
+          "offdiag": {
+            "n_offdiag": 618824,
+            "n_positive": 198586,
+            "fraction_positive": 0.3209086913241891,
+            "sum_positive": 755523.8432202723,
+            "sum_negative_abs": 3171941.938879153,
+            "weight_ratio": 0.2381896824653879,
+            "max_positive": 73055.04028406105
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 8,
+          "N": 48967,
+          "offdiag": {
+            "n_offdiag": 739744,
+            "n_positive": 237344,
+            "fraction_positive": 0.3208461305532725,
+            "sum_positive": 667954.235899504,
+            "sum_negative_abs": 2844911.2515757307,
+            "weight_ratio": 0.23478912937250312,
+            "max_positive": 44355.34171625807
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        },
+        {
+          "step": 9,
+          "N": 58499,
+          "offdiag": {
+            "n_offdiag": 883890,
+            "n_positive": 282532,
+            "fraction_positive": 0.3196461098100442,
+            "sum_positive": 694802.9746971617,
+            "sum_negative_abs": 3012973.6121882326,
+            "weight_ratio": 0.23060373708103837,
+            "max_positive": 44078.05648337506
+          },
+          "overshoot_rel": 0.0,
+          "undershoot_rel": 0.0,
+          "dmp_violated": false
+        }
+      ],
+      "n_steps_violating_dmp": 1,
+      "worst_overshoot_rel": 0.003994503956878314,
+      "worst_undershoot_rel": 0.0
+    }
+  ],
+  "offdiag_positive_fraction_range": [
+    0.3195707275712147,
+    0.33778055958185094
+  ],
+  "self_convergence": {
+    "rows": [
+      {
+        "N": 4000,
+        "h_median": 10.239112288807414,
+        "l2_rel": 0.06516237976482378,
+        "linf": 0.3791185723360363
+      },
+      {
+        "N": 8000,
+        "h_median": 8.101855795068913,
+        "l2_rel": 0.056546652984066206,
+        "linf": 0.2980333150248222
+      },
+      {
+        "N": 16000,
+        "h_median": 6.41416971885424,
+        "l2_rel": 0.04919937731432896,
+        "linf": 0.2545732426063952
+      }
+    ],
+    "observed_order": 0.6008103493765993,
+    "reference_N": 32000
+  }
+}

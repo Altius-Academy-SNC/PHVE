@@ -1,0 +1,34 @@
+stretch=1.0 seed=1  N=39423  L=[144.0, 178.0, 154.0]  kappa=1.24  R1 orders=[10, 10, 10] (budget 30)
+   natural     gap mean   11022.9  median  8520.0  max    39329 | IC0   35  Jacobi  187 | L1 miss    533766 | order 0.0000 s
+   rcm         gap mean    1344.4  median   352.0  max     4060 | IC0   38  Jacobi  188 | L1 miss     21267 | order 0.1770 s
+   phve_cubic  gap mean     817.5  median    13.0  max    38595 | IC0   39  Jacobi  187 | L1 miss     14093 | order 0.0833 s
+   phve_aniso  gap mean     817.5  median    13.0  max    38595 | IC0   39  Jacobi  187 | L1 miss     14093 | order 0.0598 s
+stretch=2.0 seed=1  N=39368  L=[288.0, 178.0, 154.0]  kappa=1.87  R1 orders=[10, 10, 10] (budget 30)
+   natural     gap mean   10899.2  median  8387.0  max    39274 | IC0   54  Jacobi  268 | L1 miss    531496 | order 0.0000 s
+   rcm         gap mean    1378.6  median   325.0  max     4359 | IC0   46  Jacobi  266 | L1 miss     22216 | order 0.4091 s
+   phve_cubic  gap mean     740.2  median    14.0  max    38468 | IC0   58  Jacobi  266 | L1 miss     14232 | order 0.0673 s
+   phve_aniso  gap mean     740.2  median    14.0  max    38468 | IC0   58  Jacobi  266 | L1 miss     14232 | order 0.0658 s
+stretch=4.0 seed=1  N=39336  L=[576.0, 178.0, 154.0]  kappa=3.74  R1 orders=[11, 10, 9] (budget 30)
+   natural     gap mean   10929.0  median  8444.0  max    39264 | IC0   40  Jacobi  183 | L1 miss    530361 | order 0.0000 s
+   rcm         gap mean    1398.2  median   369.0  max     4204 | IC0   30  Jacobi  183 | L1 miss     22304 | order 0.2868 s
+   phve_cubic  gap mean     725.0  median    20.0  max    38344 | IC0   45  Jacobi  183 | L1 miss     14486 | order 0.0951 s
+   phve_aniso  gap mean     551.8  median    14.0  max    23265 | IC0   24  Jacobi  183 | L1 miss     13584 | order 0.1007 s
+stretch=8.0 seed=1  N=39103  L=[1152.0, 178.0, 154.0]  kappa=7.48  R1 orders=[12, 9, 9] (budget 30)
+   natural     gap mean   11033.7  median  8645.0  max    39057 | IC0   26  Jacobi  171 | L1 miss    526701 | order 0.0000 s
+   rcm         gap mean    1494.4  median   434.0  max     4893 | IC0   26  Jacobi  171 | L1 miss     22927 | order 0.2599 s
+   phve_cubic  gap mean     797.6  median    32.0  max    38132 | IC0   33  Jacobi  171 | L1 miss     15175 | order 0.0543 s
+   phve_aniso  gap mean     522.7  median    12.0  max    23687 | IC0   33  Jacobi  170 | L1 miss     13070 | order 0.0672 s
+
+=== R1 under test: does the per-axis rule beat the cubic order? ===
+  kappa |  mean gap cubic -> aniso  | factor | max gap cubic -> aniso
+   1.24 |      817.5 ->      817.5 | x 1.00 |    38595 ->    38595 (x1.00)
+   1.87 |      740.2 ->      740.2 | x 1.00 |    38468 ->    38468 (x1.00)
+   3.74 |      725.0 ->      551.8 | x 1.31 |    38344 ->    23265 (x1.65)
+   7.48 |      797.6 ->      522.7 | x 1.53 |    38132 ->    23687 (x1.61)
+
+=== Does it reach the solver? ===
+  kappa  1.24  IC(0) iters: rcm   38  cubic   39  aniso   39   | Jacobi spread across all four orderings: 1
+  kappa  1.87  IC(0) iters: rcm   46  cubic   58  aniso   58   | Jacobi spread across all four orderings: 2
+  kappa  3.74  IC(0) iters: rcm   30  cubic   45  aniso   24   | Jacobi spread across all four orderings: 0
+  kappa  7.48  IC(0) iters: rcm   26  cubic   33  aniso   33   | Jacobi spread across all four orderings: 1
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp16_anisotropic_domain.json

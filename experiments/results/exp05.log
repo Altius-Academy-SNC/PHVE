@@ -1,0 +1,23 @@
+kappa=  1.0 rho= 1.00 p_aniso=[10, 10, 10] | mean gap: uniform   623.2 -> aniso   623.2 (x 1.00)  | achievable bound x 1.00  | max gap:  19564 ->  19564 (x1.00)
+kappa=  2.0 rho= 1.41 p_aniso=[11, 10, 9] | mean gap: uniform   569.4 -> aniso   492.7 (x 1.16)  | achievable bound x 1.00  | max gap:  19561 ->  12141 (x1.61)
+kappa=  3.0 rho= 1.73 p_aniso=[11, 10, 9] | mean gap: uniform   564.1 -> aniso   448.2 (x 1.26)  | achievable bound x 1.50  | max gap:  19573 ->  12151 (x1.61)
+kappa=  5.0 rho= 2.24 p_aniso=[11, 10, 9] | mean gap: uniform   571.3 -> aniso   404.1 (x 1.41)  | achievable bound x 2.00  | max gap:  19566 ->  12140 (x1.61)
+kappa=  8.0 rho= 2.83 p_aniso=[12, 10, 8] | mean gap: uniform   595.8 -> aniso   367.3 (x 1.62)  | achievable bound x 2.00  | max gap:  19533 ->  10151 (x1.92)
+kappa= 12.0 rho= 3.46 p_aniso=[12, 10, 8] | mean gap: uniform   642.0 -> aniso   337.6 (x 1.90)  | achievable bound x 3.00  | max gap:  19550 ->  10071 (x1.94)
+kappa= 20.0 rho= 4.47 p_aniso=[12, 10, 8] | mean gap: uniform   709.0 -> aniso   307.3 (x 2.31)  | achievable bound x 4.00  | max gap:  19547 ->   9822 (x1.99)
+
+FB box 2000x600x400, budget 24 bits:
+   uniform p=(8,8,8) -> Delta=(7.812, 2.344, 1.562) mm  (Delta_min=1.562)
+   rule    p=(9,8,7) -> Delta=(3.906, 2.344, 3.125) mm  (Delta_min=2.344)
+   continuum rho = 1.9574 (bound / rho^3 = 7.50);  achieved with integer orders: 1.5000 (bound / 3.38)
+
+FB box 2000x600x400, budget 30 bits:
+   uniform p=(10,10,10) -> Delta=(1.953, 0.586, 0.391) mm  (Delta_min=0.391)
+   rule    p=(11,10,9) -> Delta=(0.977, 0.586, 0.781) mm  (Delta_min=0.586)
+   continuum rho = 1.9574 (bound / rho^3 = 7.50);  achieved with integer orders: 1.5000 (bound / 3.38)
+
+FB box 2000x600x400, budget 36 bits:
+   uniform p=(12,12,12) -> Delta=(0.488, 0.146, 0.098) mm  (Delta_min=0.098)
+   rule    p=(13,12,11) -> Delta=(0.244, 0.146, 0.195) mm  (Delta_min=0.146)
+   continuum rho = 1.9574 (bound / rho^3 = 7.50);  achieved with integer orders: 1.5000 (bound / 3.38)
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp05_R1_anisotropy.json

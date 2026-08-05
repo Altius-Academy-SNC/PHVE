@@ -1,0 +1,81 @@
+{
+  "experiment": "exp22_prefix_index",
+  "params": {
+    "p": 8,
+    "volume": "CR",
+    "depths": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "queries": 200,
+    "seed": 1
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "n_voxels": 235375,
+  "build": {
+    "prefix_s": 0.12306390099911368,
+    "prefix_bytes": 3766000,
+    "kdtree_s": 0.05623562700020557,
+    "kdtree_points_bytes_lower_bound": 5649000
+  },
+  "queries": [
+    {
+      "depth": 2,
+      "cell_voxels_side": 64,
+      "n_queries": 24,
+      "mismatches": 0,
+      "selectivity_mean": 9807.291666666666,
+      "selectivity_median": 6849.0,
+      "prefix_ms_median": 0.0048484998842468485,
+      "kdtree_ms_median": 0.4232259998389054,
+      "speedup_median": 87.29009176920874
+    },
+    {
+      "depth": 3,
+      "cell_voxels_side": 32,
+      "n_queries": 116,
+      "mismatches": 0,
+      "selectivity_mean": 2029.094827586207,
+      "selectivity_median": 1580.0,
+      "prefix_ms_median": 0.0034114991649403237,
+      "kdtree_ms_median": 0.12390099982440006,
+      "speedup_median": 36.31863700795232
+    },
+    {
+      "depth": 4,
+      "cell_voxels_side": 16,
+      "n_queries": 200,
+      "mismatches": 0,
+      "selectivity_mean": 377.255,
+      "selectivity_median": 478.0,
+      "prefix_ms_median": 0.0030110004445305094,
+      "kdtree_ms_median": 0.05724199945689179,
+      "speedup_median": 19.010956826948345
+    },
+    {
+      "depth": 5,
+      "cell_voxels_side": 8,
+      "n_queries": 200,
+      "mismatches": 0,
+      "selectivity_mean": 59.2,
+      "selectivity_median": 64.0,
+      "prefix_ms_median": 0.0027650003175949678,
+      "kdtree_ms_median": 0.02064400086965179,
+      "speedup_median": 7.466183905399404
+    }
+  ],
+  "total_mismatches": 0
+}

@@ -1,0 +1,33 @@
+
+--- remesh every m=1, 12 steps, final N=55033 ---
+  natural  IC0: renum  0.000 + fact  0.375 + solve  4.744 = TOTAL  5.119 s | its  387 | apply  10.34 ms | fill x0.53
+                plainCG  4781 | BWmax   24891 BWmean  6872.3 | miss 3.71e+06
+  rcm      IC0: renum  1.201 + fact  0.386 + solve  2.993 = TOTAL  4.580 s | its  321 | apply   9.40 ms | fill x0.53
+                plainCG  4759 | BWmax    2872 BWmean   926.2 | miss 1.442e+05
+  phve     IC0: renum  0.417 + fact  0.513 + solve  4.062 = TOTAL  4.992 s | its  421 | apply   8.87 ms | fill x0.53
+                plainCG  4790 | BWmax   24613 BWmean   574.8 | miss 1.058e+05
+
+--- remesh every m=2, 12 steps, final N=19234 ---
+  natural  IC0: renum  0.000 + fact  0.302 + solve  1.799 = TOTAL  2.101 s | its  275 | apply   3.83 ms | fill x0.53
+                plainCG  3145 | BWmax   12927 BWmean  3536.5 | miss 1.556e+06
+  rcm      IC0: renum  0.187 + fact  0.085 + solve  0.986 = TOTAL  1.258 s | its  205 | apply   3.64 ms | fill x0.53
+                plainCG  3139 | BWmax    1640 BWmean   547.4 | miss 5.585e+04
+  phve     IC0: renum  0.097 + fact  0.089 + solve  0.875 = TOTAL  1.061 s | its  283 | apply   4.21 ms | fill x0.53
+                plainCG  3154 | BWmax   12742 BWmean   398.3 | miss 5.112e+04
+
+--- remesh every m=4, 12 steps, final N=11372 ---
+  natural  IC0: renum  0.000 + fact  0.092 + solve  0.379 = TOTAL  0.471 s | its  252 | apply   2.07 ms | fill x0.53
+                plainCG  2577 | BWmax    9610 BWmean  2774.4 | miss 9.889e+05
+  rcm      IC0: renum  0.057 + fact  0.073 + solve  0.522 = TOTAL  0.653 s | its  211 | apply   2.34 ms | fill x0.53
+                plainCG  2586 | BWmax    1259 BWmean   408.3 | miss 3.176e+04
+  phve     IC0: renum  0.034 + fact  0.078 + solve  0.776 = TOTAL  0.888 s | its  257 | apply   3.07 ms | fill x0.53
+                plainCG  2591 | BWmax    9459 BWmean   331.8 | miss 3.637e+04
+
+--- remesh every m=12, 12 steps, final N=8000 ---
+  natural  IC0: renum  0.000 + fact  0.140 + solve  0.074 = TOTAL  0.214 s | its  264 | apply   1.17 ms | fill x0.53
+                plainCG  2035 | BWmax    7970 BWmean  2490.8 | miss 7.355e+05
+  rcm      IC0: renum  0.014 + fact  0.098 + solve  0.075 = TOTAL  0.186 s | its  258 | apply   1.42 ms | fill x0.53
+                plainCG  2042 | BWmax    1022 BWmean   330.9 | miss 2.4e+04
+  phve     IC0: renum  0.009 + fact  0.069 + solve  0.092 = TOTAL  0.170 s | its  299 | apply   1.82 ms | fill x0.53
+                plainCG  2046 | BWmax    7843 BWmean   300.0 | miss 2.893e+04
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp04_comparative.json

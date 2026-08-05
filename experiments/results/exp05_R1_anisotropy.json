@@ -1,0 +1,486 @@
+{
+  "experiment": "exp05_R1_anisotropy",
+  "params": {
+    "n_target": 20000,
+    "total_bits": 30,
+    "seed": 1
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "platform": "Linux-6.17.0-19-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "git_rev": "1444e55",
+    "perf_counters_available": {
+      "perf_event_paranoid": 4,
+      "usable": false
+    }
+  },
+  "cases": [
+    {
+      "L": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kappa": 1.0,
+      "G": 1.0,
+      "rho": 1.0,
+      "N": 20000,
+      "n_edges": 153126,
+      "h_median": 0.0386396494410569,
+      "h_max": 0.19169401211332798,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        10,
+        10,
+        10
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.0009765625,
+        0.0009765625
+      ],
+      "Delta_aniso": [
+        0.0009765625,
+        0.0009765625,
+        0.0009765625
+      ],
+      "aniso_spread_uniform": 1.0,
+      "aniso_spread_aniso": 1.0,
+      "r_pred_uniform": 39.56700102764226,
+      "r_pred_aniso": 39.56700102764226,
+      "predicted_gain_max_rho_d": 1.0,
+      "predicted_gain_mean_rho": 1.0,
+      "achieved_ratio_Delta_min": 1.0,
+      "achieved_gain_max_bound": 1.0,
+      "achieved_gain_mean_bound": 1.0,
+      "gap_uniform": {
+        "max": 19564,
+        "mean": 623.1532594072855,
+        "median": 17.0,
+        "p99": 13749.75,
+        "p999": 19285.87500000003
+      },
+      "gap_aniso": {
+        "max": 19564,
+        "mean": 623.1532594072855,
+        "median": 17.0,
+        "p99": 13749.75,
+        "p999": 19285.87500000003
+      }
+    },
+    {
+      "L": [
+        1.0,
+        0.7071067811865476,
+        0.5
+      ],
+      "kappa": 2.0,
+      "G": 0.7071067811865476,
+      "rho": 1.4142135623730951,
+      "N": 20000,
+      "n_edges": 152901,
+      "h_median": 0.027332739863523987,
+      "h_max": 0.18065397182463144,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        11,
+        10,
+        9
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.0006905339660024879,
+        0.00048828125
+      ],
+      "Delta_aniso": [
+        0.00048828125,
+        0.0006905339660024879,
+        0.0009765625
+      ],
+      "aniso_spread_uniform": 2.0,
+      "aniso_spread_aniso": 2.0,
+      "r_pred_uniform": 55.977451240497125,
+      "r_pred_aniso": 55.977451240497125,
+      "predicted_gain_max_rho_d": 2.8284271247461907,
+      "predicted_gain_mean_rho": 1.4142135623730951,
+      "achieved_ratio_Delta_min": 1.0,
+      "achieved_gain_max_bound": 1.0,
+      "achieved_gain_mean_bound": 1.0,
+      "gap_uniform": {
+        "max": 19561,
+        "mean": 569.4497354497355,
+        "median": 20.0,
+        "p99": 11726.0,
+        "p999": 19126.100000000006
+      },
+      "gap_aniso": {
+        "max": 12141,
+        "mean": 492.7356655613763,
+        "median": 19.0,
+        "p99": 9579.0,
+        "p999": 11930.300000000017
+      }
+    },
+    {
+      "L": [
+        1.0,
+        0.5773502691896257,
+        0.3333333333333333
+      ],
+      "kappa": 3.0,
+      "G": 0.5773502691896257,
+      "rho": 1.7320508075688772,
+      "N": 20000,
+      "n_edges": 152766,
+      "h_median": 0.022367493910789654,
+      "h_max": 0.16476115233587757,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        11,
+        10,
+        9
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.0005638186222554939,
+        0.0003255208333333333
+      ],
+      "Delta_aniso": [
+        0.00048828125,
+        0.0005638186222554939,
+        0.0006510416666666666
+      ],
+      "aniso_spread_uniform": 3.0,
+      "aniso_spread_aniso": 1.3333333333333333,
+      "r_pred_uniform": 68.71294129394582,
+      "r_pred_aniso": 45.80862752929721,
+      "predicted_gain_max_rho_d": 5.196152422706631,
+      "predicted_gain_mean_rho": 1.7320508075688772,
+      "achieved_ratio_Delta_min": 1.5,
+      "achieved_gain_max_bound": 3.375,
+      "achieved_gain_mean_bound": 1.5,
+      "gap_uniform": {
+        "max": 19573,
+        "mean": 564.0883769948811,
+        "median": 25.0,
+        "p99": 9675.0,
+        "p999": 19103.47000000003
+      },
+      "gap_aniso": {
+        "max": 12151,
+        "mean": 448.21559771153267,
+        "median": 17.0,
+        "p99": 9474.350000000006,
+        "p999": 11919.47000000003
+      }
+    },
+    {
+      "L": [
+        1.0,
+        0.447213595499958,
+        0.2
+      ],
+      "kappa": 5.0,
+      "G": 0.4472135954999579,
+      "rho": 2.2360679774997894,
+      "N": 20000,
+      "n_edges": 152663,
+      "h_median": 0.01735921141159678,
+      "h_max": 0.18347524849957722,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        11,
+        10,
+        9
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.0004367320268554277,
+        0.0001953125
+      ],
+      "Delta_aniso": [
+        0.00048828125,
+        0.0004367320268554277,
+        0.000390625
+      ],
+      "aniso_spread_uniform": 5.0,
+      "aniso_spread_aniso": 1.25,
+      "r_pred_uniform": 88.8791624273755,
+      "r_pred_aniso": 44.43958121368775,
+      "predicted_gain_max_rho_d": 11.180339887498944,
+      "predicted_gain_mean_rho": 2.2360679774997894,
+      "achieved_ratio_Delta_min": 2.0,
+      "achieved_gain_max_bound": 8.0,
+      "achieved_gain_mean_bound": 2.0,
+      "gap_uniform": {
+        "max": 19566,
+        "mean": 571.2551174809876,
+        "median": 33.0,
+        "p99": 9365.380000000005,
+        "p999": 18986.338000000018
+      },
+      "gap_aniso": {
+        "max": 12140,
+        "mean": 404.07823768693135,
+        "median": 17.0,
+        "p99": 8491.76000000001,
+        "p999": 11819.338000000018
+      }
+    },
+    {
+      "L": [
+        1.0,
+        0.3535533905932738,
+        0.125
+      ],
+      "kappa": 8.0,
+      "G": 0.3535533905932738,
+      "rho": 2.8284271247461903,
+      "N": 20000,
+      "n_edges": 152447,
+      "h_median": 0.013798886214839943,
+      "h_max": 0.1787408654108972,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        12,
+        10,
+        8
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.00034526698300124393,
+        0.0001220703125
+      ],
+      "Delta_aniso": [
+        0.000244140625,
+        0.00034526698300124393,
+        0.00048828125
+      ],
+      "aniso_spread_uniform": 8.0,
+      "aniso_spread_aniso": 2.0,
+      "r_pred_uniform": 113.04047587196881,
+      "r_pred_aniso": 56.520237935984404,
+      "predicted_gain_max_rho_d": 22.627416997969526,
+      "predicted_gain_mean_rho": 2.8284271247461903,
+      "achieved_ratio_Delta_min": 2.0,
+      "achieved_gain_max_bound": 8.0,
+      "achieved_gain_mean_bound": 2.0,
+      "gap_uniform": {
+        "max": 19533,
+        "mean": 595.7750037718026,
+        "median": 46.0,
+        "p99": 9303.0,
+        "p999": 18448.554000000004
+      },
+      "gap_aniso": {
+        "max": 10151,
+        "mean": 367.32972770864626,
+        "median": 18.0,
+        "p99": 8603.0,
+        "p999": 9538.554000000004
+      }
+    },
+    {
+      "L": [
+        1.0,
+        0.28867513459481287,
+        0.08333333333333333
+      ],
+      "kappa": 12.0,
+      "G": 0.28867513459481287,
+      "rho": 3.4641016151377544,
+      "N": 20000,
+      "n_edges": 152251,
+      "h_median": 0.011308244700810042,
+      "h_max": 0.17462209656604524,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        12,
+        10,
+        8
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.00028190931112774694,
+        8.138020833333333e-05
+      ],
+      "Delta_aniso": [
+        0.000244140625,
+        0.00028190931112774694,
+        0.0003255208333333333
+      ],
+      "aniso_spread_uniform": 12.0,
+      "aniso_spread_aniso": 1.3333333333333333,
+      "r_pred_uniform": 138.95571088355382,
+      "r_pred_aniso": 46.31857029451793,
+      "predicted_gain_max_rho_d": 41.56921938165305,
+      "predicted_gain_mean_rho": 3.4641016151377544,
+      "achieved_ratio_Delta_min": 3.0,
+      "achieved_gain_max_bound": 27.0,
+      "achieved_gain_mean_bound": 3.0,
+      "gap_uniform": {
+        "max": 19550,
+        "mean": 641.9678951205575,
+        "median": 62.0,
+        "p99": 9266.0,
+        "p999": 18270.50000000006
+      },
+      "gap_aniso": {
+        "max": 10071,
+        "mean": 337.5593657841328,
+        "median": 16.0,
+        "p99": 8515.5,
+        "p999": 9518.75000000003
+      }
+    },
+    {
+      "L": [
+        1.0,
+        0.223606797749979,
+        0.05
+      ],
+      "kappa": 20.0,
+      "G": 0.223606797749979,
+      "rho": 4.47213595499958,
+      "N": 20000,
+      "n_edges": 151951,
+      "h_median": 0.008827368199256436,
+      "h_max": 0.18002703907051054,
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        12,
+        10,
+        8
+      ],
+      "Delta_uniform": [
+        0.0009765625,
+        0.00021836601342771386,
+        4.8828125e-05
+      ],
+      "Delta_aniso": [
+        0.000244140625,
+        0.00021836601342771386,
+        0.0001953125
+      ],
+      "aniso_spread_uniform": 20.0,
+      "aniso_spread_aniso": 1.25,
+      "r_pred_uniform": 180.7845007207718,
+      "r_pred_aniso": 45.19612518019295,
+      "predicted_gain_max_rho_d": 89.4427190999916,
+      "predicted_gain_mean_rho": 4.47213595499958,
+      "achieved_ratio_Delta_min": 4.0,
+      "achieved_gain_max_bound": 64.0,
+      "achieved_gain_mean_bound": 4.0,
+      "gap_uniform": {
+        "max": 19547,
+        "mean": 709.0487591394594,
+        "median": 88.0,
+        "p99": 9014.5,
+        "p999": 18189.0
+      },
+      "gap_aniso": {
+        "max": 9822,
+        "mean": 307.3206099334654,
+        "median": 16.0,
+        "p99": 8091.5,
+        "p999": 9503.050000000017
+      }
+    }
+  ],
+  "full_body_box": [
+    {
+      "total_bits": 24,
+      "p_uniform": 8,
+      "p_aniso": [
+        9,
+        8,
+        7
+      ],
+      "Delta_uniform_mm": [
+        7.8125,
+        2.34375,
+        1.5625
+      ],
+      "Delta_aniso_mm": [
+        3.90625,
+        2.34375,
+        3.125
+      ],
+      "cells_uniform": 16777216.0,
+      "cells_aniso": 16777216.0,
+      "rho_continuum": 1.9574338205844308,
+      "gain_max_bound_continuum": 7.4999999999999885,
+      "gain_mean_bound_continuum": 1.9574338205844308,
+      "achieved_ratio_Delta_min": 1.5,
+      "gain_max_bound_achieved": 3.375,
+      "gain_mean_bound_achieved": 1.5,
+      "kappa": 5.0
+    },
+    {
+      "total_bits": 30,
+      "p_uniform": 10,
+      "p_aniso": [
+        11,
+        10,
+        9
+      ],
+      "Delta_uniform_mm": [
+        1.953125,
+        0.5859375,
+        0.390625
+      ],
+      "Delta_aniso_mm": [
+        0.9765625,
+        0.5859375,
+        0.78125
+      ],
+      "cells_uniform": 1073741824.0,
+      "cells_aniso": 1073741824.0,
+      "rho_continuum": 1.9574338205844308,
+      "gain_max_bound_continuum": 7.4999999999999885,
+      "gain_mean_bound_continuum": 1.9574338205844308,
+      "achieved_ratio_Delta_min": 1.5,
+      "gain_max_bound_achieved": 3.375,
+      "gain_mean_bound_achieved": 1.5,
+      "kappa": 5.0
+    },
+    {
+      "total_bits": 36,
+      "p_uniform": 12,
+      "p_aniso": [
+        13,
+        12,
+        11
+      ],
+      "Delta_uniform_mm": [
+        0.48828125,
+        0.146484375,
+        0.09765625
+      ],
+      "Delta_aniso_mm": [
+        0.244140625,
+        0.146484375,
+        0.1953125
+      ],
+      "cells_uniform": 68719476736.0,
+      "cells_aniso": 68719476736.0,
+      "rho_continuum": 1.9574338205844308,
+      "gain_max_bound_continuum": 7.4999999999999885,
+      "gain_mean_bound_continuum": 1.9574338205844308,
+      "achieved_ratio_Delta_min": 1.5,
+      "gain_max_bound_achieved": 3.375,
+      "gain_mean_bound_achieved": 1.5,
+      "kappa": 5.0
+    }
+  ]
+}

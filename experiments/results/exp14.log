@@ -1,0 +1,50 @@
+=== skilling, d = 2 ===
+   p=1 N=      4  WL2=    1.0000  (exhaustive, argmax gap 2 = 0.5000 N)
+   p=2 N=     16  WL2=    2.5000  (exhaustive, argmax gap 4 = 0.2500 N)
+   p=3 N=     64  WL2=    3.6250  (exhaustive, argmax gap 16 = 0.2500 N)
+   p=4 N=    256  WL2=    4.4815  (exhaustive, argmax gap 27 = 0.1055 N)
+   p=5 N=   1024  WL2=    5.2326  (exhaustive, argmax gap 43 = 0.0420 N)
+   p=6 N=   4096  WL2=    5.6199  (exhaustive, argmax gap 171 = 0.0417 N)
+   p=7 N=  16384  WL2=    5.8111  (exhaustive, argmax gap 683 = 0.0417 N)
+   p=8 N=  65536  WL2=    5.9059  (gap-sweep g<=5242, argmax gap 2731 = 0.0417 N)
+   extrapolated limit L = 5.999  (r = 0.4955, orders [6, 7, 8])
+   published 6.0  ->  relative error 0.02 %
+
+=== hrc, d = 2 ===
+   p=1 N=      4  WL2=    1.0000  (exhaustive, argmax gap 2 = 0.5000 N)
+   p=2 N=     16  WL2=    2.5000  (exhaustive, argmax gap 4 = 0.2500 N)
+   p=3 N=     64  WL2=    3.6250  (exhaustive, argmax gap 16 = 0.2500 N)
+   p=4 N=    256  WL2=    4.4815  (exhaustive, argmax gap 27 = 0.1055 N)
+   p=5 N=   1024  WL2=    5.2326  (exhaustive, argmax gap 43 = 0.0420 N)
+   p=6 N=   4096  WL2=    5.6199  (exhaustive, argmax gap 171 = 0.0417 N)
+   p=7 N=  16384  WL2=    5.8111  (exhaustive, argmax gap 683 = 0.0417 N)
+   p=8 N=  65536  WL2=    5.9059  (gap-sweep g<=5242, argmax gap 2731 = 0.0417 N)
+   extrapolated limit L = 5.999  (r = 0.4955, orders [6, 7, 8])
+   published 6.0  ->  relative error 0.02 %
+
+=== skilling, d = 3 ===
+   p=1 N=      8  WL2=    1.7321  (exhaustive, argmax gap 3 = 0.3750 N)
+   p=2 N=     64  WL2=    9.0000  (exhaustive, argmax gap 3 = 0.0469 N)
+   p=3 N=    512  WL2=   18.0526  (exhaustive, argmax gap 19 = 0.0371 N)
+   p=4 N=   4096  WL2=   22.9592  (exhaustive, argmax gap 147 = 0.0359 N)
+   p=5 N=  32768  WL2=   25.9603  (exhaustive, argmax gap 1253 = 0.0382 N)
+   p=6 N= 262144  WL2=   27.5803  (gap-sweep g<=20971, argmax gap 10021 = 0.0382 N)
+   extrapolated limit L = 29.480  (r = 0.5398, orders [4, 5, 6])
+
+=== hrc, d = 3 ===
+   p=1 N=      8  WL2=    1.7321  (exhaustive, argmax gap 3 = 0.3750 N)
+   p=2 N=     64  WL2=    7.9057  (exhaustive, argmax gap 4 = 0.0625 N)
+   p=3 N=    512  WL2=   13.8036  (exhaustive, argmax gap 32 = 0.0625 N)
+   p=4 N=   4096  WL2=   18.2406  (exhaustive, argmax gap 261 = 0.0637 N)
+   p=5 N=  32768  WL2=   20.8159  (exhaustive, argmax gap 2085 = 0.0636 N)
+   p=6 N= 262144  WL2=   22.1935  (gap-sweep g<=20971, argmax gap 16677 = 0.0636 N)
+   extrapolated limit L = 23.778  (r = 0.5349, orders [4, 5, 6])
+   published 22.9  ->  relative error 3.83 %
+
+=== Verdict ===
+   calibration skilling_d2    error 0.02 % against published
+   calibration hrc_d2         error 0.02 % against published
+   calibration hrc_d3         error 3.83 % against published
+   Skilling d=3 (no published value): L = 29.48
+   ratio Skilling/H&RC = 1.240  -- the widely implemented variant is that much worse
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp14_wl2_extrapolation.json

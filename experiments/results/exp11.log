@@ -1,0 +1,19 @@
+seed=1 N=  4000 E=  29902 | D= 33 h=65.620 | c1=268435.46 c2=  2.46 | bound 3.881e+10  measured 2.002e+02  ratio 193857481.9
+seed=1 N=  8000 E=  60461 | D= 33 h=61.690 | c1=134217.73 c2=  2.51 | bound 3.694e+10  measured 3.198e+02  ratio 115495418.8
+seed=1 N= 16000 E= 121854 | D= 31 h=55.241 | c1=67108.86 c2=  2.61 | bound 3.199e+10  measured 5.000e+02  ratio 63975517.1
+seed=1 N= 32000 E= 244494 | D= 38 h=49.264 | c1=67108.86 c2=  2.74 | bound 7.313e+10  measured 7.889e+02  ratio 92700844.7
+seed=1 N= 64000 E= 490751 | D= 35 h=44.086 | c1=33554.43 c2=  2.86 | bound 6.282e+10  measured 1.252e+03  ratio 50167212.6
+
+=== Constants across the mesh sequence ===
+  c1 : min 33554.43  max 268435.46
+  c2 : min 2.46  max 2.86
+  D  : min 31  max 38
+  bound/measured : min 50167212.6  max 193857481.9
+
+=== N-dependence of the constants (the hypothesis at stake) ===
+  seed=1 N=  4000  c1=268435.46  c2=  2.46  D= 33  h=65.620
+  seed=1 N=  8000  c1=134217.73  c2=  2.51  D= 33  h=61.690
+  seed=1 N= 16000  c1=67108.86  c2=  2.61  D= 31  h=55.241
+  seed=1 N= 32000  c1=67108.86  c2=  2.74  D= 38  h=49.264
+  seed=1 N= 64000  c1=33554.43  c2=  2.86  D= 35  h=44.086
+[saved] /home/paul/Documents/Code/brevets/PHVE/experiments/results/exp11_meangap_constants.json
