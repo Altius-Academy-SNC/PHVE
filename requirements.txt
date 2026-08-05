@@ -21,4 +21,4 @@ scikit-image>=0.21
 plotly>=5.18
 
 # Browser-based demonstrator (app_demo.py)
-streamlit>=1.30
+streamlit==1.61.1

@@ -222,7 +222,7 @@ def page_bijectivity():
             ),
             height=700, margin=dict(l=0, r=0, t=0, b=0),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.divider()
     st.subheader("Encoder / decoder")
@@ -326,7 +326,7 @@ def page_prefix_search():
             title=f"Prefix 'CR:{prefix}...' -- {n_match:,}/{n_total:,} vertices ({n_match/max(n_total,1)*100:.1f}%)",
             height=600, margin=dict(l=0, r=0, t=40, b=0),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         st.code(f"SELECT * FROM voxels WHERE phve_code LIKE 'CR:{prefix}%';", language="sql")
 
 
@@ -365,7 +365,7 @@ def page_interpatient():
             "Match": "Identical" if is_match else f"Common prefix: {common}/{len(raw_a)}",
         })
 
-    st.dataframe(rows, use_container_width=True, hide_index=True)
+    st.dataframe(rows, width="stretch", hide_index=True)
     pct = matches / len(LANDMARKS) * 100
     st.metric("Identical codes", f"{matches}/{len(LANDMARKS)} ({pct:.0f}%)")
 
@@ -389,7 +389,7 @@ def page_interpatient():
                               line=dict(color="#2ecc71", width=3), marker=dict(size=10)))
     fig.update_layout(xaxis_title="Order $p$", yaxis_title="Identical codes (%)",
                        height=350, yaxis=dict(range=[0, 105]))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 # ===================================================================
@@ -510,7 +510,7 @@ worst-case regime: see Remark 8.4 of the paper.
             yaxis_title="Shannon entropy (bits)",
             height=400, yaxis=dict(range=[0, max(vals) * 1.15]),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col_b:
         fig = go.Figure()
@@ -526,7 +526,7 @@ worst-case regime: see Remark 8.4 of the paper.
             barmode="overlay", height=400,
             xaxis=dict(range=[-200, 200]),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.subheader("Summary")
     st.dataframe([
@@ -547,7 +547,7 @@ worst-case regime: see Remark 8.4 of the paper.
          "Raster": f"{np.sum(r['dpcm_raster']==0)/len(r['dpcm_raster'])*100:.1f}%",
          "Morton": f"{np.sum(r['dpcm_morton']==0)/len(r['dpcm_morton'])*100:.1f}%",
          "Hilbert": f"{np.sum(r['dpcm_hilbert']==0)/len(r['dpcm_hilbert'])*100:.1f}%"},
-    ], use_container_width=True, hide_index=True)
+    ], width="stretch", hide_index=True)
 
 
 # ===================================================================
@@ -755,7 +755,7 @@ $N - 1$ in the worst-case natural ordering (10.2(b)).
         fig.update_yaxes(title_text="row $i$" if col_idx == 1 else "",
                          row=1, col=col_idx, autorange="reversed", showgrid=False)
     fig.update_layout(height=320, margin=dict(l=10, r=10, t=40, b=10))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     st.subheader("Summary")
     rows_summary = []
@@ -768,7 +768,7 @@ $N - 1$ in the worst-case natural ordering (10.2(b)).
             "CG iterations": r["iter_cg"],
             "Solve time (ms)": f"{r['time_ms']:.1f}",
         })
-    st.dataframe(rows_summary, use_container_width=True, hide_index=True)
+    st.dataframe(rows_summary, width="stretch", hide_index=True)
 
     if "Hilbert" in results and "Natural" in results:
         bw_gain = (1 - results["Hilbert"]["bw_avg"] / results["Natural"]["bw_avg"]) * 100
@@ -786,7 +786,7 @@ $N - 1$ in the worst-case natural ordering (10.2(b)).
     ))
     fig.update_layout(height=400, xaxis_title="x", yaxis_title="y",
                       yaxis=dict(scaleanchor="x", scaleratio=1))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 # ===================================================================
@@ -905,7 +905,7 @@ independently of $n$ and $\ell$.
             fig.update_layout(height=600, scene=scene, title=title,
                               margin=dict(l=0, r=0, t=40, b=0))
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.divider()
     c1, c2 = st.columns(2)
@@ -917,7 +917,7 @@ independently of $n$ and $\ell$.
                              textposition="outside"))
         fig.update_layout(title="Mean neighbour difference (mm) -- lower is smoother",
                            yaxis_title="mm", height=350)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with c2:
         st.markdown(f"""
@@ -996,7 +996,7 @@ the script that produced it.
             "Name": v["name"],
             "Dimensions (mm)": f"{v['dims'][0]} x {v['dims'][1]} x {v['dims'][2]}",
         })
-    st.dataframe(vol_rows, use_container_width=True, hide_index=True)
+    st.dataframe(vol_rows, width="stretch", hide_index=True)
 
     st.markdown("""
 ---
