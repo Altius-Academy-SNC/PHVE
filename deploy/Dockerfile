@@ -29,6 +29,14 @@ COPY simulations/ /app/simulations/
 # Pre-create the nilearn cache dir so the first request doesn't race on it.
 RUN mkdir -p /data/nilearn_data
 
+# Build the brain surface once, here, instead of on the first request.
+# Measured in this container, the first render cost 3.58 s, of which 2.20 s
+# was importing nilearn (1.57 s) and scipy.ndimage (0.63 s) -- both needed
+# only to turn the MNI152 template into a triangulated surface that never
+# changes. Shipping the result (0.81 MiB) keeps those imports off the
+# runtime path of the two pages the demonstrator serves.
+RUN python /app/simulations/prewarm.py
+
 WORKDIR /app/simulations
 
 EXPOSE 8501

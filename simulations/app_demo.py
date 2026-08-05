@@ -20,6 +20,7 @@ Author: Paul Guindo, Altius Academy SNC.
 """
 
 import math
+import os
 import time
 from collections import Counter
 
@@ -81,6 +82,41 @@ def extract_brain_mesh(_data, _affine, _mask):
     return verts_mm, faces, normals, intensity
 
 
+_PRECOMPUTED = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "precomputed", "brain_mesh.npz")
+
+
+@st.cache_data
+def brain_summary():
+    """(volume shape, brain-voxel count, affine).
+
+    Read from the build-time artefact when it exists, so that the two pages
+    the demonstrator serves never import nilearn -- which alone costs 1.57 s
+    of the 3.58 s first render measured in the container.
+    """
+    if os.path.exists(_PRECOMPUTED):
+        with np.load(_PRECOMPUTED) as z:
+            return (tuple(int(v) for v in z["data_shape"]),
+                    int(z["n_brain_voxels"]), z["affine"])
+    data, affine, mask = load_brain()
+    return data.shape, int(mask.sum()), affine
+
+
+@st.cache_data
+def brain_mesh():
+    """verts_mm, faces, normals, intensity of the brain surface.
+
+    Falls back to computing the surface when the artefact is absent, so a
+    plain checkout without a build step still runs.
+    """
+    if os.path.exists(_PRECOMPUTED):
+        with np.load(_PRECOMPUTED) as z:
+            return (z["verts_mm"].astype(np.float64), z["faces"],
+                    z["normals"], z["intensity"])
+    data, affine, mask = load_brain()
+    return extract_brain_mesh(data, affine, mask)
+
+
 @st.cache_data
 def compute_vertex_hilbert(verts_mm, p=5, volume="CR"):
     """Hilbert index Hil_p^{(3)} for every vertex, normalised to [0, 1]."""
@@ -136,8 +172,8 @@ def page_bijectivity():
     st.header("Bijectivity of $\\mathcal{F}_p^{(3),\\alpha}$ on MNI152")
     st.caption("Proposition 1: the encoding map is injective on the cell-centre grid. On the MNI152 brain mask it separates every voxel from $p = 8$ onwards; $14.1\\%$ still collide at $p = 7$.")
 
-    data, affine, mask = load_brain()
-    st.caption(f"MNI152 T1w | shape {data.shape} | 2 mm isotropic | {mask.sum():,} brain voxels")
+    shape, n_brain_voxels, affine = brain_summary()
+    st.caption(f"MNI152 T1w | shape {shape} | 2 mm isotropic | {n_brain_voxels:,} brain voxels")
 
     col_ctrl, col_3d = st.columns([1, 3])
 
@@ -148,8 +184,8 @@ def page_bijectivity():
         opacity = st.slider("Opacity", 0.3, 1.0, 0.8, 0.05)
         show_landmarks = st.checkbox("Show anatomical landmarks", value=True)
 
-    with st.spinner("Extracting brain surface..."):
-        verts_mm, faces, normals, intensity = extract_brain_mesh(data, affine, mask)
+    with st.spinner("Loading brain surface..."):
+        verts_mm, faces, normals, intensity = brain_mesh()
 
     st.sidebar.metric("Vertices", f"{verts_mm.shape[0]:,}")
     st.sidebar.metric("Triangles", f"{faces.shape[0]:,}")
@@ -276,7 +312,6 @@ def page_prefix_search():
     st.header("Prefix search as an ordered-index range scan (Proposition 2)")
     st.caption("Codes sharing a prefix form a contiguous interval, so a region query is two binary searches on an ordinary ordered column -- no spatial index. Measured against a $k$-d tree in `experiments/exp22_prefix_index.py`: identical result sets, and a cost independent of how many points are returned.")
 
-    data, affine, mask = load_brain()
     col1, col2 = st.columns([1, 3])
 
     with col1:
@@ -288,7 +323,7 @@ def page_prefix_search():
                                help="Leading characters of the code (without the 'CR:' volume tag).")
 
     with col2:
-        verts_mm, faces, normals, intensity = extract_brain_mesh(data, affine, mask)
+        verts_mm, faces, normals, intensity = brain_mesh()
         dims = VOLUMES["CR"]["dims"]
         n = 1 << p
         k = _code_length_3d(p)
@@ -842,8 +877,8 @@ independently of $n$ and $\ell$.
         show_mode = st.radio("Display", ["Hilbert (smooth)", "Random (noise)", "Side by side"],
                               key="s6_mode")
 
-    with st.spinner("Extracting brain surface..."):
-        verts_mm, faces, normals, intensity = extract_brain_mesh(data, affine, mask)
+    with st.spinner("Loading brain surface..."):
+        verts_mm, faces, normals, intensity = brain_mesh()
 
     with st.spinner(f"Computing Hilbert indices (p={p_morph})..."):
         h_norm = compute_surface_hilbert(verts_mm, p=p_morph)
