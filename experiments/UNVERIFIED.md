@@ -386,7 +386,7 @@ produced a spurious 0.96 % residual. That was our protocol error, recorded
 here so the corrected run is not mistaken for a retraction.
 
 **"Inter-patient stability" — the number reproduces, the interpretation
-does not.** `simulations/interpatient_stability.py` uses no inter-patient
+does not.** `simulations/refuted/interpatient_stability.py` uses no inter-patient
 data. It perturbs seven fixed landmarks with Gaussian noise of standard
 deviation σ and counts unchanged codes. Re-run at p = 6, σ = 0.5 mm: 43.4 %
 identical, against the 49 % quoted in v4 (protocol details differ; same

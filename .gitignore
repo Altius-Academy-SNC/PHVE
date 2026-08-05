@@ -41,3 +41,4 @@ simulations/*.nii.gz
 
 # Compiled C extensions (built from the .c sources, see experiments/README.md)
 *.so
+simulations/refuted/results/

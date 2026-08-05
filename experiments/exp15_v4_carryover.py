@@ -27,7 +27,7 @@ This script performs the missing test properly and characterises (ii).
     smaller than the voxel spacing along every axis.
 
 (B) The "inter-patient" protocol, re-run and described for what it is.
-    `simulations/interpatient_stability.py` does not use inter-patient
+    `simulations/refuted/interpatient_stability.py` does not use inter-patient
     data.  It perturbs seven fixed landmark coordinates with Gaussian noise
     of standard deviation sigma and counts how often the code is unchanged.
     That measures the probability that a jitter of size sigma keeps a point

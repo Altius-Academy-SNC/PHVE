@@ -18,6 +18,8 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import KDTree
 
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 from codec3d import VOLUMES, xyz2d
 
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")

@@ -13,6 +13,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 from codec3d import (
     VOLUMES, encode, decode, truncate, xyz2d,
     _code_length_3d, _int_to_base29, _canonical_precision_3d,

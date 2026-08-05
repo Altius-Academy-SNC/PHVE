@@ -66,17 +66,19 @@ PHVE/
 │   ├── constants.py         # geographic Reference Family (DOMAINS dict)
 │   ├── bijectivity_mni152.py     # 3D bijectivity on MNI152
 │   ├── app_demo.py          # Streamlit demonstrator (2 tabs)
-│   └── …                    # scripts of the refuted claims, kept for the record
+│   └── refuted/             # scripts of the refuted claims — see its README
 ├── deploy/                  # Docker + nginx + certbot for the demonstrator
 ├── requirements.txt
 ├── LICENSE                  # MIT
 └── README.md
 ```
 
-The scripts `interpatient_stability.py`, `dpcm_compression.py`,
-`fem_bandwidth.py` and `surface_morphing.py` are kept because their outputs are
-cited in the refutations, not because their conclusions hold. Two of them
-contain bugs that the campaign found; see `experiments/LOGBOOK.md`.
+`simulations/refuted/` holds the four scripts whose claims did not survive
+verification. They are kept because their outputs are cited in the refutations,
+not because their conclusions hold, and two of them contain bugs that the
+campaign found. `simulations/refuted/README.md` states, for each, what was
+claimed, what refuted it, and which bug it contains. Nothing in that directory
+should be used as evidence.
 
 ## Reproducing the paper experiments
 
@@ -86,7 +88,6 @@ cd PHVE
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-cd simulations
 ```
 
 Then run any single experiment. The two that back the paper:
@@ -107,7 +108,7 @@ cc -O2 -shared -fPIC -o experiments/phve/libic0.so   experiments/phve/ic0.c -lm
 Or launch the interactive demonstrator:
 
 ```bash
-streamlit run app_demo.py
+streamlit run simulations/app_demo.py
 ```
 
 The MNI152 templates are downloaded automatically by `nilearn` on
@@ -120,8 +121,8 @@ Requires a TeX Live distribution with `pdflatex`, `tikz`, `algorithmic`,
 
 ```bash
 cd paper
-pdflatex altius_code_arxiv_v4.tex
-pdflatex altius_code_arxiv_v4.tex   # second pass for cross-references
+pdflatex phve_software.tex
+pdflatex phve_software.tex   # second pass for cross-references
 ```
 
 ## Citation
@@ -129,8 +130,8 @@ pdflatex altius_code_arxiv_v4.tex   # second pass for cross-references
 ```bibtex
 @misc{guindo2026phve,
   author = {Paul Guindo},
-  title  = {Parametric Hilbert Volumetric Encoding for Geometric Data
-            with Locality, Hierarchy, and Variance Bounds},
+  title  = {{PHVE}: a bijective, prefix-searchable spatial code for
+            anatomical volumes},
   year   = {2026},
   note   = {Altius Academy SNC},
   url    = {https://github.com/Altius-Academy-SNC/PHVE}
@@ -139,9 +140,10 @@ pdflatex altius_code_arxiv_v4.tex   # second pass for cross-references
 
 ## Status
 
-This repository is **work in progress**: the paper is being revised
-toward arXiv submission, and the simulation scripts are under active
-audit. Issues and pull requests are welcome.
+The software paper reports only what survived verification. The earlier,
+broader manuscript is not published here: several of its statements were
+refuted (see the table above and `experiments/LOGBOOK.md`). Issues and pull
+requests are welcome.
 
 ## License
 
