@@ -129,12 +129,12 @@ LANDMARKS = {
 
 
 # ===================================================================
-# Tab 1: Bijectivity (Theorem 4.3)
+# Tab 1: Bijectivity (Proposition 1 of the software paper)
 # ===================================================================
 
 def page_bijectivity():
     st.header("Bijectivity of $\\mathcal{F}_p^{(3),\\alpha}$ on MNI152")
-    st.caption("Theorem 4.3: the encoding map is a bijection on the cell-centre grid.")
+    st.caption("Proposition 1: the encoding map is injective on the cell-centre grid. On the MNI152 brain mask it separates every voxel from $p = 8$ onwards; $14.1\\%$ still collide at $p = 7$.")
 
     data, affine, mask = load_brain()
     st.caption(f"MNI152 T1w | shape {data.shape} | 2 mm isotropic | {mask.sum():,} brain voxels")
@@ -239,7 +239,7 @@ def page_bijectivity():
         decoded = decode(code)
         st.code(code, language=None)
         st.caption(f"Resolution: {decoded['resolution_mm']:.1f} mm")
-        with st.expander("Truncation hierarchy (Theorem 6.1)"):
+        with st.expander("Truncation hierarchy (Proposition 2)"):
             raw_full = code.split(":")[1].replace("-", "")
             vol = code.split(":")[0]
             dims = VOLUMES[vol]["dims"]
@@ -269,12 +269,12 @@ def page_bijectivity():
 
 
 # ===================================================================
-# Tab 2: Prefix search (Proposition 10.1)
+# Tab 2: Prefix search (Proposition 2 of the software paper)
 # ===================================================================
 
 def page_prefix_search():
-    st.header("Prefix search as B-tree query (Proposition 10.1)")
-    st.caption("Codes starting with a fixed prefix form a contiguous lexicographic interval (Theorem 6.1), retrievable by a single B-tree range scan in $O(\\log N + |R|)$.")
+    st.header("Prefix search as an ordered-index range scan (Proposition 2)")
+    st.caption("Codes sharing a prefix form a contiguous interval, so a region query is two binary searches on an ordinary ordered column -- no spatial index. Measured against a $k$-d tree in `experiments/exp22_prefix_index.py`: identical result sets, and a cost independent of how many points are returned.")
 
     data, affine, mask = load_brain()
     col1, col2 = st.columns([1, 3])
@@ -1044,8 +1044,8 @@ the script that produced it.
 # The page functions are kept in the file, unreferenced, so the history is not
 # lost; they are not reachable from the navigation.
 PAGES = {
-    "Bijectivity (Thm. 4.3)": page_bijectivity,
-    "Prefix search (Prop. 10.1)": page_prefix_search,
+    "Bijectivity (Prop. 1)": page_bijectivity,
+    "Prefix search (Prop. 2)": page_prefix_search,
     "---": None,
     "About": page_about,
 }
